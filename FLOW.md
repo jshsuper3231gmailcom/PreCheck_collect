@@ -1,534 +1,512 @@
-# PreCheck 수집 서버 소스 코드 읽기 가이드
+# precheck-collect 개발자 참고 문서
+
+## 1. 프로젝트 개요
+
+### 목적 및 역할
+
+`precheck-collect`는 대상 서버의 로그 파일을 SFTP로 수집하여 DB에 적재하는 Spring Boot 배치 서버다. HTTP 서버를 구동하지 않고, `@Scheduled` + `@Async` + `@Retryable` 조합으로 스케줄 기반 비동기 수집을 수행한다.
+
+스케줄 파일(`PreCheck_CollectLogs_Schedule.conf`)을 1초마다 폴링하여 실행 시점이 된 수집 작업을 실행한다. 수집된 로그 라인은 정규화 포맷(`@@@...@@@`)으로 파싱된 뒤 `TB_COLLECT_LOG`에 INSERT되며, 이후 `precheck-analyze` 서버가 이 테이블을 분석한다.
+
+수집 방식은 증분(주기) 또는 전체(배치) 두 가지로 구분되며, 파일 크기 초과 시 `TB_COLLECT_EXCLUDE`에 등록하여 해당 파일을 영구 제외한다.
+
+### 기술 스택
+
+| 항목 | 내용 |
+|------|------|
+| 런타임 | Java 17, Spring Boot 3.5.3 |
+| 스케줄링 | `@Scheduled(fixedDelay)` + `@Async` (collectExecutor) |
+| 재시도 | Spring Retry (`@Retryable` / `@Recover`) |
+| SFTP | SSHJ 0.39.0 (`PromiscuousVerifier`) |
+| DB | PostgreSQL (local/test) / Altibase 8.1.0.0.1 (prod) |
+| ORM | MyBatis 3.0.5 (XML mapper) |
+| 로깅 | Log4j2 (spring-boot-starter-logging 제외) |
+| 빌드 | Gradle |
+
+### 실행 방식
+
+HTTP 포트 없음. JVM 프로세스로 기동 후 `CollectScheduler`가 매초 스케줄 파일을 읽어 수집 대상을 판별한다. 수집 대상 발견 시 `collectExecutor` 스레드풀에 비동기 작업을 제출한다.
 
 ---
 
-## 패키지 구조
+## 2. 데이터 흐름
+
+### 전체 흐름도
 
 ```
-com.sks.precheck.collect
-│
-├── CollectApplication.java          ← 진입점
-│
-├── common/
-│   ├── constants/
-│   │   └── CollectConstants.java    ← 숫자/문자열 상수 모음 (파일크기 한도, 재시도 횟수 등)
-│   ├── exception/
-│   │   └── CollectException.java    ← 수집 서버 전용 RuntimeException
-│   └── util/
-│       ├── DateUtil.java            ← 날짜 포맷/파싱 유틸 (timestamp 파싱, yyyyMMdd 변환)
-│       └── SequenceHelper.java      ← DB SEQUENCE NEXTVAL 조회 (PostgreSQL/Altibase 분기)
-│
-├── config/
-│   ├── DataSourceConfig.java        ← 프로파일별 DataSource 설정 (test=PostgreSQL, prod=Altibase)
-│   └── RetryConfig.java             ← @EnableRetry 활성화
-│
-├── domain/
-│   ├── CollectLog.java              ← TB_COLLECT_LOG 매핑 DTO
-│   ├── CollectHistory.java          ← TB_COLLECT_HISTORY 매핑 DTO
-│   └── CollectExclude.java          ← TB_COLLECT_EXCLUDE 매핑 DTO
-│
-├── mapper/
-│   ├── CollectLogMapper.java        ← TB_COLLECT_LOG 접근 (insert, findForAnalyze)
-│   ├── CollectHistoryMapper.java    ← TB_COLLECT_HISTORY 접근 (insert, update, findLastLineNumber)
-│   └── CollectExcludeMapper.java    ← TB_COLLECT_EXCLUDE 접근 (insert, countActiveExclude)
-│
-├── parser/
-│   ├── CollectScheduleParser.java   ← .conf 파일 → CollectScheduleVo 목록 변환
-│   └── LogNormalizeParser.java      ← 로그 한 줄 → CollectLog 변환 (@@@...@@@ 파싱)
-│
-├── scheduler/
-│   └── CollectScheduler.java        ← 1초마다 실행, 조건 판단 후 CollectService 호출
-│
-├── service/
-│   ├── CollectService.java          ← 수집 진입점, 이력 선등록 후 RetryService에 위임
-│   ├── CollectRetryService.java     ← 실제 수집 처리 + @Retryable 재시도 로직
-│   ├── SftpService.java             ← SSH 접속, 파일 크기 조회, 라인 단위 읽기
-│   └── ExcludeService.java          ← 영구 제외 대상 등록/조회
-│
-└── vo/
-    └── CollectScheduleVo.java       ← .conf 파일 한 줄을 담는 VO (서버ID, IP, 파일경로, 스케줄표현식)
-
-resources/
-├── application.yml                  ← 공통 설정 (기본 프로파일: local)
-├── application-local.yml            ← 로컬 개발용 (PostgreSQL localhost)
-├── application-test.yml             ← 테스트 서버용 (PostgreSQL)
-├── application-prod.yml             ← 운영 서버용 (Altibase)
-└── mapper/
-    ├── CollectLogMapper.xml
-    ├── CollectHistoryMapper.xml
-    └── CollectExcludeMapper.xml
+[PreCheck_CollectLogs_Schedule.conf]
+        │  (1초마다 폴링, 60초 캐시)
+        ▼
+[CollectScheduler] ──── 스케줄 매칭 (pollWindowSeconds=2) ────┐
+                                                               │
+        ┌──────────────────────────────────────────────────────┘
+        │  @Async("collectExecutor")
+        ▼
+[CollectService.collect()]
+        │  INSERT TB_COLLECT_HISTORY (STATUS=FAIL / failReason=IN_PROGRESS) ← crash-safe
+        │  AOP proxy → CollectRetryService
+        ▼
+[CollectRetryService.collectWithRetry()]  @Retryable(maxAttempts=4, delay=10s)
+        │
+        ├── Step 1: retryCount 갱신 (RetrySynchronizationManager)
+        ├── Step 2: TB_COLLECT_EXCLUDE 체크 → SKIP
+        ├── Step 3: SFTP getFileSizeBytes()
+        ├── Step 4: 배치 + fileSize ≥ 300MB → registerExclude + SKIP
+        ├── Step 5: 주기 → findLastLineNumber(), 날짜 리셋 판정
+        ├── Step 6: readLines() → logNormalizeParser.parseNormalizedLogFromLine()
+        ├── Step 7: 주기 + totalReadBytes ≥ 50MB → registerExclude + SKIP
+        ├── Step 8: INSERT TB_COLLECT_LOG (SEQ_COLLECT_LOG)
+        └── Step 9: UPDATE TB_COLLECT_HISTORY → SUCCESS (LAST_LINE_NUMBER 저장)
+                                                               │
+        @Recover → UPDATE TB_COLLECT_HISTORY → FAIL           │
+                                                               ▼
+                                                    [TB_COLLECT_LOG]
+                                                               │
+                                                    (precheck-analyze 분석)
 ```
 
----
+### 주요 시나리오별 흐름
 
-## 클래스 간 호출 관계
-
-```
-CollectScheduler
-    │  생성자에서 직접 new
-    ├──► CollectScheduleParser          (Spring Bean 아님, 상태 없음)
-    │
-    │  Spring Bean 주입
-    └──► CollectService
-              │
-              ├──► SequenceHelper       (SEQ_COLLECT_HISTORY NEXTVAL)
-              ├──► CollectHistoryMapper (이력 INSERT)
-              │
-              └──► CollectRetryService  ← @Retryable AOP 프록시 경유 호출 (★중요)
-                        │
-                        ├──► SequenceHelper       (SEQ_COLLECT_LOG, SEQ_COLLECT_EXCLUDE NEXTVAL)
-                        ├──► CollectLogMapper      (로그 INSERT)
-                        ├──► CollectHistoryMapper  (이력 UPDATE)
-                        ├──► ExcludeService        (제외 등록/조회)
-                        │         └──► CollectExcludeMapper
-                        ├──► SftpService            (파일 크기 조회, 라인 읽기)
-                        │
-                        └──► LogNormalizeParser    (생성자에서 직접 new, 상태 없음)
-```
-
-> **CollectService → CollectRetryService 분리 이유**
-> Spring의 `@Retryable`은 AOP 프록시를 통해서만 동작한다.
-> 같은 클래스 내부에서 `this.메서드()` 로 호출하면 프록시를 우회해 재시도가 무력화된다.
-> 재시도가 필요한 로직만 별도 Bean(`CollectRetryService`)으로 분리하고,
-> `CollectService`에서 Spring이 주입한 프록시 Bean을 통해 호출해야 `@Retryable`이 동작한다.
-
----
-
-## 코드 흐름 추적
-
-### STEP 1 — 기동
+#### A. 주기 수집 (증분)
 
 ```
-CollectApplication.java
-  @SpringBootApplication     → 패키지 하위 전체 Bean 스캔
-  @EnableScheduling          → @Scheduled 어노테이션 활성화
-
-  main() {
-      SpringApplication.run(CollectApplication.class, args);
-  }
+1. LAST_LINE_NUMBER 조회 (TB_COLLECT_HISTORY)
+2. COLLECT_DATE ≠ 오늘 AND '+' 미사용 → startLineNumber=0 (날짜 리셋)
+3. SFTP readLines(startLineNumber=LAST_LINE_NUMBER+1)
+4. 각 라인: @@@...@@@ 파싱 → 파싱 성공 시 로그 리스트에 추가
+5. totalReadBytes ≥ 50MB → PART_SIZE 제외 등록, SKIP
+6. TB_COLLECT_LOG INSERT (파싱 성공한 라인만)
+7. LAST_LINE_NUMBER = 마지막 읽은 라인 번호로 UPDATE
 ```
 
-기동 시 주요 자동 설정:
-- `application-{profile}.yml` 의 `spring.datasource.*` → DataSource 생성
-- `application.yml` 의 `mybatis.*` → MyBatis SqlSessionFactory 자동 구성
-  - `map-underscore-to-camel-case: true` : `COLLECT_LOG_ID` → `collectLogId` 자동 매핑
-  - `mapper-locations` : `resources/mapper/*.xml` 로드
-- `@Mapper` 어노테이션이 붙은 인터페이스 자동 등록
-
----
-
-### STEP 2 — 스케줄러 루프
+#### B. 배치 수집 (전체)
 
 ```
-CollectScheduler.java
-  @Scheduled(fixedDelayString = "${precheck.collect.scheduler.fixed-delay-ms:1000}")
-  run() {
-      // SFTP 계정 미설정이면 건너뜀
-      if (sftpUsername.isBlank() || sftpPassword.isBlank()) { return; }
-
-      List<CollectScheduleVo> schedules = getSchedules();   // ← STEP 3
-      for (CollectScheduleVo schedule : schedules) {
-          if (shouldRun(schedule, now)) {                   // ← STEP 4
-              collectService.collect(...);                  // ← STEP 5
-          }
-      }
-  }
+1. SFTP getFileSizeBytes()
+2. fileSize ≥ 300MB → INIT_SIZE 제외 등록, SKIP
+3. startLineNumber=0 으로 전체 파일 읽기
+4. TB_COLLECT_LOG INSERT
+5. LAST_LINE_NUMBER 갱신 안 함 (배치는 매번 전체 읽기)
 ```
 
-`fixedDelay` 방식: 이전 `run()` 실행이 완전히 끝난 뒤 1초 후에 다음 실행 시작.
-→ `run()` 실행 중 다음 `run()`이 겹쳐 실행되지 않음.
-
----
-
-### STEP 3 — 스케줄 파일 파싱
+#### C. 제외 파일 처리
 
 ```
-CollectScheduler.java
-  getSchedules() {
-      // 마지막 파싱 후 reloadIntervalMillis(기본 60초) 미경과 → 캐시 반환
-      if (캐시 유효) return cachedSchedules;
-
-      // 캐시 만료 → 파일 재파싱
-      collectScheduleParser.parseScheduleFile(scheduleFilePath);
-  }
-
-CollectScheduleParser.java
-  parseScheduleFile(filePath) {
-      // 파일을 한 줄씩 읽어 parseLine() 호출
-      // 결과: List<CollectScheduleVo>
-  }
-
-  parseLine(line, lineNumber) {
-      // '#' 시작 또는 빈 줄 → null (무시)
-      // extractBracketTokens() 로 [토큰] 4개 추출
-      // 토큰이 4개가 아니거나 isValidScheduleExpression() 실패 → null (WARN 로그)
-      // 성공 → CollectScheduleVo 반환
-  }
+isExcluded() → TB_COLLECT_EXCLUDE WHERE RESTORE_YN='N' 존재
+→ STATUS=SKIP, SKIP_REASON="EXCLUDED" 로 종료
+(관리자가 RESTORE_YN='Y' 로 변경하면 다음 수집부터 재개)
 ```
 
-**.conf 파일 한 줄 파싱 예:**
-```
-입력: [dlprem01][192.168.210.121][/tmp/check.out][주기|1-5|090001|10|100001]
+#### D. 파일 경로 특수 처리
 
-CollectScheduleVo {
-    serverId         = "dlprem01"
-    serverIp         = "192.168.210.121"
-    sourceFilePath   = "/tmp/check.out"
-    scheduleExpression = "주기|1-5|090001|10|100001"
-}
+```
+sourceFilePath에 "yyyymmdd" 포함 → today 날짜로 치환
+  예: /logs/app_yyyymmdd.log → /logs/app_20260616.log
+
+sourceFilePath가 "+" 로 끝남 → 날짜 리셋 비활성화
+  예: /logs/app.log+  → 날짜 바뀌어도 LAST_LINE_NUMBER 유지
 ```
 
 ---
 
-### STEP 4 — 실행 조건 판단
+## 3. 디렉토리 및 파일 구조
+
+### 디렉토리 역할
 
 ```
-CollectScheduler.java
-  shouldRun(schedule, now) {
-      ScheduleRule rule = parseRule(schedule.getScheduleExpression());
-      // scheduleExpression → type(배치/주기), daySpec, startTime, intervalMinutes, endTime
-
-      if (!isTodayMatched(rule.daySpec, today)) return false;  // 요일 불일치
-
-      if ("배치".equals(rule.type)) return shouldRunBatch(...);
-      return shouldRunPeriodic(...);
-  }
+collect/
+├── src/main/java/com/precheck/collect/
+│   ├── CollectApplication.java          메인 클래스
+│   ├── scheduler/                        스케줄 폴링 및 실행 트리거
+│   ├── service/                          수집 비즈니스 로직, SFTP, 파일 읽기
+│   ├── parser/                           로그 정규화 포맷 파싱
+│   ├── mapper/                           MyBatis 매퍼 인터페이스
+│   ├── dto/                              데이터 전송 객체
+│   ├── constants/                        상수 정의
+│   └── config/                           Async 설정
+├── src/main/resources/
+│   ├── application.yml                   공통 설정
+│   ├── application-local.yml             로컬 (PostgreSQL + LocalFileService)
+│   ├── application-test.yml              테스트 (PostgreSQL + SftpService)
+│   ├── application-prod.yml              운영 (Altibase + SftpService)
+│   ├── mapper/                           MyBatis XML 매퍼
+│   └── log4j2.xml                        로그 설정
+└── build.gradle
 ```
 
-**배치 타입 판단 (`shouldRunBatch`):**
-```
-nowSeconds 가 [startSeconds, startSeconds + 2) 범위 안?  →  2초 실행 윈도우
-AND 오늘 날짜로 아직 실행 안 함? (lastBatchRunDateByKey)
-→ true 이면 실행, lastBatchRunDateByKey에 오늘 날짜 기록
-```
+### 주요 파일 목록
 
-**주기 타입 판단 (`shouldRunPeriodic`):**
-```
-startSeconds ≤ nowSeconds ≤ endSeconds?
-
-offsetSeconds = nowSeconds - startSeconds
-intervalSeconds = intervalMinutes * 60
-runIndex = offsetSeconds / intervalSeconds   ← 몇 번째 주기인지
-remainder = offsetSeconds % intervalSeconds  ← 이 주기 안에서 얼마나 지났는지
-
-remainder < 2초(폴링 윈도우)?               ← 주기 시작점 근처인지
-AND runIndex를 아직 실행 안 함? (lastPeriodicRunIndexByKey)
-→ true 이면 실행, lastPeriodicRunIndexByKey에 runIndex 기록
-```
+| 파일 | 역할 |
+|------|------|
+| `CollectScheduler.java` | 매 1초 스케줄 파일 읽기, 실행 시점 매칭, `collectService.collect()` 호출 |
+| `CollectService.java` | `@Async` 진입점, TB_COLLECT_HISTORY 초기 INSERT, AOP proxy 경유 |
+| `CollectRetryService.java` | `@Retryable` 9단계 수집 로직, `@Recover` 실패 처리 |
+| `SftpService.java` | SSHJ 기반 SFTP 연결, `getFileSizeBytes()`, `readLines()` |
+| `LocalFileService.java` | 로컬 파일 시스템 읽기 (테스트 전용) |
+| `FileReadService.java` | `SftpService`/`LocalFileService` 공통 인터페이스 |
+| `LogNormalizeParser.java` | `@@@[timestamp][logType][logId]\|content\|$tokens$@@@` 파싱 |
+| `ExcludeService.java` | TB_COLLECT_EXCLUDE 조회/등록 |
+| `AsyncConfig.java` | `collectExecutor` 스레드풀 빈 정의 |
+| `CollectConstants.java` | 크기 제한, 재시도 설정, 경로 특수 문자 상수 |
+| `CollectHistoryMapper.java` / `.xml` | TB_COLLECT_HISTORY CRUD |
+| `CollectLogMapper.java` / `.xml` | TB_COLLECT_LOG INSERT / 분석용 SELECT |
+| `PreCheck_CollectLogs_Schedule.conf` | 수집 스케줄 정의 파일 (serverId/serverIp/path/expr) |
 
 ---
 
-### STEP 5 — 수집 진입점
+## 4. 소스별 주요 함수/메서드
 
-```
-CollectService.java
-  collect(schedule, port, username, password) {
+### `scheduler/CollectScheduler.java`
 
-      // 1. 수집 타입 파싱: scheduleExpression.split("|")[0] → "배치" or "주기"
-      String scheduleType = parseScheduleType(schedule.getScheduleExpression());
+| 함수명 | 파라미터 | 반환값 | 설명 |
+|--------|----------|--------|------|
+| `scheduledTask()` | 없음 | void | `@Scheduled(fixedDelay=1000ms)` 진입점, 스케줄 파일 로드 후 매칭 |
+| `loadScheduleRules()` | 없음 | `List<ScheduleRule>` | 스케줄 파일 파싱 (60초 캐시), `[serverId][serverIp][path][expr]` 4필드 |
+| `isTimeToRun(rule)` | `ScheduleRule` | boolean | pollWindowSeconds=2 이내 시작시각 매칭 |
+| `buildScheduleKey(rule)` | `ScheduleRule` | String | serverId+serverIp+path+expr 조합으로 중복 실행 방지 키 생성 |
+| `isValidSftpConfig(rule)` | `ScheduleRule` | boolean | sftp 모드에서 자격증명 빈 값 체크 |
 
-      // 2. 수집 이력 PK 채번
-      Long historyId = sequenceHelper.nextval("SEQ_COLLECT_HISTORY");
+**내부 클래스 `ScheduleRule`**
 
-      // 3. 수집 이력 선등록 (수집 시작 마킹)
-      //    STATUS = "FAIL", FAIL_REASON = "IN_PROGRESS"
-      //    → 수집 도중 서버 다운 시에도 이력이 남아 추적 가능
-      CollectHistory history = new CollectHistory();
-      history.setCollectStatus(CollectConstants.STATUS_FAIL);
-      history.setFailReason("IN_PROGRESS");
-      collectHistoryMapper.insert(history);
-
-      // 4. 실제 수집은 CollectRetryService에 위임
-      //    ↓ 반드시 주입된 Bean(프록시)을 통해 호출해야 @Retryable 동작
-      return collectRetryService.collectWithRetry(historyId, schedule, ...);
-  }
-```
+| 필드 | 타입 | 설명 |
+|------|------|------|
+| `type` | String | `주기` / `배치` |
+| `daySpec` | String | 요일 (`*` / `월화수` 등) |
+| `startTime` | LocalTime | 시작 시각 |
+| `intervalMinutes` | int | 반복 간격 (분) — 주기 전용 |
+| `endTime` | LocalTime | 종료 시각 |
 
 ---
 
-### STEP 6 — 실제 수집 (@Retryable)
+### `service/CollectService.java`
 
-```
-CollectRetryService.java
+| 함수명 | 파라미터 | 반환값 | 설명 |
+|--------|----------|--------|------|
+| `collect(rule)` | `ScheduleRule` | void | `@Async("collectExecutor")`, TB_COLLECT_HISTORY 초기 INSERT 후 `collectRetryService.collectWithRetry()` 위임 |
 
-  @Retryable(
-      retryFor = {CollectException.class},
-      maxAttemptsExpression = "#{...CollectConstants.MAX_RETRY_COUNT + 1}",  // 4회
-      backoff = @Backoff(delayExpression = "#{...RETRY_DELAY_MILLISECONDS}") // 10초
-  )
-  collectWithRetry(historyId, schedule, scheduleType, port, username, password) {
-
-      // --- 재시도 횟수 갱신 ---
-      int retryCount = RetrySynchronizationManager.getContext().getRetryCount();
-      // → TB_COLLECT_HISTORY.RETRY_COUNT UPDATE
-
-      // --- 영구 제외 확인 ---
-      if (excludeService.isExcluded(serverId, sourceFilePath)) {
-          // TB_COLLECT_HISTORY STATUS=SKIP, return 0
-      }
-
-      // --- 파일 크기 조회 ---
-      long fileSizeBytes = sftpService.getFileSizeBytes(...);
-      // 실패 시 CollectException → @Retryable 재시도 발동
-
-      // --- [배치] 초기 크기 초과 ---
-      if ("배치".equals(scheduleType) && fileSizeBytes >= 300MB) {
-          excludeService.registerExclude(..., "INIT_SIZE", ...);
-          // TB_COLLECT_HISTORY STATUS=SKIP, return 0
-      }
-
-      // --- 파일 경로 전처리 ---
-      // 경로 끝 '+' → 날짜 변경에 따른 리셋 비활성화(dateResetDisabled=true), '+' 제거
-      // 경로 내 "yyyymmdd" → 오늘 날짜(yyyyMMdd)로 치환 (예: test.yyyymmdd → test.20260612)
-
-      // --- [주기] 증분 시작점 계산 ---
-      // COLLECT_DATE가 오늘과 다르면(날짜가 바뀌면) lastLineNumber를 조회하지 않고 처음부터 읽음
-      // 단, dateResetDisabled=true(경로에 '+' 접미사)면 collectDate=null로 조회하여 날짜와 무관하게 이어서 읽음
-      String collectDate = DateUtil.todayCollectDate();
-      Long lastLineNumber = null;
-      if ("주기".equals(scheduleType)) {
-          String lastLineCollectDate = dateResetDisabled ? null : collectDate;
-          lastLineNumber = collectHistoryMapper.findLastLineNumber(serverId, sourceFilePath, lastLineCollectDate);
-          // SELECT LAST_LINE_NUMBER ... WHERE ... [AND COLLECT_DATE = #{collectDate}] FETCH FIRST 1 ROWS ONLY
-      }
-      long startLineNumber = (lastLineNumber == null) ? 1 : lastLineNumber + 1;
-
-      // --- SFTP 파일 읽기 + 파싱 ---
-      List<CollectLog> parsedLogs = new ArrayList<>();
-      LineReadState lineReadState = new LineReadState(startLineNumber - 1);
-
-      sftpService.readLines(..., startLineNumber, (lineNumber, lineText) -> {
-          lineReadState.lastReadLineNumber = lineNumber;
-          lineReadState.totalReadBytes += lineText.getBytes(UTF_8).length;
-
-          // [주기] 50MB 초과 시 파싱 중단 (읽기는 계속해 lastReadLineNumber 추적)
-          if ("주기".equals(scheduleType) && lineReadState.totalReadBytes >= 50MB) {
-              lineReadState.exceededPartSizeLimit = true;
-              return;
-          }
-
-          CollectLog parsed = logNormalizeParser.parseNormalizedLogFromLine(lineText, lineNumber);
-          if (parsed != null) parsedLogs.add(parsed);
-      });
-
-      // --- [주기] 증분 크기 초과 ---
-      if ("주기".equals(scheduleType) && lineReadState.exceededPartSizeLimit) {
-          excludeService.registerExclude(..., "PART_SIZE", ...);
-          // TB_COLLECT_HISTORY STATUS=SKIP, return 0
-      }
-
-      // --- TB_COLLECT_LOG INSERT ---
-      for (CollectLog logRow : parsedLogs) {
-          logRow.setCollectLogId(sequenceHelper.nextval("SEQ_COLLECT_LOG"));
-          logRow.setServerId(serverId);           // 파서가 모르는 정보를 여기서 보완
-          logRow.setCollectDate(today);
-          logRow.setScheduleType(scheduleType);
-          collectLogMapper.insert(logRow);
-      }
-
-      // --- TB_COLLECT_HISTORY SUCCESS UPDATE ---
-      // LAST_LINE_NUMBER = lineReadState.lastReadLineNumber  ← 다음 주기 수집 시작점
-      collectHistoryMapper.updateCollectStatus(update);
-
-      return parsedLogs.size();
-  }
-
-  @Recover  // 4회 모두 실패 시 호출
-  recover(CollectException e, Long historyId, ...) {
-      // TB_COLLECT_HISTORY STATUS=FAIL, FAIL_REASON=예외메시지
-      // ERROR 로그 기록
-      return 0;
-  }
-```
+> `CollectRetryService`를 별도 빈으로 분리한 이유: Spring AOP 프록시 우회 방지.
+> `this.method()` 자기 호출 시 `@Retryable` AOP가 동작하지 않으므로 반드시 별도 빈 경유.
 
 ---
 
-### STEP 7 — SSH/SFTP 접속
+### `service/CollectRetryService.java`
 
-```
-SftpService.java
+| 함수명 | 파라미터 | 반환값 | 설명 |
+|--------|----------|--------|------|
+| `collectWithRetry(rule, historyId)` | `ScheduleRule`, `Long` | void | `@Retryable(CollectException, maxAttempts=4, delay=10000ms)` — 9단계 수집 흐름 |
+| `recover(e, rule, historyId)` | `CollectException`, `ScheduleRule`, `Long` | void | `@Recover` — 최대 재시도 소진 후 FAIL 처리 |
 
-  getFileSizeBytes(serverIp, port, username, password, remoteFilePath) {
-      try (SSHClient client = createClient()) {     // PromiscuousVerifier (내부망 전용)
-          connectAndAuth(client, ...);              // connect() → authPassword()
-          try (SFTPClient sftp = client.newSFTPClient()) {
-              return sftp.stat(remoteFilePath).getSize();
-          }
-      }
-      // IOException → CollectException 변환 → @Retryable 재시도 대상
-  }
+**9단계 수집 흐름 상세**
 
-  readLines(serverIp, port, username, password, remoteFilePath,
-            startLineNumber, charset, lineConsumer) {
-      try (SSHClient client = createClient()) {
-          connectAndAuth(client, ...);
-          try (SFTPClient sftp = client.newSFTPClient();
-               RemoteFile remoteFile = sftp.open(remoteFilePath);
-               BufferedReader reader = new BufferedReader(
-                       new InputStreamReader(remoteFile.new RemoteFileInputStream(), charset))) {
+| 단계 | 동작 | 관련 메서드/클래스 |
+|------|------|-------------------|
+| 1 | retryCount 갱신 | `RetrySynchronizationManager.getContext().getRetryCount()` |
+| 2 | 제외 파일 체크 | `excludeService.isExcluded(serverId, filePath)` |
+| 3 | SFTP 파일 크기 조회 | `fileReadService.getFileSizeBytes(...)` |
+| 4 | 배치 + ≥300MB → 영구 제외 | `excludeService.registerExclude(..., "INIT_SIZE")` |
+| 5 | 주기: 마지막 라인 번호 조회, 날짜 리셋 판정 | `collectHistoryMapper.findLastLineNumber(...)` |
+| 6 | 라인 읽기 + 정규화 파싱 | `fileReadService.readLines(...)`, `logNormalizeParser.parseNormalizedLogFromLine(...)` |
+| 7 | 주기 + ≥50MB → 영구 제외 | `excludeService.registerExclude(..., "PART_SIZE")` |
+| 8 | TB_COLLECT_LOG INSERT | `collectLogMapper.insert(...)` (SEQ_COLLECT_LOG) |
+| 9 | TB_COLLECT_HISTORY 성공 UPDATE | `collectHistoryMapper.updateCollectStatus(...)` |
 
-              long currentLineNumber = 0;
-              String line;
-              while ((line = reader.readLine()) != null) {
-                  currentLineNumber++;
-                  if (currentLineNumber < startLineNumber) continue;  // 앞부분 skip
-                  lineConsumer.accept(currentLineNumber, line);        // 콜백 호출
-              }
-          }
-      }
-  }
-```
+**`LineReadState` 내부 클래스**
+
+| 필드 | 설명 |
+|------|------|
+| `lastReadLineNumber` | 마지막으로 읽은 라인 번호 |
+| `totalReadBytes` | 이번 실행에서 읽은 누적 바이트 |
+| `totalLineCount` | 이번 실행에서 읽은 라인 수 |
+| `exceededPartSizeLimit` | 50MB 초과 여부 플래그 |
 
 ---
 
-### STEP 8 — 정규화 로그 파싱
+### `service/SftpService.java`
 
-```
-LogNormalizeParser.java
+| 함수명 | 파라미터 | 반환값 | 설명 |
+|--------|----------|--------|------|
+| `getFileSizeBytes(host, port, user, pass, path)` | String, int, String, String, String | long | SFTP stat으로 파일 크기 조회 |
+| `readLines(host, port, user, pass, path, startLine, consumer)` | ..., long, `BiConsumer<Long,String>` | void | startLine 이전 라인 순차 스킵, 이후 라인 consumer 콜백 |
 
-  parseNormalizedLogFromLine(line, lineNumber) {
-
-      // "@@@" 없으면 즉시 null (일반 로그 라인)
-      int start = line.indexOf("@@@");
-      if (start < 0) return null;
-
-      // 종료 "@@@" 찾기
-      int end = line.indexOf("@@@", start + 3);
-      if (end < 0) { WARN "종료 누락"; return null; }
-
-      // 한 라인에 @@@가 3개 이상 (로그 2건 혼재)
-      if (line.indexOf("@@@", end + 3) >= 0) { WARN "2건 이상"; return null; }
-
-      // rawLog = "@@@[...][...][...]|...|...@@@"
-      String rawLog = line.substring(start, end + 3);
-
-      // 헤더(@@@[timestamp][type][logId])를 먼저 파싱하고,
-      // 이후 |...| 구간(contentPart)과 뒤쪽(tailPart)에서 $...$ 토큰을 추출한다.
-
-      // logType 검증: 문구/정보/날짜/수치/존재/비교/시간 중 하나여야 함
-      // LOG_ID 검증: 대문자+숫자+언더스코어, 최대 30자  (패턴: ^[A-Z0-9_]{1,30}$)
-      // timestamp 파싱: DateUtil.parseLogTimestamp() → LocalDateTime
-
-      // 값 토큰 규칙(v1.1)
-      //  - 수치: $...$ 토큰이 정확히 1개 (콜론(:) 없는 값만 허용)
-      //  - 비교: $...$ 토큰이 정확히 2개 (콜론(:) 없는 값만 허용)
-      //  - 시간: $...$ 토큰이 정확히 1개 (콜론(:) 포함, HH:mm → 분(minute) 값으로 저장)
-
-      // CollectLog 반환 (serverId 등 수집 맥락 정보는 CollectRetryService에서 보완)
-  }
-```
-
-**파싱 예시:**
-
-```
-입력 라인:
-  2026/05/01 sis15007 @@@[2026/05/01 09:00:01.123][수치][DISK_HOME]|홈디스크|$80$@@@
-
-rawLog 추출:
-  @@@[2026/05/01 09:00:01.123][수치][DISK_HOME]|홈디스크|$80$@@@
-
-추출 필드:
-  timestamp   = "2026/05/01 09:00:01.123" → LocalDateTime
-  logType     = "수치"
-  logId       = "DISK_HOME"
-  logContent  = "홈디스크"
-  logValue    = BigDecimal("80")
-  rawLog      = "@@@[2026/05/01 09:00:01.123][수치][DISK_HOME]|홈디스크|$80$@@@"
-  lineNumber  = 42  (파일에서의 라인번호)
-```
-
-```
-입력 라인(수치, 중간 배치):
-  2026/05/28 sis15007 @@@[2026/05/28 13:01:09.555][수치][PROC_AO_TR]|ao_tr_pro_nm PROCESS 갯수 $4$ 처리중|@@@
-
-추출 필드:
-  logType     = "수치"
-  logContent  = "ao_tr_pro_nm PROCESS 갯수 처리중"
-  logValue    = BigDecimal("4")
-```
-
-```
-입력 라인(시간):
-  2026/05/01 sis15007 @@@[2026/05/01 09:00:01.123][시간][DATE_BTIME]|처리시간 $07:35$|@@@
-
-추출 필드:
-  logType     = "시간"
-  logContent  = "처리시간"
-  logValue    = BigDecimal("455")  // 07:35 → 455분
-```
+- `@ConditionalOnProperty(name="precheck.collect.mode", havingValue="sftp", matchIfMissing=true)`
+- SSHJ `PromiscuousVerifier` — 내부망 전용, 호스트 키 검증 생략
+- 호출마다 새 SSHClient 생성/종료 (커넥션 재사용 없음, 스레드 안전)
 
 ---
 
-### STEP 9 — DB SEQUENCE 채번
+### `service/LocalFileService.java`
 
-```
-SequenceHelper.java
+| 함수명 | 파라미터 | 반환값 | 설명 |
+|--------|----------|--------|------|
+| `getFileSizeBytes(...)` | (serverIp/port/user/pass 무시) | long | 로컬 파일 크기 조회 |
+| `readLines(...)` | (serverIp/port/user/pass 무시) | void | 로컬 파일 순차 읽기 |
 
-  nextval(sequenceName) {
-      Connection connection = dataSource.getConnection();
-      String dbProductName = connection.getMetaData().getDatabaseProductName();
-
-      // DB 종류에 따라 SQL 분기
-      if (dbProductName.contains("postgres"))
-          sql = "select nextval('" + sequenceName + "')";      // PostgreSQL
-      else
-          sql = "SELECT " + sequenceName + ".NEXTVAL FROM DUAL"; // Altibase
-
-      // PreparedStatement 실행 → Long 반환
-  }
-```
-
-사용처:
-- `CollectService` : `SEQ_COLLECT_HISTORY` (수집 이력 PK)
-- `CollectRetryService` : `SEQ_COLLECT_LOG` (수집 로그 PK), `SEQ_COLLECT_EXCLUDE` (제외 PK)
+- `@ConditionalOnProperty(name="precheck.collect.mode", havingValue="local")`
+- 로컬 개발/테스트 전용
 
 ---
 
-## 데이터 흐름 한눈에 보기
+### `parser/LogNormalizeParser.java`
+
+| 함수명 | 파라미터 | 반환값 | 설명 |
+|--------|----------|--------|------|
+| `parseNormalizedLogFromLine(line, failDetails)` | String, `List<String>` | `NormalizedLog?` | 운영 파싱 메서드, 실패 시 failDetails에 사유 추가 후 null 반환 |
+| `parseFile(filePath)` | String | `List<NormalizedLog>` | 테스트/단독 실행용 파일 전체 파싱 |
+
+**정규화 로그 포맷**
 
 ```
-.conf 파일
-    │
-    ▼  CollectScheduleParser.parseScheduleFile()
-CollectScheduleVo (서버ID, IP, 파일경로, 스케줄표현식)
-    │
-    ▼  CollectScheduler.shouldRun()  →  조건 불충족이면 버림
-    │
-    ▼  CollectService.collect()
-    │      TB_COLLECT_HISTORY INSERT  (STATUS=FAIL, FAIL_REASON=IN_PROGRESS)
-    │
-    ▼  CollectRetryService.collectWithRetry()   @Retryable
-    │      SftpService.getFileSizeBytes()
-    │      SftpService.readLines()
-    │          │
-    │          ▼  (각 라인마다 콜백)
-    │      LogNormalizeParser.parseNormalizedLogFromLine()
-    │          │
-    │          ▼  @@@...@@@ 라인만
-    │      CollectLog  (logType, logId, logTimestamp, logContent, logValue, rawLog, lineNumber)
-    │          │
-    │          ▼  수집 맥락 정보 보완 (serverId, serverIp, collectDate, scheduleType ...)
-    │      TB_COLLECT_LOG INSERT
-    │
-    ▼  TB_COLLECT_HISTORY UPDATE  (STATUS=SUCCESS, LAST_LINE_NUMBER=마지막라인번호)
+@@@[yyyy/MM/dd HH:mm:ss.SSS][logType][LOG_ID]|content|$token1$$token2$@@@
 ```
+
+**logType별 파싱 규칙**
+
+| logType | 토큰 조건 | 처리 |
+|---------|-----------|------|
+| 문구 | 없음 | content만 저장 |
+| 수치 | 숫자 토큰 정확히 1개 | BigDecimal 변환 |
+| 날짜 | 없음 | content를 날짜로 해석 |
+| 존재 | 없음 | content를 Y/N으로 해석 |
+| 정보 | 없음 | content 그대로 |
+| 비교 | 숫자 토큰 정확히 2개 | BigDecimal 두 값 저장 |
+| 시간 | HH:mm 토큰 1개 | 분(minute) 수로 BigDecimal 변환 |
+
+**패턴 상수**
+
+| 패턴 | 정규식 | 설명 |
+|------|--------|------|
+| `HEADER_PATTERN` | `^@@@\[timestamp\]\[logType\]\[logId\]` | 라인 시작 구조 검증 |
+| `LOG_ID_PATTERN` | `^[A-Z0-9_]{1,30}$` | LOG_ID 형식 검증 |
+| `VALUE_TOKEN_PATTERN` | `\$[^$]+\$` | `$...$` 토큰 추출 |
 
 ---
 
-## 설정값 목록
+### `service/ExcludeService.java`
 
-| 설정 키 | 기본값 | 설명 |
+| 함수명 | 파라미터 | 반환값 | 설명 |
+|--------|----------|--------|------|
+| `isExcluded(serverId, filePath)` | String, String | boolean | TB_COLLECT_EXCLUDE WHERE RESTORE_YN='N' 존재 여부 |
+| `registerExclude(serverId, filePath, reason)` | String, String, String | void | TB_COLLECT_EXCLUDE INSERT |
+
+---
+
+### `config/AsyncConfig.java`
+
+| 빈 이름 | 설정값 | 설명 |
 |---------|--------|------|
-| `precheck.collect.schedule-file-path` | `~/cfg/PreCheck_CollectLogs_Schedule.conf` | 스케줄 설정 파일 경로 |
-| `precheck.sftp.port` | `22` | SSH 포트 |
-| `precheck.sftp.username` | (없음) | SFTP 계정 — 미설정 시 수집 건너뜀 |
-| `precheck.sftp.password` | (없음) | SFTP 비밀번호 — 미설정 시 수집 건너뜀 |
-| `precheck.collect.scheduler.fixed-delay-ms` | `1000` | 스케줄러 실행 간격 (ms) |
-| `precheck.collect.scheduler.reload-interval-ms` | `60000` | 스케줄 파일 캐시 유효 시간 (ms) |
+| `collectExecutor` | core=5, max=20, queue=100, prefix="collect-async-" | 수집 비동기 스레드풀 |
+
+---
+
+### `constants/CollectConstants.java`
 
 | 상수 | 값 | 설명 |
-|------|----|------|
-| `INIT_COLLECT_SIZE_LIMIT_BYTES` | 300MB | 배치 수집 파일 크기 한도 |
-| `PART_COLLECT_SIZE_LIMIT_BYTES` | 50MB  | 주기 증분 크기 한도 |
-| `MAX_RETRY_COUNT` | 3 | 재시도 횟수 (최초 포함 총 4회) |
-| `RETRY_DELAY_MILLISECONDS` | 10,000 (10초) | 재시도 간격 |
+|------|-----|------|
+| `INIT_COLLECT_SIZE_LIMIT_BYTES` | 300MB | 배치 수집 최대 파일 크기 |
+| `PART_COLLECT_SIZE_LIMIT_BYTES` | 50MB | 주기 수집 1회 최대 읽기 크기 |
+| `MAX_RETRY_COUNT` | 3 | 최대 재시도 횟수 |
+| `RETRY_DELAY_MILLISECONDS` | 10,000L (10초) | 재시도 간격 |
+| `FILE_PATH_DATE_PLACEHOLDER` | `"yyyymmdd"` | 날짜 치환 플레이스홀더 |
+| `FILE_PATH_NO_DATE_RESET_SUFFIX` | `"+"` | 날짜 리셋 비활성화 접미사 |
+| `STATUS_SUCCESS` | `"SUCCESS"` | 수집 성공 상태 |
+| `STATUS_FAIL` | `"FAIL"` | 수집 실패 상태 |
+| `STATUS_SKIP` | `"SKIP"` | 수집 건너뜀 상태 |
+| `EXCLUDE_REASON_INIT_SIZE` | `"INIT_SIZE"` | 배치 크기 초과 제외 사유 |
+| `EXCLUDE_REASON_PART_SIZE` | `"PART_SIZE"` | 주기 크기 초과 제외 사유 |
+
+---
+
+## 5. 리소스 및 DB 환경
+
+### DB 연결 정보
+
+| 환경 | DB | JDBC URL | 비고 |
+|------|-----|---------|------|
+| local | PostgreSQL | `jdbc:postgresql://localhost:5432/postgres` | LocalFileService 사용 |
+| test | PostgreSQL | `jdbc:postgresql://[테스트서버]:5432/precheck` | SftpService 사용 |
+| prod | Altibase | `jdbc:Altibase://192.168.0.1:20300/precheck` | SftpService 사용 |
+
+### 사용 테이블 목록
+
+| 테이블 | 역할 |
+|--------|------|
+| `TB_COLLECT_HISTORY` | 수집 작업 이력 (STATUS, LAST_LINE_NUMBER, retryCount 등) |
+| `TB_COLLECT_LOG` | 수집된 정규화 로그 라인 (SEQ_COLLECT_LOG 시퀀스) |
+| `TB_COLLECT_EXCLUDE` | 크기 초과 등으로 영구 제외된 파일 목록 |
+
+**TB_COLLECT_HISTORY 주요 컬럼**
+
+| 컬럼 | 설명 |
+|------|------|
+| `HISTORY_ID` | PK |
+| `SERVER_ID` | 대상 서버 ID |
+| `SOURCE_FILE_PATH` | 수집 대상 파일 경로 |
+| `STATUS` | SUCCESS / FAIL / SKIP |
+| `LAST_LINE_NUMBER` | 다음 수집 시작 라인 (주기 수집) |
+| `COLLECT_DATE` | 수집 일자 (날짜 리셋 판단 기준) |
+| `RETRY_COUNT` | 현재 재시도 횟수 |
+| `FAIL_REASON` | 실패 사유 (`IN_PROGRESS` → 크래시 감지용) |
+
+**TB_COLLECT_LOG 주요 컬럼**
+
+| 컬럼 | 설명 |
+|------|------|
+| `LOG_SEQ` | PK (SEQ_COLLECT_LOG) |
+| `SERVER_ID` | 대상 서버 ID |
+| `LOG_ID` | 로그 식별자 (`[A-Z0-9_]{1,30}`) |
+| `LOG_TYPE` | 문구 / 수치 / 날짜 / 존재 / 정보 / 비교 / 시간 |
+| `LOG_TIMESTAMP` | 로그 발생 시각 |
+| `CONTENT` | 로그 내용 |
+| `VALUE1`, `VALUE2` | 수치/비교형 파싱값 (BigDecimal) |
+| `COLLECT_DATE` | 수집 일자 |
+
+**TB_COLLECT_EXCLUDE 주요 컬럼**
+
+| 컬럼 | 설명 |
+|------|------|
+| `SERVER_ID` | 대상 서버 ID |
+| `FILE_PATH` | 제외된 파일 경로 |
+| `EXCLUDE_REASON` | INIT_SIZE / PART_SIZE |
+| `RESTORE_YN` | N: 제외 중 / Y: 복원 (관리자 수동 변경) |
+
+### 외부 리소스
+
+| 리소스 | 상세 |
+|--------|------|
+| SFTP 서버 | 대상 서버 (port 22, SSHJ PromiscuousVerifier) |
+| 스케줄 파일 | `PreCheck_CollectLogs_Schedule.conf` (환경별 경로 다름) |
+
+### MyBatis Mapper
+
+**`CollectHistoryMapper.xml` 주요 쿼리**
+
+| 쿼리 ID | 설명 |
+|---------|------|
+| `insert` | TB_COLLECT_HISTORY 초기 INSERT |
+| `updateCollectStatus` | STATUS / LAST_LINE_NUMBER / RETRY_COUNT 동적 UPDATE (`<if>` 조건) |
+| `findLastLineNumber` | 최근 SUCCESS 이력의 LAST_LINE_NUMBER 조회 (`FETCH FIRST 1 ROWS ONLY`) |
+
+**`CollectLogMapper.xml` 주요 쿼리**
+
+| 쿼리 ID | 설명 |
+|---------|------|
+| `insert` | TB_COLLECT_LOG 15개 필드 INSERT |
+| `findForAnalyze` | analyze 서버용 SELECT (날짜/serverId/logType/logId 필터) |
+
+---
+
+## 6. 설정 파일 분석
+
+### `application.yml` (공통)
+
+| 항목 | 기본값 | 설명 |
+|------|--------|------|
+| `spring.application.name` | `precheck-collect` | 앱 이름 |
+| `spring.profiles.active` | `local` | 기본 활성 프로파일 |
+| `precheck.collect.async.core-pool-size` | `5` | collectExecutor 코어 스레드 수 |
+| `precheck.collect.async.max-pool-size` | `20` | collectExecutor 최대 스레드 수 |
+| `precheck.collect.async.queue-capacity` | `100` | collectExecutor 큐 용량 |
+| `mybatis.mapper-locations` | `classpath:mapper/*.xml` | XML 매퍼 위치 |
+| `mybatis.type-aliases-package` | `com.precheck.collect.dto` | 타입 별칭 패키지 |
+| `mybatis.configuration.map-underscore-to-camel-case` | `true` | 스네이크 → 카멜 자동 변환 |
+
+---
+
+### `application-local.yml` (로컬 개발)
+
+| 항목 | 값 | 설명 |
+|------|-----|------|
+| DB | PostgreSQL localhost:5432/postgres | 로컬 개발 DB |
+| `precheck.collect.mode` | `local` | LocalFileService 활성화 (SFTP 사용 안 함) |
+| `schedule-file-path` | 로컬 sample conf 경로 | 로컬 테스트용 스케줄 파일 |
+| `banner-mode` | `off` | 스프링 배너 비활성화 |
+
+---
+
+### `application-test.yml` (테스트 서버)
+
+| 항목 | 값 | 설명 |
+|------|-----|------|
+| DB | PostgreSQL 테스트 서버 | 테스트 환경 DB |
+| SFTP | port 22, `/home/precheck/cfg/...` | SftpService 활성화 |
+| `precheck.collect.mode` | `sftp` | SftpService 활성화 |
+
+---
+
+### `application-prod.yml` (운영)
+
+| 항목 | 값 | 설명 |
+|------|-----|------|
+| DB | Altibase 192.168.0.1:20300/precheck | 운영 DB |
+| SFTP | port 22 | SftpService 활성화 |
+| `schedule-file-path` | `/home/precheck/cfg/PreCheck_CollectLogs_Schedule.conf` | 운영 스케줄 파일 경로 |
+| `precheck.collect.mode` | `sftp` | SftpService 활성화 |
+
+---
+
+### `PreCheck_CollectLogs_Schedule.conf` (스케줄 파일)
+
+**파일 형식**
+
+```
+[serverId][serverIp][sourceFilePath][scheduleExpression]
+```
+
+**scheduleExpression 형식**
+
+| 유형 | 형식 | 예시 |
+|------|------|------|
+| 주기 | `주기\|요일\|시작시각\|간격(분)\|종료시각` | `주기\|*\|080000\|1\|235959` |
+| 배치 | `배치\|요일\|시각` | `배치\|월수금\|020000` |
+
+**파일 경로 특수 처리**
+
+| 규칙 | 예시 |
+|------|------|
+| `yyyymmdd` 플레이스홀더 | `/logs/app_yyyymmdd.log` → `/logs/app_20260616.log` |
+| `+` 접미사 | `/logs/app.log+` → 날짜 리셋 비활성화 |
+
+**현재 활성 항목 (운영 예시)**
+
+```
+[pjpsap01-주파수클럽][127.0.0.1][/var/log/app/monitoring_jpc.log][주기|*|080000|1|235959]
+[dcoodb01-주문체결][127.0.0.1][/var/log/app/monitoring_jcm.log][주기|*|080000|1|235959]
+```
+
+---
+
+## 7. 주요 아키텍처 결정 및 주의사항
+
+### Spring Retry AOP 우회 방지
+
+`@Retryable`은 AOP 프록시 기반이므로 `this.method()` 자기 호출 시 동작하지 않는다.  
+`CollectService` → `CollectRetryService` 구조로 분리하여 스프링 컨텍스트 프록시를 경유한다.
+
+### SFTP 연결 전략
+
+매 수집 호출마다 새 `SSHClient`를 생성하고 종료한다. 커넥션 풀 없음.  
+`PromiscuousVerifier`로 호스트 키 검증을 생략한다 (내부망 전용 가정).  
+`readLines()`에서 `startLineNumber` 이전 라인은 순차적으로 스킵한다 (SFTP seek 미지원으로 인한 설계 결정).
+
+### Crash-safe 이력 관리
+
+수집 시작 직전 `STATUS=FAIL, failReason=IN_PROGRESS`로 INSERT한다.  
+프로세스 비정상 종료 시 `IN_PROGRESS` 상태가 남아 미완료 수집을 감지할 수 있다.
+
+### `@Async` + `@Retryable` 조합 주의
+
+`collectExecutor` 스레드에서 `@Retryable`이 동작한다.  
+재시도는 같은 스레드에서 delay 후 재실행되므로, 재시도 대기 중 해당 스레드가 점유된다.  
+max=20 스레드 모두 재시도 대기 상태가 되면 신규 수집 작업이 큐에 적재된다 (queue=100).
+
+### 스케줄러 동작 방식
+
+- **폴링 주기**: 매 1초 (`fixedDelay=1000ms`)
+- **스케줄 파일 캐시**: 60초 (`reloadIntervalMillis=60000`)
+- **시간 매칭 윈도우**: ±2초 (`pollWindowSeconds=2`)
+- 같은 스케줄 키가 윈도우 내 중복 실행되지 않도록 실행 중인 키를 추적
+
+### analyze 서버와의 연계
+
+`TB_COLLECT_LOG`의 `findForAnalyze` 쿼리는 `precheck-analyze` 서버가 직접 호출한다.  
+두 서버가 같은 DB를 공유하며, collect가 INSERT → analyze가 SELECT 하는 단방향 흐름이다.

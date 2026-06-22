@@ -1,232 +1,706 @@
-2026-06-12 09:24:42.879 [restartedMain] INFO  CollectApplication - Starting CollectApplication using Java 17.0.19 with PID 24604 (C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\bin\main started by 20200161 in C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect)
-2026-06-12 09:24:42.895 [restartedMain] INFO  CollectApplication - The following 1 profile is active: "local"
-2026-06-12 09:24:43.977 [restartedMain] INFO  CollectScheduler - <<< CollectScheduler initialized with configuration: >>>
-2026-06-12 09:24:43.978 [restartedMain] INFO  CollectScheduler -   Schedule file path: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\schedule_sample\PreCheck_CollectLogs_Schedule.conf
-2026-06-12 09:24:43.978 [restartedMain] INFO  CollectScheduler -   Collect mode: local
-2026-06-12 09:24:43.978 [restartedMain] INFO  CollectScheduler -   SFTP port: 22
-2026-06-12 09:24:43.978 [restartedMain] INFO  CollectScheduler -   SFTP username: local_user
-2026-06-12 09:24:43.978 [restartedMain] INFO  CollectScheduler -   Schedule reload interval (ms): 60000
-2026-06-12 09:24:43.978 [restartedMain] INFO  CollectScheduler - <<< Configuration initialized >>>
-2026-06-12 09:24:44.158 [restartedMain] INFO  CollectApplication - Started CollectApplication in 1.765 seconds (process running for 2.347)
-2026-06-12 09:24:44.168 [scheduling-1] INFO  CollectScheduleParser - =============================
-2026-06-12 09:24:44.168 [scheduling-1] INFO  CollectScheduleParser -   [1] serverId: pjpsap01-주파수클럽, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, scheduleExpression: 주기|*|080000|1|235959
-2026-06-12 09:24:44.169 [scheduling-1] INFO  CollectScheduleParser - =============================
-2026-06-12 09:24:44.169 [scheduling-1] INFO  CollectScheduleParser -   [2] serverId: dcoodb01-주문체결, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, scheduleExpression: 주기|*|080000|1|235959
-2026-06-12 09:25:00.241 [scheduling-1] INFO  CollectScheduler - 주기 수집 실행 - serverId: pjpsap01-주파수클럽, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, 간격: 1분, 86번째 실행, schedule: 주기|*|080000|1|235959
-2026-06-12 09:25:00.246 [scheduling-1] INFO  CollectScheduler - 주기 수집 실행 - serverId: dcoodb01-주문체결, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, 간격: 1분, 86번째 실행, schedule: 주기|*|080000|1|235959
-2026-06-12 09:25:00.634 [collect-async-2] INFO  CollectRetryService - 수집 완료 - 서버: dcoodb01-주문체결, 파일: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, 타입: 주기, 수집총라인수: 0, 정규화저장건수: 0, 정규화실패건수: 0
-2026-06-12 09:25:00.634 [collect-async-1] INFO  CollectRetryService - 수집 완료 - 서버: pjpsap01-주파수클럽, 파일: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, 타입: 주기, 수집총라인수: 0, 정규화저장건수: 0, 정규화실패건수: 0
-2026-06-12 09:25:44.386 [scheduling-1] INFO  CollectScheduleParser - =============================
-2026-06-12 09:25:44.386 [scheduling-1] INFO  CollectScheduleParser -   [1] serverId: pjpsap01-주파수클럽, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, scheduleExpression: 주기|*|080000|1|235959
-2026-06-12 09:25:44.387 [scheduling-1] INFO  CollectScheduleParser - =============================
-2026-06-12 09:25:44.387 [scheduling-1] INFO  CollectScheduleParser -   [2] serverId: dcoodb01-주문체결, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, scheduleExpression: 주기|*|080000|1|235959
-2026-06-12 09:26:00.423 [scheduling-1] INFO  CollectScheduler - 주기 수집 실행 - serverId: pjpsap01-주파수클럽, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, 간격: 1분, 87번째 실행, schedule: 주기|*|080000|1|235959
-2026-06-12 09:26:00.425 [scheduling-1] INFO  CollectScheduler - 주기 수집 실행 - serverId: dcoodb01-주문체결, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, 간격: 1분, 87번째 실행, schedule: 주기|*|080000|1|235959
-2026-06-12 09:26:00.439 [collect-async-3] INFO  CollectRetryService - 수집 완료 - 서버: pjpsap01-주파수클럽, 파일: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, 타입: 주기, 수집총라인수: 0, 정규화저장건수: 0, 정규화실패건수: 0
-2026-06-12 09:26:00.440 [collect-async-4] INFO  CollectRetryService - 수집 완료 - 서버: dcoodb01-주문체결, 파일: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, 타입: 주기, 수집총라인수: 0, 정규화저장건수: 0, 정규화실패건수: 0
-2026-06-12 09:30:44.974 [restartedMain] INFO  CollectApplication - Starting CollectApplication using Java 17.0.19 with PID 16716 (C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\bin\main started by 20200161 in C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect)
-2026-06-12 09:30:44.974 [restartedMain] INFO  CollectApplication - The following 1 profile is active: "local"
-2026-06-12 09:30:45.875 [restartedMain] INFO  CollectScheduler - <<< CollectScheduler initialized with configuration: >>>
-2026-06-12 09:30:45.877 [restartedMain] INFO  CollectScheduler -   Schedule file path: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\schedule_sample\PreCheck_CollectLogs_Schedule.conf
-2026-06-12 09:30:45.877 [restartedMain] INFO  CollectScheduler -   Collect mode: local
-2026-06-12 09:30:45.877 [restartedMain] INFO  CollectScheduler -   SFTP port: 22
-2026-06-12 09:30:45.877 [restartedMain] INFO  CollectScheduler -   SFTP username: local_user
-2026-06-12 09:30:45.877 [restartedMain] INFO  CollectScheduler -   Schedule reload interval (ms): 60000
-2026-06-12 09:30:45.877 [restartedMain] INFO  CollectScheduler - <<< Configuration initialized >>>
-2026-06-12 09:30:45.986 [restartedMain] INFO  CollectApplication - Started CollectApplication in 1.415 seconds (process running for 1.821)
-2026-06-12 09:30:45.991 [scheduling-1] INFO  CollectScheduleParser - =============================
-2026-06-12 09:30:45.992 [scheduling-1] INFO  CollectScheduleParser -   [1] serverId: pjpsap01-주파수클럽, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, scheduleExpression: 주기|*|080000|1|235959
-2026-06-12 09:30:45.992 [scheduling-1] INFO  CollectScheduleParser - =============================
-2026-06-12 09:30:45.992 [scheduling-1] INFO  CollectScheduleParser -   [2] serverId: dcoodb01-주문체결, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, scheduleExpression: 주기|*|080000|1|235959
-2026-06-12 09:31:00.040 [scheduling-1] INFO  CollectScheduler - 주기 수집 실행 - serverId: pjpsap01-주파수클럽, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, 간격: 1분, 92번째 실행, schedule: 주기|*|080000|1|235959
-2026-06-12 09:31:00.044 [scheduling-1] INFO  CollectScheduler - 주기 수집 실행 - serverId: dcoodb01-주문체결, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, 간격: 1분, 92번째 실행, schedule: 주기|*|080000|1|235959
-2026-06-12 09:31:00.417 [collect-async-1] INFO  CollectRetryService - 수집 완료 - 서버: pjpsap01-주파수클럽, 파일: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, 타입: 주기, 수집총라인수: 46, 정규화저장건수: 9, 정규화실패건수: 0
-2026-06-12 09:31:00.444 [collect-async-2] INFO  CollectRetryService - 수집 완료 - 서버: dcoodb01-주문체결, 파일: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, 타입: 주기, 수집총라인수: 74, 정규화저장건수: 73, 정규화실패건수: 0
-2026-06-12 09:31:46.162 [scheduling-1] INFO  CollectScheduleParser - =============================
-2026-06-12 09:31:46.163 [scheduling-1] INFO  CollectScheduleParser -   [1] serverId: pjpsap01-주파수클럽, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, scheduleExpression: 주기|*|080000|1|235959
-2026-06-12 09:31:46.163 [scheduling-1] INFO  CollectScheduleParser - =============================
-2026-06-12 09:31:46.164 [scheduling-1] INFO  CollectScheduleParser -   [2] serverId: dcoodb01-주문체결, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, scheduleExpression: 주기|*|080000|1|235959
-2026-06-12 09:32:00.183 [scheduling-1] INFO  CollectScheduler - 주기 수집 실행 - serverId: pjpsap01-주파수클럽, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, 간격: 1분, 93번째 실행, schedule: 주기|*|080000|1|235959
-2026-06-12 09:32:00.184 [scheduling-1] INFO  CollectScheduler - 주기 수집 실행 - serverId: dcoodb01-주문체결, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, 간격: 1분, 93번째 실행, schedule: 주기|*|080000|1|235959
-2026-06-12 09:32:00.189 [collect-async-3] INFO  CollectRetryService - 수집 완료 - 서버: pjpsap01-주파수클럽, 파일: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, 타입: 주기, 수집총라인수: 0, 정규화저장건수: 0, 정규화실패건수: 0
-2026-06-12 09:32:00.189 [collect-async-4] INFO  CollectRetryService - 수집 완료 - 서버: dcoodb01-주문체결, 파일: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, 타입: 주기, 수집총라인수: 0, 정규화저장건수: 0, 정규화실패건수: 0
-2026-06-12 09:32:46.294 [scheduling-1] INFO  CollectScheduleParser - =============================
-2026-06-12 09:32:46.294 [scheduling-1] INFO  CollectScheduleParser -   [1] serverId: pjpsap01-주파수클럽, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, scheduleExpression: 주기|*|080000|1|235959
-2026-06-12 09:32:46.295 [scheduling-1] INFO  CollectScheduleParser - =============================
-2026-06-12 09:32:46.295 [scheduling-1] INFO  CollectScheduleParser -   [2] serverId: dcoodb01-주문체결, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, scheduleExpression: 주기|*|080000|1|235959
-2026-06-12 09:33:00.343 [scheduling-1] INFO  CollectScheduler - 주기 수집 실행 - serverId: pjpsap01-주파수클럽, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, 간격: 1분, 94번째 실행, schedule: 주기|*|080000|1|235959
-2026-06-12 09:33:00.345 [scheduling-1] INFO  CollectScheduler - 주기 수집 실행 - serverId: dcoodb01-주문체결, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, 간격: 1분, 94번째 실행, schedule: 주기|*|080000|1|235959
-2026-06-12 09:33:00.356 [collect-async-1] INFO  CollectRetryService - 수집 완료 - 서버: dcoodb01-주문체결, 파일: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, 타입: 주기, 수집총라인수: 0, 정규화저장건수: 0, 정규화실패건수: 0
-2026-06-12 09:33:00.357 [collect-async-5] INFO  CollectRetryService - 수집 완료 - 서버: pjpsap01-주파수클럽, 파일: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, 타입: 주기, 수집총라인수: 0, 정규화저장건수: 0, 정규화실패건수: 0
-2026-06-12 09:33:46.445 [scheduling-1] INFO  CollectScheduleParser - =============================
-2026-06-12 09:33:46.446 [scheduling-1] INFO  CollectScheduleParser -   [1] serverId: pjpsap01-주파수클럽, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, scheduleExpression: 주기|*|080000|1|235959
-2026-06-12 09:33:46.446 [scheduling-1] INFO  CollectScheduleParser - =============================
-2026-06-12 09:33:46.446 [scheduling-1] INFO  CollectScheduleParser -   [2] serverId: dcoodb01-주문체결, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, scheduleExpression: 주기|*|080000|1|235959
-2026-06-12 09:34:00.472 [scheduling-1] INFO  CollectScheduler - 주기 수집 실행 - serverId: pjpsap01-주파수클럽, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, 간격: 1분, 95번째 실행, schedule: 주기|*|080000|1|235959
-2026-06-12 09:34:00.474 [scheduling-1] INFO  CollectScheduler - 주기 수집 실행 - serverId: dcoodb01-주문체결, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, 간격: 1분, 95번째 실행, schedule: 주기|*|080000|1|235959
-2026-06-12 09:34:00.482 [collect-async-3] INFO  CollectRetryService - 수집 완료 - 서버: dcoodb01-주문체결, 파일: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, 타입: 주기, 수집총라인수: 0, 정규화저장건수: 0, 정규화실패건수: 0
-2026-06-12 09:34:00.482 [collect-async-2] INFO  CollectRetryService - 수집 완료 - 서버: pjpsap01-주파수클럽, 파일: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, 타입: 주기, 수집총라인수: 0, 정규화저장건수: 0, 정규화실패건수: 0
-2026-06-12 09:34:46.608 [scheduling-1] INFO  CollectScheduleParser - =============================
-2026-06-12 09:34:46.608 [scheduling-1] INFO  CollectScheduleParser -   [1] serverId: pjpsap01-주파수클럽, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, scheduleExpression: 주기|*|080000|1|235959
-2026-06-12 09:34:46.609 [scheduling-1] INFO  CollectScheduleParser - =============================
-2026-06-12 09:34:46.609 [scheduling-1] INFO  CollectScheduleParser -   [2] serverId: dcoodb01-주문체결, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, scheduleExpression: 주기|*|080000|1|235959
-2026-06-12 09:35:00.642 [scheduling-1] INFO  CollectScheduler - 주기 수집 실행 - serverId: pjpsap01-주파수클럽, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, 간격: 1분, 96번째 실행, schedule: 주기|*|080000|1|235959
-2026-06-12 09:35:00.644 [scheduling-1] INFO  CollectScheduler - 주기 수집 실행 - serverId: dcoodb01-주문체결, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, 간격: 1분, 96번째 실행, schedule: 주기|*|080000|1|235959
-2026-06-12 09:35:00.658 [collect-async-1] INFO  CollectRetryService - 수집 완료 - 서버: dcoodb01-주문체결, 파일: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, 타입: 주기, 수집총라인수: 0, 정규화저장건수: 0, 정규화실패건수: 0
-2026-06-12 09:35:00.658 [collect-async-4] INFO  CollectRetryService - 수집 완료 - 서버: pjpsap01-주파수클럽, 파일: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, 타입: 주기, 수집총라인수: 0, 정규화저장건수: 0, 정규화실패건수: 0
-2026-06-12 09:35:46.718 [scheduling-1] INFO  CollectScheduleParser - =============================
-2026-06-12 09:35:46.719 [scheduling-1] INFO  CollectScheduleParser -   [1] serverId: pjpsap01-주파수클럽, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, scheduleExpression: 주기|*|080000|1|235959
-2026-06-12 09:35:46.719 [scheduling-1] INFO  CollectScheduleParser - =============================
-2026-06-12 09:35:46.720 [scheduling-1] INFO  CollectScheduleParser -   [2] serverId: dcoodb01-주문체결, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, scheduleExpression: 주기|*|080000|1|235959
-2026-06-12 09:36:00.738 [scheduling-1] INFO  CollectScheduler - 주기 수집 실행 - serverId: pjpsap01-주파수클럽, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, 간격: 1분, 97번째 실행, schedule: 주기|*|080000|1|235959
-2026-06-12 09:36:00.738 [scheduling-1] INFO  CollectScheduler - 주기 수집 실행 - serverId: dcoodb01-주문체결, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, 간격: 1분, 97번째 실행, schedule: 주기|*|080000|1|235959
-2026-06-12 09:36:00.743 [collect-async-5] INFO  CollectRetryService - 수집 완료 - 서버: pjpsap01-주파수클럽, 파일: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, 타입: 주기, 수집총라인수: 0, 정규화저장건수: 0, 정규화실패건수: 0
-2026-06-12 09:36:00.743 [collect-async-3] INFO  CollectRetryService - 수집 완료 - 서버: dcoodb01-주문체결, 파일: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, 타입: 주기, 수집총라인수: 0, 정규화저장건수: 0, 정규화실패건수: 0
-2026-06-12 09:36:46.800 [scheduling-1] INFO  CollectScheduleParser - =============================
-2026-06-12 09:36:46.801 [scheduling-1] INFO  CollectScheduleParser -   [1] serverId: pjpsap01-주파수클럽, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, scheduleExpression: 주기|*|080000|1|235959
-2026-06-12 09:36:46.802 [scheduling-1] INFO  CollectScheduleParser - =============================
-2026-06-12 09:36:46.802 [scheduling-1] INFO  CollectScheduleParser -   [2] serverId: dcoodb01-주문체결, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, scheduleExpression: 주기|*|080000|1|235959
-2026-06-12 09:37:00.817 [scheduling-1] INFO  CollectScheduler - 주기 수집 실행 - serverId: pjpsap01-주파수클럽, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, 간격: 1분, 98번째 실행, schedule: 주기|*|080000|1|235959
-2026-06-12 09:37:00.817 [scheduling-1] INFO  CollectScheduler - 주기 수집 실행 - serverId: dcoodb01-주문체결, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, 간격: 1분, 98번째 실행, schedule: 주기|*|080000|1|235959
-2026-06-12 09:37:00.826 [collect-async-2] INFO  CollectRetryService - 수집 완료 - 서버: pjpsap01-주파수클럽, 파일: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, 타입: 주기, 수집총라인수: 0, 정규화저장건수: 0, 정규화실패건수: 0
-2026-06-12 09:37:00.826 [collect-async-1] INFO  CollectRetryService - 수집 완료 - 서버: dcoodb01-주문체결, 파일: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, 타입: 주기, 수집총라인수: 0, 정규화저장건수: 0, 정규화실패건수: 0
-2026-06-12 09:37:46.879 [scheduling-1] INFO  CollectScheduleParser - =============================
-2026-06-12 09:37:46.880 [scheduling-1] INFO  CollectScheduleParser -   [1] serverId: pjpsap01-주파수클럽, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, scheduleExpression: 주기|*|080000|1|235959
-2026-06-12 09:37:46.880 [scheduling-1] INFO  CollectScheduleParser - =============================
-2026-06-12 09:37:46.881 [scheduling-1] INFO  CollectScheduleParser -   [2] serverId: dcoodb01-주문체결, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, scheduleExpression: 주기|*|080000|1|235959
-2026-06-12 09:38:00.899 [scheduling-1] INFO  CollectScheduler - 주기 수집 실행 - serverId: pjpsap01-주파수클럽, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, 간격: 1분, 99번째 실행, schedule: 주기|*|080000|1|235959
-2026-06-12 09:38:00.900 [scheduling-1] INFO  CollectScheduler - 주기 수집 실행 - serverId: dcoodb01-주문체결, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, 간격: 1분, 99번째 실행, schedule: 주기|*|080000|1|235959
-2026-06-12 09:38:00.911 [collect-async-4] INFO  CollectRetryService - 수집 완료 - 서버: pjpsap01-주파수클럽, 파일: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, 타입: 주기, 수집총라인수: 0, 정규화저장건수: 0, 정규화실패건수: 0
-2026-06-12 09:38:00.911 [collect-async-5] INFO  CollectRetryService - 수집 완료 - 서버: dcoodb01-주문체결, 파일: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, 타입: 주기, 수집총라인수: 0, 정규화저장건수: 0, 정규화실패건수: 0
-2026-06-12 09:38:46.959 [scheduling-1] INFO  CollectScheduleParser - =============================
-2026-06-12 09:38:46.959 [scheduling-1] INFO  CollectScheduleParser -   [1] serverId: pjpsap01-주파수클럽, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, scheduleExpression: 주기|*|080000|1|235959
-2026-06-12 09:38:46.960 [scheduling-1] INFO  CollectScheduleParser - =============================
-2026-06-12 09:38:46.961 [scheduling-1] INFO  CollectScheduleParser -   [2] serverId: dcoodb01-주문체결, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, scheduleExpression: 주기|*|080000|1|235959
-2026-06-12 09:39:00.999 [scheduling-1] INFO  CollectScheduler - 주기 수집 실행 - serverId: pjpsap01-주파수클럽, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, 간격: 1분, 100번째 실행, schedule: 주기|*|080000|1|235959
-2026-06-12 09:39:01.000 [scheduling-1] INFO  CollectScheduler - 주기 수집 실행 - serverId: dcoodb01-주문체결, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, 간격: 1분, 100번째 실행, schedule: 주기|*|080000|1|235959
-2026-06-12 09:39:01.006 [collect-async-2] INFO  CollectRetryService - 수집 완료 - 서버: dcoodb01-주문체결, 파일: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, 타입: 주기, 수집총라인수: 0, 정규화저장건수: 0, 정규화실패건수: 0
-2026-06-12 09:39:01.006 [collect-async-3] INFO  CollectRetryService - 수집 완료 - 서버: pjpsap01-주파수클럽, 파일: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, 타입: 주기, 수집총라인수: 0, 정규화저장건수: 0, 정규화실패건수: 0
-2026-06-12 09:39:47.088 [scheduling-1] INFO  CollectScheduleParser - =============================
-2026-06-12 09:39:47.088 [scheduling-1] INFO  CollectScheduleParser -   [1] serverId: pjpsap01-주파수클럽, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, scheduleExpression: 주기|*|080000|1|235959
-2026-06-12 09:39:47.089 [scheduling-1] INFO  CollectScheduleParser - =============================
-2026-06-12 09:39:47.089 [scheduling-1] INFO  CollectScheduleParser -   [2] serverId: dcoodb01-주문체결, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, scheduleExpression: 주기|*|080000|1|235959
-2026-06-12 09:40:00.102 [scheduling-1] INFO  CollectScheduler - 주기 수집 실행 - serverId: pjpsap01-주파수클럽, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, 간격: 1분, 101번째 실행, schedule: 주기|*|080000|1|235959
-2026-06-12 09:40:00.102 [scheduling-1] INFO  CollectScheduler - 주기 수집 실행 - serverId: dcoodb01-주문체결, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, 간격: 1분, 101번째 실행, schedule: 주기|*|080000|1|235959
-2026-06-12 09:40:00.107 [collect-async-4] INFO  CollectRetryService - 수집 완료 - 서버: dcoodb01-주문체결, 파일: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, 타입: 주기, 수집총라인수: 0, 정규화저장건수: 0, 정규화실패건수: 0
-2026-06-12 09:40:00.107 [collect-async-1] INFO  CollectRetryService - 수집 완료 - 서버: pjpsap01-주파수클럽, 파일: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, 타입: 주기, 수집총라인수: 0, 정규화저장건수: 0, 정규화실패건수: 0
-2026-06-12 09:40:47.158 [scheduling-1] INFO  CollectScheduleParser - =============================
-2026-06-12 09:40:47.158 [scheduling-1] INFO  CollectScheduleParser -   [1] serverId: pjpsap01-주파수클럽, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, scheduleExpression: 주기|*|080000|1|235959
-2026-06-12 09:40:47.158 [scheduling-1] INFO  CollectScheduleParser - =============================
-2026-06-12 09:40:47.158 [scheduling-1] INFO  CollectScheduleParser -   [2] serverId: dcoodb01-주문체결, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, scheduleExpression: 주기|*|080000|1|235959
-2026-06-12 09:41:00.174 [scheduling-1] INFO  CollectScheduler - 주기 수집 실행 - serverId: pjpsap01-주파수클럽, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, 간격: 1분, 102번째 실행, schedule: 주기|*|080000|1|235959
-2026-06-12 09:41:00.175 [scheduling-1] INFO  CollectScheduler - 주기 수집 실행 - serverId: dcoodb01-주문체결, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, 간격: 1분, 102번째 실행, schedule: 주기|*|080000|1|235959
-2026-06-12 09:41:00.181 [collect-async-5] INFO  CollectRetryService - 수집 완료 - 서버: pjpsap01-주파수클럽, 파일: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, 타입: 주기, 수집총라인수: 0, 정규화저장건수: 0, 정규화실패건수: 0
-2026-06-12 09:41:00.183 [collect-async-2] INFO  CollectRetryService - 수집 완료 - 서버: dcoodb01-주문체결, 파일: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, 타입: 주기, 수집총라인수: 0, 정규화저장건수: 0, 정규화실패건수: 0
-2026-06-12 09:41:47.221 [scheduling-1] INFO  CollectScheduleParser - =============================
-2026-06-12 09:41:47.221 [scheduling-1] INFO  CollectScheduleParser -   [1] serverId: pjpsap01-주파수클럽, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, scheduleExpression: 주기|*|080000|1|235959
-2026-06-12 09:41:47.222 [scheduling-1] INFO  CollectScheduleParser - =============================
-2026-06-12 09:41:47.222 [scheduling-1] INFO  CollectScheduleParser -   [2] serverId: dcoodb01-주문체결, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, scheduleExpression: 주기|*|080000|1|235959
-2026-06-12 09:42:00.242 [scheduling-1] INFO  CollectScheduler - 주기 수집 실행 - serverId: pjpsap01-주파수클럽, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, 간격: 1분, 103번째 실행, schedule: 주기|*|080000|1|235959
-2026-06-12 09:42:00.243 [scheduling-1] INFO  CollectScheduler - 주기 수집 실행 - serverId: dcoodb01-주문체결, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, 간격: 1분, 103번째 실행, schedule: 주기|*|080000|1|235959
-2026-06-12 09:42:00.253 [collect-async-3] INFO  CollectRetryService - 수집 완료 - 서버: pjpsap01-주파수클럽, 파일: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, 타입: 주기, 수집총라인수: 0, 정규화저장건수: 0, 정규화실패건수: 0
-2026-06-12 09:42:00.253 [collect-async-4] INFO  CollectRetryService - 수집 완료 - 서버: dcoodb01-주문체결, 파일: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, 타입: 주기, 수집총라인수: 0, 정규화저장건수: 0, 정규화실패건수: 0
-2026-06-12 09:42:47.307 [scheduling-1] INFO  CollectScheduleParser - =============================
-2026-06-12 09:42:47.308 [scheduling-1] INFO  CollectScheduleParser -   [1] serverId: pjpsap01-주파수클럽, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, scheduleExpression: 주기|*|080000|1|235959
-2026-06-12 09:42:47.309 [scheduling-1] INFO  CollectScheduleParser - =============================
-2026-06-12 09:42:47.309 [scheduling-1] INFO  CollectScheduleParser -   [2] serverId: dcoodb01-주문체결, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, scheduleExpression: 주기|*|080000|1|235959
-2026-06-12 09:43:00.350 [scheduling-1] INFO  CollectScheduler - 주기 수집 실행 - serverId: pjpsap01-주파수클럽, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, 간격: 1분, 104번째 실행, schedule: 주기|*|080000|1|235959
-2026-06-12 09:43:00.351 [scheduling-1] INFO  CollectScheduler - 주기 수집 실행 - serverId: dcoodb01-주문체결, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, 간격: 1분, 104번째 실행, schedule: 주기|*|080000|1|235959
-2026-06-12 09:43:00.363 [collect-async-5] INFO  CollectRetryService - 수집 완료 - 서버: dcoodb01-주문체결, 파일: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, 타입: 주기, 수집총라인수: 0, 정규화저장건수: 0, 정규화실패건수: 0
-2026-06-12 09:43:00.363 [collect-async-1] INFO  CollectRetryService - 수집 완료 - 서버: pjpsap01-주파수클럽, 파일: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, 타입: 주기, 수집총라인수: 0, 정규화저장건수: 0, 정규화실패건수: 0
-2026-06-12 09:43:47.473 [scheduling-1] INFO  CollectScheduleParser - =============================
-2026-06-12 09:43:47.473 [scheduling-1] INFO  CollectScheduleParser -   [1] serverId: pjpsap01-주파수클럽, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, scheduleExpression: 주기|*|080000|1|235959
-2026-06-12 09:43:47.474 [scheduling-1] INFO  CollectScheduleParser - =============================
-2026-06-12 09:43:47.474 [scheduling-1] INFO  CollectScheduleParser -   [2] serverId: dcoodb01-주문체결, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, scheduleExpression: 주기|*|080000|1|235959
-2026-06-12 09:44:00.488 [scheduling-1] INFO  CollectScheduler - 주기 수집 실행 - serverId: pjpsap01-주파수클럽, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, 간격: 1분, 105번째 실행, schedule: 주기|*|080000|1|235959
-2026-06-12 09:44:00.489 [scheduling-1] INFO  CollectScheduler - 주기 수집 실행 - serverId: dcoodb01-주문체결, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, 간격: 1분, 105번째 실행, schedule: 주기|*|080000|1|235959
-2026-06-12 09:44:00.496 [collect-async-2] INFO  CollectRetryService - 수집 완료 - 서버: pjpsap01-주파수클럽, 파일: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, 타입: 주기, 수집총라인수: 0, 정규화저장건수: 0, 정규화실패건수: 0
-2026-06-12 09:44:00.496 [collect-async-3] INFO  CollectRetryService - 수집 완료 - 서버: dcoodb01-주문체결, 파일: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, 타입: 주기, 수집총라인수: 0, 정규화저장건수: 0, 정규화실패건수: 0
-2026-06-12 09:44:47.535 [scheduling-1] INFO  CollectScheduleParser - =============================
-2026-06-12 09:44:47.535 [scheduling-1] INFO  CollectScheduleParser -   [1] serverId: pjpsap01-주파수클럽, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, scheduleExpression: 주기|*|080000|1|235959
-2026-06-12 09:44:47.536 [scheduling-1] INFO  CollectScheduleParser - =============================
-2026-06-12 09:44:47.536 [scheduling-1] INFO  CollectScheduleParser -   [2] serverId: dcoodb01-주문체결, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, scheduleExpression: 주기|*|080000|1|235959
-2026-06-12 09:45:00.561 [scheduling-1] INFO  CollectScheduler - 주기 수집 실행 - serverId: pjpsap01-주파수클럽, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, 간격: 1분, 106번째 실행, schedule: 주기|*|080000|1|235959
-2026-06-12 09:45:00.561 [scheduling-1] INFO  CollectScheduler - 주기 수집 실행 - serverId: dcoodb01-주문체결, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, 간격: 1분, 106번째 실행, schedule: 주기|*|080000|1|235959
-2026-06-12 09:45:00.563 [collect-async-4] INFO  CollectRetryService - 수집 완료 - 서버: pjpsap01-주파수클럽, 파일: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, 타입: 주기, 수집총라인수: 0, 정규화저장건수: 0, 정규화실패건수: 0
-2026-06-12 09:45:00.563 [collect-async-5] INFO  CollectRetryService - 수집 완료 - 서버: dcoodb01-주문체결, 파일: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, 타입: 주기, 수집총라인수: 0, 정규화저장건수: 0, 정규화실패건수: 0
-2026-06-12 09:45:47.647 [scheduling-1] INFO  CollectScheduleParser - =============================
-2026-06-12 09:45:47.647 [scheduling-1] INFO  CollectScheduleParser -   [1] serverId: pjpsap01-주파수클럽, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, scheduleExpression: 주기|*|080000|1|235959
-2026-06-12 09:45:47.648 [scheduling-1] INFO  CollectScheduleParser - =============================
-2026-06-12 09:45:47.648 [scheduling-1] INFO  CollectScheduleParser -   [2] serverId: dcoodb01-주문체결, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, scheduleExpression: 주기|*|080000|1|235959
-2026-06-12 09:46:00.681 [scheduling-1] INFO  CollectScheduler - 주기 수집 실행 - serverId: pjpsap01-주파수클럽, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, 간격: 1분, 107번째 실행, schedule: 주기|*|080000|1|235959
-2026-06-12 09:46:00.682 [scheduling-1] INFO  CollectScheduler - 주기 수집 실행 - serverId: dcoodb01-주문체결, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, 간격: 1분, 107번째 실행, schedule: 주기|*|080000|1|235959
-2026-06-12 09:46:00.690 [collect-async-2] INFO  CollectRetryService - 수집 완료 - 서버: dcoodb01-주문체결, 파일: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, 타입: 주기, 수집총라인수: 0, 정규화저장건수: 0, 정규화실패건수: 0
-2026-06-12 09:46:00.690 [collect-async-1] INFO  CollectRetryService - 수집 완료 - 서버: pjpsap01-주파수클럽, 파일: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, 타입: 주기, 수집총라인수: 0, 정규화저장건수: 0, 정규화실패건수: 0
-2026-06-12 09:46:47.826 [scheduling-1] INFO  CollectScheduleParser - =============================
-2026-06-12 09:46:47.827 [scheduling-1] INFO  CollectScheduleParser -   [1] serverId: pjpsap01-주파수클럽, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, scheduleExpression: 주기|*|080000|1|235959
-2026-06-12 09:46:47.828 [scheduling-1] INFO  CollectScheduleParser - =============================
-2026-06-12 09:46:47.828 [scheduling-1] INFO  CollectScheduleParser -   [2] serverId: dcoodb01-주문체결, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, scheduleExpression: 주기|*|080000|1|235959
-2026-06-12 09:47:00.847 [scheduling-1] INFO  CollectScheduler - 주기 수집 실행 - serverId: pjpsap01-주파수클럽, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, 간격: 1분, 108번째 실행, schedule: 주기|*|080000|1|235959
-2026-06-12 09:47:00.847 [scheduling-1] INFO  CollectScheduler - 주기 수집 실행 - serverId: dcoodb01-주문체결, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, 간격: 1분, 108번째 실행, schedule: 주기|*|080000|1|235959
-2026-06-12 09:47:00.851 [collect-async-4] INFO  CollectRetryService - 수집 완료 - 서버: dcoodb01-주문체결, 파일: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, 타입: 주기, 수집총라인수: 0, 정규화저장건수: 0, 정규화실패건수: 0
-2026-06-12 09:47:00.851 [collect-async-3] INFO  CollectRetryService - 수집 완료 - 서버: pjpsap01-주파수클럽, 파일: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, 타입: 주기, 수집총라인수: 0, 정규화저장건수: 0, 정규화실패건수: 0
-2026-06-12 09:47:47.917 [scheduling-1] INFO  CollectScheduleParser - =============================
-2026-06-12 09:47:47.917 [scheduling-1] INFO  CollectScheduleParser -   [1] serverId: pjpsap01-주파수클럽, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, scheduleExpression: 주기|*|080000|1|235959
-2026-06-12 09:47:47.918 [scheduling-1] INFO  CollectScheduleParser - =============================
-2026-06-12 09:47:47.918 [scheduling-1] INFO  CollectScheduleParser -   [2] serverId: dcoodb01-주문체결, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, scheduleExpression: 주기|*|080000|1|235959
-2026-06-12 09:48:00.933 [scheduling-1] INFO  CollectScheduler - 주기 수집 실행 - serverId: pjpsap01-주파수클럽, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, 간격: 1분, 109번째 실행, schedule: 주기|*|080000|1|235959
-2026-06-12 09:48:00.933 [scheduling-1] INFO  CollectScheduler - 주기 수집 실행 - serverId: dcoodb01-주문체결, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, 간격: 1분, 109번째 실행, schedule: 주기|*|080000|1|235959
-2026-06-12 09:48:00.938 [collect-async-5] INFO  CollectRetryService - 수집 완료 - 서버: pjpsap01-주파수클럽, 파일: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, 타입: 주기, 수집총라인수: 0, 정규화저장건수: 0, 정규화실패건수: 0
-2026-06-12 09:48:00.938 [collect-async-2] INFO  CollectRetryService - 수집 완료 - 서버: dcoodb01-주문체결, 파일: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, 타입: 주기, 수집총라인수: 0, 정규화저장건수: 0, 정규화실패건수: 0
-2026-06-12 09:48:48.016 [scheduling-1] INFO  CollectScheduleParser - =============================
-2026-06-12 09:48:48.017 [scheduling-1] INFO  CollectScheduleParser -   [1] serverId: pjpsap01-주파수클럽, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, scheduleExpression: 주기|*|080000|1|235959
-2026-06-12 09:48:48.017 [scheduling-1] INFO  CollectScheduleParser - =============================
-2026-06-12 09:48:48.018 [scheduling-1] INFO  CollectScheduleParser -   [2] serverId: dcoodb01-주문체결, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, scheduleExpression: 주기|*|080000|1|235959
-2026-06-12 09:49:00.079 [scheduling-1] INFO  CollectScheduler - 주기 수집 실행 - serverId: pjpsap01-주파수클럽, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, 간격: 1분, 110번째 실행, schedule: 주기|*|080000|1|235959
-2026-06-12 09:49:00.079 [scheduling-1] INFO  CollectScheduler - 주기 수집 실행 - serverId: dcoodb01-주문체결, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, 간격: 1분, 110번째 실행, schedule: 주기|*|080000|1|235959
-2026-06-12 09:49:00.084 [collect-async-4] INFO  CollectRetryService - 수집 완료 - 서버: dcoodb01-주문체결, 파일: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, 타입: 주기, 수집총라인수: 0, 정규화저장건수: 0, 정규화실패건수: 0
-2026-06-12 09:49:00.085 [collect-async-1] INFO  CollectRetryService - 수집 완료 - 서버: pjpsap01-주파수클럽, 파일: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, 타입: 주기, 수집총라인수: 0, 정규화저장건수: 0, 정규화실패건수: 0
-2026-06-12 09:49:48.169 [scheduling-1] INFO  CollectScheduleParser - =============================
-2026-06-12 09:49:48.170 [scheduling-1] INFO  CollectScheduleParser -   [1] serverId: pjpsap01-주파수클럽, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, scheduleExpression: 주기|*|080000|1|235959
-2026-06-12 09:49:48.170 [scheduling-1] INFO  CollectScheduleParser - =============================
-2026-06-12 09:49:48.171 [scheduling-1] INFO  CollectScheduleParser -   [2] serverId: dcoodb01-주문체결, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, scheduleExpression: 주기|*|080000|1|235959
-2026-06-12 09:50:00.187 [scheduling-1] INFO  CollectScheduler - 주기 수집 실행 - serverId: pjpsap01-주파수클럽, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, 간격: 1분, 111번째 실행, schedule: 주기|*|080000|1|235959
-2026-06-12 09:50:00.187 [scheduling-1] INFO  CollectScheduler - 주기 수집 실행 - serverId: dcoodb01-주문체결, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, 간격: 1분, 111번째 실행, schedule: 주기|*|080000|1|235959
-2026-06-12 09:50:00.190 [collect-async-5] INFO  CollectRetryService - 수집 완료 - 서버: dcoodb01-주문체결, 파일: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, 타입: 주기, 수집총라인수: 0, 정규화저장건수: 0, 정규화실패건수: 0
-2026-06-12 09:50:00.190 [collect-async-3] INFO  CollectRetryService - 수집 완료 - 서버: pjpsap01-주파수클럽, 파일: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, 타입: 주기, 수집총라인수: 0, 정규화저장건수: 0, 정규화실패건수: 0
-2026-06-12 09:50:48.240 [scheduling-1] INFO  CollectScheduleParser - =============================
-2026-06-12 09:50:48.240 [scheduling-1] INFO  CollectScheduleParser -   [1] serverId: pjpsap01-주파수클럽, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, scheduleExpression: 주기|*|080000|1|235959
-2026-06-12 09:50:48.241 [scheduling-1] INFO  CollectScheduleParser - =============================
-2026-06-12 09:50:48.241 [scheduling-1] INFO  CollectScheduleParser -   [2] serverId: dcoodb01-주문체결, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, scheduleExpression: 주기|*|080000|1|235959
-2026-06-12 09:51:00.257 [scheduling-1] INFO  CollectScheduler - 주기 수집 실행 - serverId: pjpsap01-주파수클럽, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, 간격: 1분, 112번째 실행, schedule: 주기|*|080000|1|235959
-2026-06-12 09:51:00.258 [scheduling-1] INFO  CollectScheduler - 주기 수집 실행 - serverId: dcoodb01-주문체결, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, 간격: 1분, 112번째 실행, schedule: 주기|*|080000|1|235959
-2026-06-12 09:51:00.264 [collect-async-4] INFO  CollectRetryService - 수집 완료 - 서버: dcoodb01-주문체결, 파일: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, 타입: 주기, 수집총라인수: 0, 정규화저장건수: 0, 정규화실패건수: 0
-2026-06-12 09:51:00.265 [collect-async-2] INFO  CollectRetryService - 수집 완료 - 서버: pjpsap01-주파수클럽, 파일: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, 타입: 주기, 수집총라인수: 0, 정규화저장건수: 0, 정규화실패건수: 0
-2026-06-12 09:51:48.353 [scheduling-1] INFO  CollectScheduleParser - =============================
-2026-06-12 09:51:48.353 [scheduling-1] INFO  CollectScheduleParser -   [1] serverId: pjpsap01-주파수클럽, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, scheduleExpression: 주기|*|080000|1|235959
-2026-06-12 09:51:48.354 [scheduling-1] INFO  CollectScheduleParser - =============================
-2026-06-12 09:51:48.354 [scheduling-1] INFO  CollectScheduleParser -   [2] serverId: dcoodb01-주문체결, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, scheduleExpression: 주기|*|080000|1|235959
-2026-06-12 09:52:00.378 [scheduling-1] INFO  CollectScheduler - 주기 수집 실행 - serverId: pjpsap01-주파수클럽, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, 간격: 1분, 113번째 실행, schedule: 주기|*|080000|1|235959
-2026-06-12 09:52:00.379 [scheduling-1] INFO  CollectScheduler - 주기 수집 실행 - serverId: dcoodb01-주문체결, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, 간격: 1분, 113번째 실행, schedule: 주기|*|080000|1|235959
-2026-06-12 09:52:00.388 [collect-async-5] INFO  CollectRetryService - 수집 완료 - 서버: dcoodb01-주문체결, 파일: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, 타입: 주기, 수집총라인수: 0, 정규화저장건수: 0, 정규화실패건수: 0
-2026-06-12 09:52:00.388 [collect-async-1] INFO  CollectRetryService - 수집 완료 - 서버: pjpsap01-주파수클럽, 파일: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, 타입: 주기, 수집총라인수: 0, 정규화저장건수: 0, 정규화실패건수: 0
-2026-06-12 09:52:48.478 [scheduling-1] INFO  CollectScheduleParser - =============================
-2026-06-12 09:52:48.478 [scheduling-1] INFO  CollectScheduleParser -   [1] serverId: pjpsap01-주파수클럽, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, scheduleExpression: 주기|*|080000|1|235959
-2026-06-12 09:52:48.479 [scheduling-1] INFO  CollectScheduleParser - =============================
-2026-06-12 09:52:48.479 [scheduling-1] INFO  CollectScheduleParser -   [2] serverId: dcoodb01-주문체결, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, scheduleExpression: 주기|*|080000|1|235959
-2026-06-12 09:53:00.496 [scheduling-1] INFO  CollectScheduler - 주기 수집 실행 - serverId: pjpsap01-주파수클럽, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, 간격: 1분, 114번째 실행, schedule: 주기|*|080000|1|235959
-2026-06-12 09:53:00.496 [scheduling-1] INFO  CollectScheduler - 주기 수집 실행 - serverId: dcoodb01-주문체결, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, 간격: 1분, 114번째 실행, schedule: 주기|*|080000|1|235959
-2026-06-12 09:53:00.502 [collect-async-4] INFO  CollectRetryService - 수집 완료 - 서버: dcoodb01-주문체결, 파일: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, 타입: 주기, 수집총라인수: 0, 정규화저장건수: 0, 정규화실패건수: 0
-2026-06-12 09:53:00.502 [collect-async-3] INFO  CollectRetryService - 수집 완료 - 서버: pjpsap01-주파수클럽, 파일: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, 타입: 주기, 수집총라인수: 0, 정규화저장건수: 0, 정규화실패건수: 0
-2026-06-12 09:53:48.592 [scheduling-1] INFO  CollectScheduleParser - =============================
-2026-06-12 09:53:48.592 [scheduling-1] INFO  CollectScheduleParser -   [1] serverId: pjpsap01-주파수클럽, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, scheduleExpression: 주기|*|080000|1|235959
-2026-06-12 09:53:48.592 [scheduling-1] INFO  CollectScheduleParser - =============================
-2026-06-12 09:53:48.592 [scheduling-1] INFO  CollectScheduleParser -   [2] serverId: dcoodb01-주문체결, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, scheduleExpression: 주기|*|080000|1|235959
-2026-06-12 09:54:00.618 [scheduling-1] INFO  CollectScheduler - 주기 수집 실행 - serverId: pjpsap01-주파수클럽, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, 간격: 1분, 115번째 실행, schedule: 주기|*|080000|1|235959
-2026-06-12 09:54:00.619 [scheduling-1] INFO  CollectScheduler - 주기 수집 실행 - serverId: dcoodb01-주문체결, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, 간격: 1분, 115번째 실행, schedule: 주기|*|080000|1|235959
-2026-06-12 09:54:00.629 [collect-async-2] INFO  CollectRetryService - 수집 완료 - 서버: pjpsap01-주파수클럽, 파일: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, 타입: 주기, 수집총라인수: 0, 정규화저장건수: 0, 정규화실패건수: 0
-2026-06-12 09:54:00.629 [collect-async-5] INFO  CollectRetryService - 수집 완료 - 서버: dcoodb01-주문체결, 파일: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, 타입: 주기, 수집총라인수: 0, 정규화저장건수: 0, 정규화실패건수: 0
-2026-06-12 09:54:48.684 [scheduling-1] INFO  CollectScheduleParser - =============================
-2026-06-12 09:54:48.685 [scheduling-1] INFO  CollectScheduleParser -   [1] serverId: pjpsap01-주파수클럽, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, scheduleExpression: 주기|*|080000|1|235959
-2026-06-12 09:54:48.685 [scheduling-1] INFO  CollectScheduleParser - =============================
-2026-06-12 09:54:48.685 [scheduling-1] INFO  CollectScheduleParser -   [2] serverId: dcoodb01-주문체결, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_mls.log, scheduleExpression: 주기|*|080000|1|235959
+2026-06-15 14:22:15.319 [restartedMain] INFO  CollectApplication - Starting CollectApplication using Java 17.0.19 with PID 14996 (C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\bin\main started by 20200161 in C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect)
+2026-06-15 14:22:15.329 [restartedMain] INFO  CollectApplication - The following 1 profile is active: "local"
+2026-06-15 14:22:16.501 [restartedMain] INFO  CollectScheduler - <<< CollectScheduler initialized with configuration: >>>
+2026-06-15 14:22:16.503 [restartedMain] INFO  CollectScheduler -   Schedule file path: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\schedule_sample\PreCheck_CollectLogs_Schedule.conf
+2026-06-15 14:22:16.504 [restartedMain] INFO  CollectScheduler -   Collect mode: local
+2026-06-15 14:22:16.504 [restartedMain] INFO  CollectScheduler -   SFTP port: 22
+2026-06-15 14:22:16.504 [restartedMain] INFO  CollectScheduler -   SFTP username: local_user
+2026-06-15 14:22:16.504 [restartedMain] INFO  CollectScheduler -   Schedule reload interval (ms): 60000
+2026-06-15 14:22:16.504 [restartedMain] INFO  CollectScheduler - <<< Configuration initialized >>>
+2026-06-15 14:22:16.672 [restartedMain] INFO  CollectApplication - Started CollectApplication in 1.864 seconds (process running for 2.475)
+2026-06-15 14:22:16.686 [scheduling-1] INFO  CollectScheduleParser - =============================
+2026-06-15 14:22:16.686 [scheduling-1] INFO  CollectScheduleParser -   [1] serverId: pjpsap01-주파수클럽, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, scheduleExpression: 주기|*|080000|1|235959
+2026-06-15 14:22:16.687 [scheduling-1] INFO  CollectScheduleParser - =============================
+2026-06-15 14:22:16.687 [scheduling-1] INFO  CollectScheduleParser -   [2] serverId: dcoodb01-주문체결, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jcm.log, scheduleExpression: 주기|*|080000|1|235959
+2026-06-15 14:23:00.767 [scheduling-1] INFO  CollectScheduler - 주기 수집 실행 - serverId: pjpsap01-주파수클럽, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, 간격: 1분, 384번째 실행, schedule: 주기|*|080000|1|235959
+2026-06-15 14:23:00.771 [scheduling-1] INFO  CollectScheduler - 주기 수집 실행 - serverId: dcoodb01-주문체결, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jcm.log, 간격: 1분, 384번째 실행, schedule: 주기|*|080000|1|235959
+2026-06-15 14:23:01.128 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 2, logType: ��
+2026-06-15 14:23:01.131 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 3, logType: ��
+2026-06-15 14:23:01.132 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 4, logType: ��
+2026-06-15 14:23:01.132 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 5, logType: ��
+2026-06-15 14:23:01.132 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 6, logType: ��
+2026-06-15 14:23:01.132 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 7, logType: ��
+2026-06-15 14:23:01.133 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 8, logType: ��
+2026-06-15 14:23:01.133 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 9, logType: ��
+2026-06-15 14:23:01.133 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 10, logType: ��
+2026-06-15 14:23:01.133 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 11, logType: ��
+2026-06-15 14:23:01.134 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 12, logType: ��
+2026-06-15 14:23:01.134 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 13, logType: ��
+2026-06-15 14:23:01.134 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 14, logType: ��
+2026-06-15 14:23:01.134 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 15, logType: ��
+2026-06-15 14:23:01.135 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 16, logType: ��
+2026-06-15 14:23:01.135 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 17, logType: ��
+2026-06-15 14:23:01.135 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 18, logType: ��
+2026-06-15 14:23:01.136 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 19, logType: ��
+2026-06-15 14:23:01.136 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 20, logType: ��
+2026-06-15 14:23:01.136 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 21, logType: ��
+2026-06-15 14:23:01.136 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 22, logType: ��
+2026-06-15 14:23:01.136 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 23, logType: ��
+2026-06-15 14:23:01.137 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 24, logType: ��
+2026-06-15 14:23:01.137 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 25, logType: ��
+2026-06-15 14:23:01.137 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 26, logType: ��
+2026-06-15 14:23:01.137 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 27, logType: ��
+2026-06-15 14:23:01.138 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 28, logType: ��
+2026-06-15 14:23:01.138 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 29, logType: ��
+2026-06-15 14:23:01.138 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 30, logType: ��
+2026-06-15 14:23:01.138 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 31, logType: ��
+2026-06-15 14:23:01.139 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 32, logType: ��
+2026-06-15 14:23:01.139 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 33, logType: ��
+2026-06-15 14:23:01.139 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 34, logType: ��
+2026-06-15 14:23:01.139 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 35, logType: ��
+2026-06-15 14:23:01.140 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 36, logType: ��
+2026-06-15 14:23:01.140 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 37, logType: ��
+2026-06-15 14:23:01.140 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 38, logType: ��ġ
+2026-06-15 14:23:01.140 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 39, logType: ��ġ
+2026-06-15 14:23:01.141 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 40, logType: ��ġ
+2026-06-15 14:23:01.141 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 41, logType: ��ġ
+2026-06-15 14:23:01.141 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 42, logType: ��ġ
+2026-06-15 14:23:01.141 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 43, logType: ��ġ
+2026-06-15 14:23:01.142 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 44, logType: ��ġ
+2026-06-15 14:23:01.142 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 45, logType: ��ġ
+2026-06-15 14:23:01.142 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 46, logType: ��ġ
+2026-06-15 14:23:01.142 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 47, logType: ��ġ
+2026-06-15 14:23:01.143 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 48, logType: ��ġ
+2026-06-15 14:23:01.143 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 49, logType: ��ġ
+2026-06-15 14:23:01.143 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 50, logType: ��ġ
+2026-06-15 14:23:01.144 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 51, logType: ��ġ
+2026-06-15 14:23:01.144 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 52, logType: ��ġ
+2026-06-15 14:23:01.144 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 53, logType: ��ġ
+2026-06-15 14:23:01.144 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 54, logType: ��ġ
+2026-06-15 14:23:01.145 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 55, logType: ��ġ
+2026-06-15 14:23:01.145 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 56, logType: ��ġ
+2026-06-15 14:23:01.145 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 57, logType: ��ġ
+2026-06-15 14:23:01.145 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 58, logType: ��ġ
+2026-06-15 14:23:01.145 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 59, logType: ��ġ
+2026-06-15 14:23:01.146 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 60, logType: ��ġ
+2026-06-15 14:23:01.146 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 61, logType: ��ġ
+2026-06-15 14:23:01.145 [collect-async-1] INFO  CollectRetryService - 수집 완료 - 서버: pjpsap01-주파수클럽, 파일: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, 타입: 주기, 수집총라인수: 46, 정규화저장건수: 9, 정규화실패건수: 0
+2026-06-15 14:23:01.146 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 62, logType: ��ġ
+2026-06-15 14:23:01.146 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 63, logType: ��ġ
+2026-06-15 14:23:01.147 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 64, logType: ��ġ
+2026-06-15 14:23:01.147 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 65, logType: ��ġ
+2026-06-15 14:23:01.147 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 66, logType: ��ġ
+2026-06-15 14:23:01.147 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 67, logType: ��ġ
+2026-06-15 14:23:01.147 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 68, logType: ��ġ
+2026-06-15 14:23:01.147 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 69, logType: ��ġ
+2026-06-15 14:23:01.148 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 70, logType: ��ġ
+2026-06-15 14:23:01.148 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 71, logType: ��ġ
+2026-06-15 14:23:01.148 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 72, logType: ��ġ
+2026-06-15 14:23:01.148 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 73, logType: ��ġ
+2026-06-15 14:23:01.148 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 74, logType: ��ġ
+2026-06-15 14:23:01.149 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 75, logType: ��ġ
+2026-06-15 14:23:01.149 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 76, logType: ��ġ
+2026-06-15 14:23:01.149 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 77, logType: ��ġ
+2026-06-15 14:23:01.149 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 78, logType: ��ġ
+2026-06-15 14:23:01.150 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 79, logType: �ð�
+2026-06-15 14:23:01.150 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 80, logType: �ð�
+2026-06-15 14:23:01.150 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 81, logType: �ð�
+2026-06-15 14:23:01.150 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 82, logType: �ð�
+2026-06-15 14:23:01.151 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 83, logType: �ð�
+2026-06-15 14:23:01.151 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 84, logType: �ð�
+2026-06-15 14:23:01.151 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 85, logType: �ð�
+2026-06-15 14:23:01.152 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 86, logType: �ð�
+2026-06-15 14:23:01.152 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 87, logType: �ð�
+2026-06-15 14:23:01.152 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 88, logType: �ð�
+2026-06-15 14:23:01.152 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 89, logType: �ð�
+2026-06-15 14:23:01.152 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 90, logType: �ð�
+2026-06-15 14:23:01.153 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 91, logType: �ð�
+2026-06-15 14:23:01.153 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 92, logType: �ð�
+2026-06-15 14:23:01.153 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 93, logType: �ð�
+2026-06-15 14:23:01.153 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 94, logType: �ð�
+2026-06-15 14:23:01.153 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 95, logType: �ð�
+2026-06-15 14:23:01.153 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 96, logType: �ð�
+2026-06-15 14:23:01.154 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 97, logType: �ð�
+2026-06-15 14:23:01.154 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 98, logType: �ð�
+2026-06-15 14:23:01.154 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 99, logType: �ð�
+2026-06-15 14:23:01.154 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 100, logType: �ð�
+2026-06-15 14:23:01.154 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 101, logType: �ð�
+2026-06-15 14:23:01.155 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 102, logType: �ð�
+2026-06-15 14:23:01.155 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 103, logType: �ð�
+2026-06-15 14:23:01.155 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 104, logType: �ð�
+2026-06-15 14:23:01.155 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 105, logType: �ð�
+2026-06-15 14:23:01.155 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 106, logType: ��ġ
+2026-06-15 14:23:01.156 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 107, logType: ��ġ
+2026-06-15 14:23:01.156 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 108, logType: ��ġ
+2026-06-15 14:23:01.156 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 109, logType: ��ġ
+2026-06-15 14:23:01.156 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 110, logType: ��ġ
+2026-06-15 14:23:01.156 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 111, logType: ��ġ
+2026-06-15 14:23:01.157 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 112, logType: ��ġ
+2026-06-15 14:23:01.157 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 113, logType: ��ġ
+2026-06-15 14:23:01.157 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 118, logType: ��
+2026-06-15 14:23:01.157 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 119, logType: ��
+2026-06-15 14:23:01.157 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 120, logType: ��
+2026-06-15 14:23:01.157 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 121, logType: ��
+2026-06-15 14:23:01.158 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 122, logType: ��
+2026-06-15 14:23:01.158 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 123, logType: ��
+2026-06-15 14:23:01.158 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 124, logType: ��
+2026-06-15 14:23:01.158 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 125, logType: ��
+2026-06-15 14:23:01.158 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 126, logType: ��
+2026-06-15 14:23:01.158 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 127, logType: ��
+2026-06-15 14:23:01.159 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 128, logType: ��
+2026-06-15 14:23:01.159 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 129, logType: ��
+2026-06-15 14:23:01.159 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 130, logType: ��
+2026-06-15 14:23:01.159 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 131, logType: ��
+2026-06-15 14:23:01.159 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 132, logType: ��
+2026-06-15 14:23:01.159 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 133, logType: ��
+2026-06-15 14:23:01.160 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 134, logType: ��
+2026-06-15 14:23:01.160 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 135, logType: ��
+2026-06-15 14:23:01.160 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 136, logType: ��
+2026-06-15 14:23:01.160 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 137, logType: ��
+2026-06-15 14:23:01.161 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 138, logType: ��
+2026-06-15 14:23:01.161 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 139, logType: ��
+2026-06-15 14:23:01.161 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 140, logType: ��
+2026-06-15 14:23:01.161 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 141, logType: ��
+2026-06-15 14:23:01.161 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 142, logType: ��
+2026-06-15 14:23:01.161 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 143, logType: ��
+2026-06-15 14:23:01.162 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 144, logType: ��
+2026-06-15 14:23:01.162 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 145, logType: ��
+2026-06-15 14:23:01.162 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 146, logType: ��
+2026-06-15 14:23:01.162 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 147, logType: ��
+2026-06-15 14:23:01.162 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 148, logType: ��
+2026-06-15 14:23:01.162 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 149, logType: ��
+2026-06-15 14:23:01.163 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 150, logType: ��
+2026-06-15 14:23:01.163 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 151, logType: ��
+2026-06-15 14:23:01.163 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 152, logType: ��
+2026-06-15 14:23:01.163 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 153, logType: ��
+2026-06-15 14:23:01.163 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 154, logType: ��ġ
+2026-06-15 14:23:01.163 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 155, logType: ��ġ
+2026-06-15 14:23:01.164 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 156, logType: ��ġ
+2026-06-15 14:23:01.164 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 157, logType: ��ġ
+2026-06-15 14:23:01.164 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 158, logType: ��ġ
+2026-06-15 14:23:01.164 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 159, logType: ��ġ
+2026-06-15 14:23:01.164 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 160, logType: ��ġ
+2026-06-15 14:23:01.165 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 161, logType: ��ġ
+2026-06-15 14:23:01.165 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 162, logType: ��ġ
+2026-06-15 14:23:01.165 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 163, logType: ��ġ
+2026-06-15 14:23:01.165 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 164, logType: ��ġ
+2026-06-15 14:23:01.165 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 165, logType: ��ġ
+2026-06-15 14:23:01.165 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 166, logType: ��ġ
+2026-06-15 14:23:01.166 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 167, logType: ��ġ
+2026-06-15 14:23:01.166 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 168, logType: ��ġ
+2026-06-15 14:23:01.166 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 169, logType: ��ġ
+2026-06-15 14:23:01.166 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 170, logType: ��ġ
+2026-06-15 14:23:01.167 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 171, logType: ��ġ
+2026-06-15 14:23:01.167 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 172, logType: ��ġ
+2026-06-15 14:23:01.167 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 173, logType: ��ġ
+2026-06-15 14:23:01.167 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 174, logType: ��ġ
+2026-06-15 14:23:01.168 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 175, logType: ��ġ
+2026-06-15 14:23:01.168 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 176, logType: ��ġ
+2026-06-15 14:23:01.168 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 177, logType: ��ġ
+2026-06-15 14:23:01.168 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 178, logType: ��ġ
+2026-06-15 14:23:01.168 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 179, logType: ��ġ
+2026-06-15 14:23:01.169 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 180, logType: ��ġ
+2026-06-15 14:23:01.169 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 181, logType: ��ġ
+2026-06-15 14:23:01.169 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 182, logType: ��ġ
+2026-06-15 14:23:01.169 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 183, logType: ��ġ
+2026-06-15 14:23:01.169 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 184, logType: ��ġ
+2026-06-15 14:23:01.170 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 185, logType: ��ġ
+2026-06-15 14:23:01.170 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 186, logType: ��ġ
+2026-06-15 14:23:01.170 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 187, logType: ��ġ
+2026-06-15 14:23:01.170 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 188, logType: ��ġ
+2026-06-15 14:23:01.170 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 189, logType: ��ġ
+2026-06-15 14:23:01.171 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 190, logType: ��ġ
+2026-06-15 14:23:01.171 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 191, logType: ��ġ
+2026-06-15 14:23:01.171 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 192, logType: ��ġ
+2026-06-15 14:23:01.171 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 193, logType: ��ġ
+2026-06-15 14:23:01.171 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 194, logType: ��ġ
+2026-06-15 14:23:01.172 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 195, logType: �ð�
+2026-06-15 14:23:01.172 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 196, logType: �ð�
+2026-06-15 14:23:01.172 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 197, logType: �ð�
+2026-06-15 14:23:01.172 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 198, logType: �ð�
+2026-06-15 14:23:01.172 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 199, logType: �ð�
+2026-06-15 14:23:01.172 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 200, logType: �ð�
+2026-06-15 14:23:01.172 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 201, logType: �ð�
+2026-06-15 14:23:01.173 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 202, logType: �ð�
+2026-06-15 14:23:01.173 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 203, logType: �ð�
+2026-06-15 14:23:01.173 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 204, logType: �ð�
+2026-06-15 14:23:01.173 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 205, logType: �ð�
+2026-06-15 14:23:01.173 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 206, logType: �ð�
+2026-06-15 14:23:01.173 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 207, logType: �ð�
+2026-06-15 14:23:01.174 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 208, logType: �ð�
+2026-06-15 14:23:01.174 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 209, logType: �ð�
+2026-06-15 14:23:01.174 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 210, logType: �ð�
+2026-06-15 14:23:01.174 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 211, logType: �ð�
+2026-06-15 14:23:01.175 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 212, logType: �ð�
+2026-06-15 14:23:01.175 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 213, logType: �ð�
+2026-06-15 14:23:01.175 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 214, logType: �ð�
+2026-06-15 14:23:01.175 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 215, logType: �ð�
+2026-06-15 14:23:01.175 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 216, logType: �ð�
+2026-06-15 14:23:01.175 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 217, logType: �ð�
+2026-06-15 14:23:01.176 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 218, logType: �ð�
+2026-06-15 14:23:01.176 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 219, logType: �ð�
+2026-06-15 14:23:01.176 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 220, logType: �ð�
+2026-06-15 14:23:01.176 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 221, logType: �ð�
+2026-06-15 14:23:01.176 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 222, logType: ��ġ
+2026-06-15 14:23:01.176 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 223, logType: ��ġ
+2026-06-15 14:23:01.177 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 224, logType: ��ġ
+2026-06-15 14:23:01.177 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 225, logType: ��ġ
+2026-06-15 14:23:01.177 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 226, logType: ��ġ
+2026-06-15 14:23:01.177 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 227, logType: ��ġ
+2026-06-15 14:23:01.177 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 228, logType: ��ġ
+2026-06-15 14:23:01.178 [collect-async-2] WARN  LogNormalizeParser - 정규화 로그 타입 불일치로 무시 - lineNumber: 229, logType: ��ġ
+2026-06-15 14:23:01.179 [collect-async-2] INFO  CollectRetryService - 수집 완료 - 서버: dcoodb01-주문체결, 파일: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jcm.log, 타입: 주기, 수집총라인수: 231, 정규화저장건수: 0, 정규화실패건수: 224
+2026-06-15 14:23:01.180 [collect-async-2] INFO  CollectRetryService -   └ 라인 2: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.180 [collect-async-2] INFO  CollectRetryService -   └ 라인 3: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.180 [collect-async-2] INFO  CollectRetryService -   └ 라인 4: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.180 [collect-async-2] INFO  CollectRetryService -   └ 라인 5: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.180 [collect-async-2] INFO  CollectRetryService -   └ 라인 6: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.180 [collect-async-2] INFO  CollectRetryService -   └ 라인 7: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.180 [collect-async-2] INFO  CollectRetryService -   └ 라인 8: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.181 [collect-async-2] INFO  CollectRetryService -   └ 라인 9: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.181 [collect-async-2] INFO  CollectRetryService -   └ 라인 10: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.181 [collect-async-2] INFO  CollectRetryService -   └ 라인 11: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.181 [collect-async-2] INFO  CollectRetryService -   └ 라인 12: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.181 [collect-async-2] INFO  CollectRetryService -   └ 라인 13: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.181 [collect-async-2] INFO  CollectRetryService -   └ 라인 14: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.181 [collect-async-2] INFO  CollectRetryService -   └ 라인 15: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.182 [collect-async-2] INFO  CollectRetryService -   └ 라인 16: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.182 [collect-async-2] INFO  CollectRetryService -   └ 라인 17: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.182 [collect-async-2] INFO  CollectRetryService -   └ 라인 18: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.183 [collect-async-2] INFO  CollectRetryService -   └ 라인 19: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.183 [collect-async-2] INFO  CollectRetryService -   └ 라인 20: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.183 [collect-async-2] INFO  CollectRetryService -   └ 라인 21: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.183 [collect-async-2] INFO  CollectRetryService -   └ 라인 22: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.183 [collect-async-2] INFO  CollectRetryService -   └ 라인 23: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.184 [collect-async-2] INFO  CollectRetryService -   └ 라인 24: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.184 [collect-async-2] INFO  CollectRetryService -   └ 라인 25: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.184 [collect-async-2] INFO  CollectRetryService -   └ 라인 26: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.184 [collect-async-2] INFO  CollectRetryService -   └ 라인 27: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.184 [collect-async-2] INFO  CollectRetryService -   └ 라인 28: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.185 [collect-async-2] INFO  CollectRetryService -   └ 라인 29: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.185 [collect-async-2] INFO  CollectRetryService -   └ 라인 30: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.185 [collect-async-2] INFO  CollectRetryService -   └ 라인 31: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.185 [collect-async-2] INFO  CollectRetryService -   └ 라인 32: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.185 [collect-async-2] INFO  CollectRetryService -   └ 라인 33: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.185 [collect-async-2] INFO  CollectRetryService -   └ 라인 34: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.185 [collect-async-2] INFO  CollectRetryService -   └ 라인 35: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.186 [collect-async-2] INFO  CollectRetryService -   └ 라인 36: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.186 [collect-async-2] INFO  CollectRetryService -   └ 라인 37: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.186 [collect-async-2] INFO  CollectRetryService -   └ 라인 38: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.186 [collect-async-2] INFO  CollectRetryService -   └ 라인 39: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.186 [collect-async-2] INFO  CollectRetryService -   └ 라인 40: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.186 [collect-async-2] INFO  CollectRetryService -   └ 라인 41: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.186 [collect-async-2] INFO  CollectRetryService -   └ 라인 42: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.186 [collect-async-2] INFO  CollectRetryService -   └ 라인 43: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.186 [collect-async-2] INFO  CollectRetryService -   └ 라인 44: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.187 [collect-async-2] INFO  CollectRetryService -   └ 라인 45: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.187 [collect-async-2] INFO  CollectRetryService -   └ 라인 46: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.187 [collect-async-2] INFO  CollectRetryService -   └ 라인 47: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.187 [collect-async-2] INFO  CollectRetryService -   └ 라인 48: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.187 [collect-async-2] INFO  CollectRetryService -   └ 라인 49: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.187 [collect-async-2] INFO  CollectRetryService -   └ 라인 50: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.187 [collect-async-2] INFO  CollectRetryService -   └ 라인 51: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.187 [collect-async-2] INFO  CollectRetryService -   └ 라인 52: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.187 [collect-async-2] INFO  CollectRetryService -   └ 라인 53: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.188 [collect-async-2] INFO  CollectRetryService -   └ 라인 54: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.188 [collect-async-2] INFO  CollectRetryService -   └ 라인 55: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.188 [collect-async-2] INFO  CollectRetryService -   └ 라인 56: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.188 [collect-async-2] INFO  CollectRetryService -   └ 라인 57: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.188 [collect-async-2] INFO  CollectRetryService -   └ 라인 58: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.188 [collect-async-2] INFO  CollectRetryService -   └ 라인 59: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.188 [collect-async-2] INFO  CollectRetryService -   └ 라인 60: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.188 [collect-async-2] INFO  CollectRetryService -   └ 라인 61: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.188 [collect-async-2] INFO  CollectRetryService -   └ 라인 62: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.188 [collect-async-2] INFO  CollectRetryService -   └ 라인 63: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.189 [collect-async-2] INFO  CollectRetryService -   └ 라인 64: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.189 [collect-async-2] INFO  CollectRetryService -   └ 라인 65: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.189 [collect-async-2] INFO  CollectRetryService -   └ 라인 66: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.189 [collect-async-2] INFO  CollectRetryService -   └ 라인 67: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.189 [collect-async-2] INFO  CollectRetryService -   └ 라인 68: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.189 [collect-async-2] INFO  CollectRetryService -   └ 라인 69: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.189 [collect-async-2] INFO  CollectRetryService -   └ 라인 70: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.189 [collect-async-2] INFO  CollectRetryService -   └ 라인 71: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.190 [collect-async-2] INFO  CollectRetryService -   └ 라인 72: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.190 [collect-async-2] INFO  CollectRetryService -   └ 라인 73: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.190 [collect-async-2] INFO  CollectRetryService -   └ 라인 74: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.190 [collect-async-2] INFO  CollectRetryService -   └ 라인 75: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.190 [collect-async-2] INFO  CollectRetryService -   └ 라인 76: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.190 [collect-async-2] INFO  CollectRetryService -   └ 라인 77: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.190 [collect-async-2] INFO  CollectRetryService -   └ 라인 78: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.190 [collect-async-2] INFO  CollectRetryService -   └ 라인 79: 지원하지 않는 로그 타입: �ð�
+2026-06-15 14:23:01.191 [collect-async-2] INFO  CollectRetryService -   └ 라인 80: 지원하지 않는 로그 타입: �ð�
+2026-06-15 14:23:01.191 [collect-async-2] INFO  CollectRetryService -   └ 라인 81: 지원하지 않는 로그 타입: �ð�
+2026-06-15 14:23:01.191 [collect-async-2] INFO  CollectRetryService -   └ 라인 82: 지원하지 않는 로그 타입: �ð�
+2026-06-15 14:23:01.191 [collect-async-2] INFO  CollectRetryService -   └ 라인 83: 지원하지 않는 로그 타입: �ð�
+2026-06-15 14:23:01.191 [collect-async-2] INFO  CollectRetryService -   └ 라인 84: 지원하지 않는 로그 타입: �ð�
+2026-06-15 14:23:01.191 [collect-async-2] INFO  CollectRetryService -   └ 라인 85: 지원하지 않는 로그 타입: �ð�
+2026-06-15 14:23:01.191 [collect-async-2] INFO  CollectRetryService -   └ 라인 86: 지원하지 않는 로그 타입: �ð�
+2026-06-15 14:23:01.191 [collect-async-2] INFO  CollectRetryService -   └ 라인 87: 지원하지 않는 로그 타입: �ð�
+2026-06-15 14:23:01.191 [collect-async-2] INFO  CollectRetryService -   └ 라인 88: 지원하지 않는 로그 타입: �ð�
+2026-06-15 14:23:01.191 [collect-async-2] INFO  CollectRetryService -   └ 라인 89: 지원하지 않는 로그 타입: �ð�
+2026-06-15 14:23:01.192 [collect-async-2] INFO  CollectRetryService -   └ 라인 90: 지원하지 않는 로그 타입: �ð�
+2026-06-15 14:23:01.192 [collect-async-2] INFO  CollectRetryService -   └ 라인 91: 지원하지 않는 로그 타입: �ð�
+2026-06-15 14:23:01.192 [collect-async-2] INFO  CollectRetryService -   └ 라인 92: 지원하지 않는 로그 타입: �ð�
+2026-06-15 14:23:01.192 [collect-async-2] INFO  CollectRetryService -   └ 라인 93: 지원하지 않는 로그 타입: �ð�
+2026-06-15 14:23:01.192 [collect-async-2] INFO  CollectRetryService -   └ 라인 94: 지원하지 않는 로그 타입: �ð�
+2026-06-15 14:23:01.192 [collect-async-2] INFO  CollectRetryService -   └ 라인 95: 지원하지 않는 로그 타입: �ð�
+2026-06-15 14:23:01.192 [collect-async-2] INFO  CollectRetryService -   └ 라인 96: 지원하지 않는 로그 타입: �ð�
+2026-06-15 14:23:01.192 [collect-async-2] INFO  CollectRetryService -   └ 라인 97: 지원하지 않는 로그 타입: �ð�
+2026-06-15 14:23:01.192 [collect-async-2] INFO  CollectRetryService -   └ 라인 98: 지원하지 않는 로그 타입: �ð�
+2026-06-15 14:23:01.192 [collect-async-2] INFO  CollectRetryService -   └ 라인 99: 지원하지 않는 로그 타입: �ð�
+2026-06-15 14:23:01.193 [collect-async-2] INFO  CollectRetryService -   └ 라인 100: 지원하지 않는 로그 타입: �ð�
+2026-06-15 14:23:01.193 [collect-async-2] INFO  CollectRetryService -   └ 라인 101: 지원하지 않는 로그 타입: �ð�
+2026-06-15 14:23:01.193 [collect-async-2] INFO  CollectRetryService -   └ 라인 102: 지원하지 않는 로그 타입: �ð�
+2026-06-15 14:23:01.193 [collect-async-2] INFO  CollectRetryService -   └ 라인 103: 지원하지 않는 로그 타입: �ð�
+2026-06-15 14:23:01.193 [collect-async-2] INFO  CollectRetryService -   └ 라인 104: 지원하지 않는 로그 타입: �ð�
+2026-06-15 14:23:01.193 [collect-async-2] INFO  CollectRetryService -   └ 라인 105: 지원하지 않는 로그 타입: �ð�
+2026-06-15 14:23:01.194 [collect-async-2] INFO  CollectRetryService -   └ 라인 106: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.195 [collect-async-2] INFO  CollectRetryService -   └ 라인 107: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.195 [collect-async-2] INFO  CollectRetryService -   └ 라인 108: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.195 [collect-async-2] INFO  CollectRetryService -   └ 라인 109: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.195 [collect-async-2] INFO  CollectRetryService -   └ 라인 110: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.195 [collect-async-2] INFO  CollectRetryService -   └ 라인 111: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.195 [collect-async-2] INFO  CollectRetryService -   └ 라인 112: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.196 [collect-async-2] INFO  CollectRetryService -   └ 라인 113: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.196 [collect-async-2] INFO  CollectRetryService -   └ 라인 118: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.196 [collect-async-2] INFO  CollectRetryService -   └ 라인 119: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.196 [collect-async-2] INFO  CollectRetryService -   └ 라인 120: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.196 [collect-async-2] INFO  CollectRetryService -   └ 라인 121: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.196 [collect-async-2] INFO  CollectRetryService -   └ 라인 122: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.196 [collect-async-2] INFO  CollectRetryService -   └ 라인 123: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.196 [collect-async-2] INFO  CollectRetryService -   └ 라인 124: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.196 [collect-async-2] INFO  CollectRetryService -   └ 라인 125: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.197 [collect-async-2] INFO  CollectRetryService -   └ 라인 126: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.197 [collect-async-2] INFO  CollectRetryService -   └ 라인 127: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.197 [collect-async-2] INFO  CollectRetryService -   └ 라인 128: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.197 [collect-async-2] INFO  CollectRetryService -   └ 라인 129: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.197 [collect-async-2] INFO  CollectRetryService -   └ 라인 130: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.197 [collect-async-2] INFO  CollectRetryService -   └ 라인 131: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.197 [collect-async-2] INFO  CollectRetryService -   └ 라인 132: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.197 [collect-async-2] INFO  CollectRetryService -   └ 라인 133: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.198 [collect-async-2] INFO  CollectRetryService -   └ 라인 134: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.198 [collect-async-2] INFO  CollectRetryService -   └ 라인 135: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.198 [collect-async-2] INFO  CollectRetryService -   └ 라인 136: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.198 [collect-async-2] INFO  CollectRetryService -   └ 라인 137: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.198 [collect-async-2] INFO  CollectRetryService -   └ 라인 138: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.198 [collect-async-2] INFO  CollectRetryService -   └ 라인 139: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.198 [collect-async-2] INFO  CollectRetryService -   └ 라인 140: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.198 [collect-async-2] INFO  CollectRetryService -   └ 라인 141: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.198 [collect-async-2] INFO  CollectRetryService -   └ 라인 142: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.198 [collect-async-2] INFO  CollectRetryService -   └ 라인 143: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.199 [collect-async-2] INFO  CollectRetryService -   └ 라인 144: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.199 [collect-async-2] INFO  CollectRetryService -   └ 라인 145: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.199 [collect-async-2] INFO  CollectRetryService -   └ 라인 146: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.199 [collect-async-2] INFO  CollectRetryService -   └ 라인 147: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.199 [collect-async-2] INFO  CollectRetryService -   └ 라인 148: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.199 [collect-async-2] INFO  CollectRetryService -   └ 라인 149: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.200 [collect-async-2] INFO  CollectRetryService -   └ 라인 150: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.200 [collect-async-2] INFO  CollectRetryService -   └ 라인 151: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.200 [collect-async-2] INFO  CollectRetryService -   └ 라인 152: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.200 [collect-async-2] INFO  CollectRetryService -   └ 라인 153: 지원하지 않는 로그 타입: ��
+2026-06-15 14:23:01.200 [collect-async-2] INFO  CollectRetryService -   └ 라인 154: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.200 [collect-async-2] INFO  CollectRetryService -   └ 라인 155: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.200 [collect-async-2] INFO  CollectRetryService -   └ 라인 156: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.201 [collect-async-2] INFO  CollectRetryService -   └ 라인 157: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.201 [collect-async-2] INFO  CollectRetryService -   └ 라인 158: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.201 [collect-async-2] INFO  CollectRetryService -   └ 라인 159: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.201 [collect-async-2] INFO  CollectRetryService -   └ 라인 160: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.201 [collect-async-2] INFO  CollectRetryService -   └ 라인 161: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.201 [collect-async-2] INFO  CollectRetryService -   └ 라인 162: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.201 [collect-async-2] INFO  CollectRetryService -   └ 라인 163: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.202 [collect-async-2] INFO  CollectRetryService -   └ 라인 164: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.202 [collect-async-2] INFO  CollectRetryService -   └ 라인 165: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.202 [collect-async-2] INFO  CollectRetryService -   └ 라인 166: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.202 [collect-async-2] INFO  CollectRetryService -   └ 라인 167: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.202 [collect-async-2] INFO  CollectRetryService -   └ 라인 168: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.202 [collect-async-2] INFO  CollectRetryService -   └ 라인 169: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.202 [collect-async-2] INFO  CollectRetryService -   └ 라인 170: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.202 [collect-async-2] INFO  CollectRetryService -   └ 라인 171: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.202 [collect-async-2] INFO  CollectRetryService -   └ 라인 172: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.203 [collect-async-2] INFO  CollectRetryService -   └ 라인 173: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.203 [collect-async-2] INFO  CollectRetryService -   └ 라인 174: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.203 [collect-async-2] INFO  CollectRetryService -   └ 라인 175: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.203 [collect-async-2] INFO  CollectRetryService -   └ 라인 176: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.203 [collect-async-2] INFO  CollectRetryService -   └ 라인 177: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.203 [collect-async-2] INFO  CollectRetryService -   └ 라인 178: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.203 [collect-async-2] INFO  CollectRetryService -   └ 라인 179: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.203 [collect-async-2] INFO  CollectRetryService -   └ 라인 180: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.203 [collect-async-2] INFO  CollectRetryService -   └ 라인 181: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.203 [collect-async-2] INFO  CollectRetryService -   └ 라인 182: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.204 [collect-async-2] INFO  CollectRetryService -   └ 라인 183: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.204 [collect-async-2] INFO  CollectRetryService -   └ 라인 184: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.204 [collect-async-2] INFO  CollectRetryService -   └ 라인 185: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.204 [collect-async-2] INFO  CollectRetryService -   └ 라인 186: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.204 [collect-async-2] INFO  CollectRetryService -   └ 라인 187: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.204 [collect-async-2] INFO  CollectRetryService -   └ 라인 188: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.204 [collect-async-2] INFO  CollectRetryService -   └ 라인 189: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.204 [collect-async-2] INFO  CollectRetryService -   └ 라인 190: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.204 [collect-async-2] INFO  CollectRetryService -   └ 라인 191: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.204 [collect-async-2] INFO  CollectRetryService -   └ 라인 192: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.205 [collect-async-2] INFO  CollectRetryService -   └ 라인 193: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.205 [collect-async-2] INFO  CollectRetryService -   └ 라인 194: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.205 [collect-async-2] INFO  CollectRetryService -   └ 라인 195: 지원하지 않는 로그 타입: �ð�
+2026-06-15 14:23:01.205 [collect-async-2] INFO  CollectRetryService -   └ 라인 196: 지원하지 않는 로그 타입: �ð�
+2026-06-15 14:23:01.205 [collect-async-2] INFO  CollectRetryService -   └ 라인 197: 지원하지 않는 로그 타입: �ð�
+2026-06-15 14:23:01.205 [collect-async-2] INFO  CollectRetryService -   └ 라인 198: 지원하지 않는 로그 타입: �ð�
+2026-06-15 14:23:01.205 [collect-async-2] INFO  CollectRetryService -   └ 라인 199: 지원하지 않는 로그 타입: �ð�
+2026-06-15 14:23:01.205 [collect-async-2] INFO  CollectRetryService -   └ 라인 200: 지원하지 않는 로그 타입: �ð�
+2026-06-15 14:23:01.206 [collect-async-2] INFO  CollectRetryService -   └ 라인 201: 지원하지 않는 로그 타입: �ð�
+2026-06-15 14:23:01.206 [collect-async-2] INFO  CollectRetryService -   └ 라인 202: 지원하지 않는 로그 타입: �ð�
+2026-06-15 14:23:01.206 [collect-async-2] INFO  CollectRetryService -   └ 라인 203: 지원하지 않는 로그 타입: �ð�
+2026-06-15 14:23:01.206 [collect-async-2] INFO  CollectRetryService -   └ 라인 204: 지원하지 않는 로그 타입: �ð�
+2026-06-15 14:23:01.206 [collect-async-2] INFO  CollectRetryService -   └ 라인 205: 지원하지 않는 로그 타입: �ð�
+2026-06-15 14:23:01.206 [collect-async-2] INFO  CollectRetryService -   └ 라인 206: 지원하지 않는 로그 타입: �ð�
+2026-06-15 14:23:01.206 [collect-async-2] INFO  CollectRetryService -   └ 라인 207: 지원하지 않는 로그 타입: �ð�
+2026-06-15 14:23:01.206 [collect-async-2] INFO  CollectRetryService -   └ 라인 208: 지원하지 않는 로그 타입: �ð�
+2026-06-15 14:23:01.206 [collect-async-2] INFO  CollectRetryService -   └ 라인 209: 지원하지 않는 로그 타입: �ð�
+2026-06-15 14:23:01.206 [collect-async-2] INFO  CollectRetryService -   └ 라인 210: 지원하지 않는 로그 타입: �ð�
+2026-06-15 14:23:01.207 [collect-async-2] INFO  CollectRetryService -   └ 라인 211: 지원하지 않는 로그 타입: �ð�
+2026-06-15 14:23:01.207 [collect-async-2] INFO  CollectRetryService -   └ 라인 212: 지원하지 않는 로그 타입: �ð�
+2026-06-15 14:23:01.207 [collect-async-2] INFO  CollectRetryService -   └ 라인 213: 지원하지 않는 로그 타입: �ð�
+2026-06-15 14:23:01.207 [collect-async-2] INFO  CollectRetryService -   └ 라인 214: 지원하지 않는 로그 타입: �ð�
+2026-06-15 14:23:01.207 [collect-async-2] INFO  CollectRetryService -   └ 라인 215: 지원하지 않는 로그 타입: �ð�
+2026-06-15 14:23:01.207 [collect-async-2] INFO  CollectRetryService -   └ 라인 216: 지원하지 않는 로그 타입: �ð�
+2026-06-15 14:23:01.207 [collect-async-2] INFO  CollectRetryService -   └ 라인 217: 지원하지 않는 로그 타입: �ð�
+2026-06-15 14:23:01.207 [collect-async-2] INFO  CollectRetryService -   └ 라인 218: 지원하지 않는 로그 타입: �ð�
+2026-06-15 14:23:01.207 [collect-async-2] INFO  CollectRetryService -   └ 라인 219: 지원하지 않는 로그 타입: �ð�
+2026-06-15 14:23:01.207 [collect-async-2] INFO  CollectRetryService -   └ 라인 220: 지원하지 않는 로그 타입: �ð�
+2026-06-15 14:23:01.208 [collect-async-2] INFO  CollectRetryService -   └ 라인 221: 지원하지 않는 로그 타입: �ð�
+2026-06-15 14:23:01.208 [collect-async-2] INFO  CollectRetryService -   └ 라인 222: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.208 [collect-async-2] INFO  CollectRetryService -   └ 라인 223: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.208 [collect-async-2] INFO  CollectRetryService -   └ 라인 224: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.208 [collect-async-2] INFO  CollectRetryService -   └ 라인 225: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.208 [collect-async-2] INFO  CollectRetryService -   └ 라인 226: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.208 [collect-async-2] INFO  CollectRetryService -   └ 라인 227: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.208 [collect-async-2] INFO  CollectRetryService -   └ 라인 228: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:01.208 [collect-async-2] INFO  CollectRetryService -   └ 라인 229: 지원하지 않는 로그 타입: ��ġ
+2026-06-15 14:23:16.795 [scheduling-1] INFO  CollectScheduleParser - =============================
+2026-06-15 14:23:16.796 [scheduling-1] INFO  CollectScheduleParser -   [1] serverId: pjpsap01-주파수클럽, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, scheduleExpression: 주기|*|080000|1|235959
+2026-06-15 14:23:16.797 [scheduling-1] INFO  CollectScheduleParser - =============================
+2026-06-15 14:23:16.797 [scheduling-1] INFO  CollectScheduleParser -   [2] serverId: dcoodb01-주문체결, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jcm.log, scheduleExpression: 주기|*|080000|1|235959
+2026-06-15 14:24:00.925 [scheduling-1] INFO  CollectScheduler - 주기 수집 실행 - serverId: pjpsap01-주파수클럽, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, 간격: 1분, 385번째 실행, schedule: 주기|*|080000|1|235959
+2026-06-15 14:24:00.925 [scheduling-1] INFO  CollectScheduler - 주기 수집 실행 - serverId: dcoodb01-주문체결, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jcm.log, 간격: 1분, 385번째 실행, schedule: 주기|*|080000|1|235959
+2026-06-15 14:24:00.933 [collect-async-3] INFO  CollectRetryService - 수집 완료 - 서버: pjpsap01-주파수클럽, 파일: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, 타입: 주기, 수집총라인수: 0, 정규화저장건수: 0, 정규화실패건수: 0
+2026-06-15 14:24:00.934 [collect-async-4] INFO  CollectRetryService - 수집 완료 - 서버: dcoodb01-주문체결, 파일: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jcm.log, 타입: 주기, 수집총라인수: 0, 정규화저장건수: 0, 정규화실패건수: 0
+2026-06-15 14:25:05.187 [restartedMain] INFO  CollectApplication - Starting CollectApplication using Java 17.0.19 with PID 12544 (C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\bin\main started by 20200161 in C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect)
+2026-06-15 14:25:05.190 [restartedMain] INFO  CollectApplication - The following 1 profile is active: "local"
+2026-06-15 14:25:06.230 [restartedMain] INFO  CollectScheduler - <<< CollectScheduler initialized with configuration: >>>
+2026-06-15 14:25:06.232 [restartedMain] INFO  CollectScheduler -   Schedule file path: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\schedule_sample\PreCheck_CollectLogs_Schedule.conf
+2026-06-15 14:25:06.233 [restartedMain] INFO  CollectScheduler -   Collect mode: local
+2026-06-15 14:25:06.233 [restartedMain] INFO  CollectScheduler -   SFTP port: 22
+2026-06-15 14:25:06.233 [restartedMain] INFO  CollectScheduler -   SFTP username: local_user
+2026-06-15 14:25:06.233 [restartedMain] INFO  CollectScheduler -   Schedule reload interval (ms): 60000
+2026-06-15 14:25:06.234 [restartedMain] INFO  CollectScheduler - <<< Configuration initialized >>>
+2026-06-15 14:25:06.388 [restartedMain] INFO  CollectApplication - Started CollectApplication in 1.638 seconds (process running for 2.19)
+2026-06-15 14:25:06.396 [scheduling-1] INFO  CollectScheduleParser - =============================
+2026-06-15 14:25:06.396 [scheduling-1] INFO  CollectScheduleParser -   [1] serverId: pjpsap01-주파수클럽, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, scheduleExpression: 주기|*|080000|1|235959
+2026-06-15 14:25:06.397 [scheduling-1] INFO  CollectScheduleParser - =============================
+2026-06-15 14:25:06.397 [scheduling-1] INFO  CollectScheduleParser -   [2] serverId: dcoodb01-주문체결, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jcm.log, scheduleExpression: 주기|*|080000|1|235959
+2026-06-15 14:26:00.537 [scheduling-1] INFO  CollectScheduler - 주기 수집 실행 - serverId: pjpsap01-주파수클럽, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, 간격: 1분, 387번째 실행, schedule: 주기|*|080000|1|235959
+2026-06-15 14:26:00.542 [scheduling-1] INFO  CollectScheduler - 주기 수집 실행 - serverId: dcoodb01-주문체결, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jcm.log, 간격: 1분, 387번째 실행, schedule: 주기|*|080000|1|235959
+2026-06-15 14:26:00.934 [collect-async-1] INFO  CollectRetryService - 수집 완료 - 서버: pjpsap01-주파수클럽, 파일: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, 타입: 주기, 수집총라인수: 0, 정규화저장건수: 0, 정규화실패건수: 0
+2026-06-15 14:26:00.935 [collect-async-2] INFO  CollectRetryService - 수집 완료 - 서버: dcoodb01-주문체결, 파일: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jcm.log, 타입: 주기, 수집총라인수: 0, 정규화저장건수: 0, 정규화실패건수: 0
+2026-06-15 14:26:06.551 [scheduling-1] INFO  CollectScheduleParser - =============================
+2026-06-15 14:26:06.552 [scheduling-1] INFO  CollectScheduleParser -   [1] serverId: pjpsap01-주파수클럽, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, scheduleExpression: 주기|*|080000|1|235959
+2026-06-15 14:26:06.552 [scheduling-1] INFO  CollectScheduleParser - =============================
+2026-06-15 14:26:06.553 [scheduling-1] INFO  CollectScheduleParser -   [2] serverId: dcoodb01-주문체결, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jcm.log, scheduleExpression: 주기|*|080000|1|235959
+2026-06-15 14:27:00.687 [scheduling-1] INFO  CollectScheduler - 주기 수집 실행 - serverId: pjpsap01-주파수클럽, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, 간격: 1분, 388번째 실행, schedule: 주기|*|080000|1|235959
+2026-06-15 14:27:00.690 [scheduling-1] INFO  CollectScheduler - 주기 수집 실행 - serverId: dcoodb01-주문체결, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jcm.log, 간격: 1분, 388번째 실행, schedule: 주기|*|080000|1|235959
+2026-06-15 14:27:00.702 [collect-async-3] INFO  CollectRetryService - 수집 완료 - 서버: pjpsap01-주파수클럽, 파일: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, 타입: 주기, 수집총라인수: 0, 정규화저장건수: 0, 정규화실패건수: 0
+2026-06-15 14:27:00.703 [collect-async-4] INFO  CollectRetryService - 수집 완료 - 서버: dcoodb01-주문체결, 파일: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jcm.log, 타입: 주기, 수집총라인수: 0, 정규화저장건수: 0, 정규화실패건수: 0
+2026-06-15 14:27:06.700 [scheduling-1] INFO  CollectScheduleParser - =============================
+2026-06-15 14:27:06.701 [scheduling-1] INFO  CollectScheduleParser -   [1] serverId: pjpsap01-주파수클럽, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, scheduleExpression: 주기|*|080000|1|235959
+2026-06-15 14:27:06.701 [scheduling-1] INFO  CollectScheduleParser - =============================
+2026-06-15 14:27:06.701 [scheduling-1] INFO  CollectScheduleParser -   [2] serverId: dcoodb01-주문체결, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jcm.log, scheduleExpression: 주기|*|080000|1|235959
+2026-06-15 14:28:00.794 [scheduling-1] INFO  CollectScheduler - 주기 수집 실행 - serverId: pjpsap01-주파수클럽, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, 간격: 1분, 389번째 실행, schedule: 주기|*|080000|1|235959
+2026-06-15 14:28:00.797 [scheduling-1] INFO  CollectScheduler - 주기 수집 실행 - serverId: dcoodb01-주문체결, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jcm.log, 간격: 1분, 389번째 실행, schedule: 주기|*|080000|1|235959
+2026-06-15 14:28:00.808 [collect-async-5] INFO  CollectRetryService - 수집 완료 - 서버: pjpsap01-주파수클럽, 파일: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, 타입: 주기, 수집총라인수: 0, 정규화저장건수: 0, 정규화실패건수: 0
+2026-06-15 14:28:00.809 [collect-async-1] INFO  CollectRetryService - 수집 완료 - 서버: dcoodb01-주문체결, 파일: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jcm.log, 타입: 주기, 수집총라인수: 0, 정규화저장건수: 0, 정규화실패건수: 0
+2026-06-15 14:28:06.807 [scheduling-1] INFO  CollectScheduleParser - =============================
+2026-06-15 14:28:06.807 [scheduling-1] INFO  CollectScheduleParser -   [1] serverId: pjpsap01-주파수클럽, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, scheduleExpression: 주기|*|080000|1|235959
+2026-06-15 14:28:06.807 [scheduling-1] INFO  CollectScheduleParser - =============================
+2026-06-15 14:28:06.808 [scheduling-1] INFO  CollectScheduleParser -   [2] serverId: dcoodb01-주문체결, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jcm.log, scheduleExpression: 주기|*|080000|1|235959
+2026-06-15 14:29:00.883 [scheduling-1] INFO  CollectScheduler - 주기 수집 실행 - serverId: pjpsap01-주파수클럽, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, 간격: 1분, 390번째 실행, schedule: 주기|*|080000|1|235959
+2026-06-15 14:29:00.883 [scheduling-1] INFO  CollectScheduler - 주기 수집 실행 - serverId: dcoodb01-주문체결, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jcm.log, 간격: 1분, 390번째 실행, schedule: 주기|*|080000|1|235959
+2026-06-15 14:29:00.894 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 2, tokenCount: 0, rawLog: @@@[2026/06/12 16:00:09.000][비교][JUCHE_DIFF_1]|JCNEXT_SHMKEY=0xc0002212|@@@
+2026-06-15 14:29:00.897 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 3, tokenCount: 0, rawLog: @@@[2026/06/12 16:00:09.000][비교][JUCHE_DIFF_2]|JCM_CONF=/home/axistuja/cfg/jcm.cfg|@@@
+2026-06-15 14:29:00.897 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 4, tokenCount: 0, rawLog: @@@[2026/06/12 16:00:09.000][비교][JUCHE_DIFF_3]|[fb0db000]|@@@
+2026-06-15 14:29:00.898 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 5, tokenCount: 0, rawLog: @@@[2026/06/12 16:00:09.000][비교][JUCHE_DIFF_4]|생성일자=2026/02/20 18:01:21|@@@
+2026-06-15 14:29:00.898 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 6, tokenCount: 0, rawLog: @@@[2026/06/12 16:00:09.000][비교][JUCHE_DIFF_5]|==================================================================|@@@
+2026-06-15 14:29:00.899 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 7, tokenCount: 0, rawLog: @@@[2026/06/12 16:00:09.000][비교][JUCHE_DIFF_6]|MCAST [ OFF ]|@@@
+2026-06-15 14:29:00.899 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 8, tokenCount: 0, rawLog: @@@[2026/06/12 16:00:09.000][비교][JUCHE_DIFF_7]|------------------------------------------------------------------|@@@
+2026-06-15 14:29:00.900 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 9, tokenCount: 1, rawLog: @@@[2026/06/12 16:00:09.000][비교][JUCHE_DIFF_8]|현물 주/체 #1: 수신 [ $2$ ] B[ 0] 처리[ 2]|@@@
+2026-06-15 14:29:00.900 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 10, tokenCount: 1, rawLog: @@@[2026/06/12 16:00:09.000][비교][JUCHE_DIFF_9]|현물 주/체 #2: 수신 [ $33$ ] B[ 0] 처리[ 33]|@@@
+2026-06-15 14:29:00.901 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 11, tokenCount: 1, rawLog: @@@[2026/06/12 16:00:09.000][비교][JUCHE_DIFF_10]|현물 주/체 #3: 수신 [ $0$ ] B[ 0] 처리[ 0]|@@@
+2026-06-15 14:29:00.901 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 12, tokenCount: 1, rawLog: @@@[2026/06/12 16:00:09.000][비교][JUCHE_DIFF_11]|현물 주/체 #4: 수신 [ $14$ ] B[ 0] 처리[ 14]|@@@
+2026-06-15 14:29:00.901 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 13, tokenCount: 1, rawLog: @@@[2026/06/12 16:00:09.000][비교][JUCHE_DIFF_12]|현물 주/체 #5: 수신 [ $2$ ] B[ 0] 처리[ 2]|@@@
+2026-06-15 14:29:00.902 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 14, tokenCount: 1, rawLog: @@@[2026/06/12 16:00:09.000][비교][JUCHE_DIFF_13]|현물 주/체 #6: 수신 [ $1$ ] B[ 0] 처리[ 1]|@@@
+2026-06-15 14:29:00.902 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 15, tokenCount: 1, rawLog: @@@[2026/06/12 16:00:09.000][비교][JUCHE_DIFF_14]|현물 주/체 #7: 수신 [ $8$ ] B[ 0] 처리[ 8]|@@@
+2026-06-15 14:29:00.903 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 16, tokenCount: 1, rawLog: @@@[2026/06/12 16:00:09.000][비교][JUCHE_DIFF_15]|현물 주/체 #8: 수신 [ $0$ ] B[ 0] 처리[ 0]|@@@
+2026-06-15 14:29:00.903 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 17, tokenCount: 1, rawLog: @@@[2026/06/12 16:00:09.000][비교][JUCHE_DIFF_16]|현물 주/체 #9: 수신 [ $2$ ] B[ 0] 처리[ 2]|@@@
+2026-06-15 14:29:00.904 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 18, tokenCount: 1, rawLog: @@@[2026/06/12 16:00:09.000][비교][JUCHE_DIFF_17]|현물 주/체 #0: 수신 [ $2$ ] B[ 0] 처리[ 2]|@@@
+2026-06-15 14:29:00.904 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 19, tokenCount: 1, rawLog: @@@[2026/06/12 16:00:09.000][비교][JUCHE_DIFF_18]|파생 주/체 #1: 수신 [ $56$ ] B[ 0] 처리[ 56]|@@@
+2026-06-15 14:29:00.904 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 20, tokenCount: 1, rawLog: @@@[2026/06/12 16:00:09.000][비교][JUCHE_DIFF_19]|계좌정보 #1: 수신 [ $60$ ] B[ 0] 처리[ 60]|@@@
+2026-06-15 14:29:00.905 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 21, tokenCount: 1, rawLog: @@@[2026/06/12 16:00:09.000][비교][JUCHE_DIFF_20]|실시간정산 #1: 수신 [ $1432$ ] B[ 0] 처리[ 1432]|@@@
+2026-06-15 14:29:00.905 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 22, tokenCount: 1, rawLog: @@@[2026/06/12 16:00:09.000][비교][JUCHE_DIFF_21]|실시간정산 #2: 수신 [ $1773$ ] B[ 0] 처리[ 1773]|@@@
+2026-06-15 14:29:00.905 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 23, tokenCount: 1, rawLog: @@@[2026/06/12 16:00:09.000][비교][JUCHE_DIFF_22]|실시간정산 #3: 수신 [ $1594$ ] B[ 0] 처리[ 1594]|@@@
+2026-06-15 14:29:00.906 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 24, tokenCount: 1, rawLog: @@@[2026/06/12 16:00:09.000][비교][JUCHE_DIFF_23]|실시간정산 #4: 수신 [ $1489$ ] B[ 0] 처리[ 1489]|@@@
+2026-06-15 14:29:00.906 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 25, tokenCount: 1, rawLog: @@@[2026/06/12 16:00:09.000][비교][JUCHE_DIFF_24]|실시간정산 #5: 수신 [ $1714$ ] B[ 0] 처리[ 1714]|@@@
+2026-06-15 14:29:00.907 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 26, tokenCount: 1, rawLog: @@@[2026/06/12 16:00:09.000][비교][JUCHE_DIFF_25]|실시간정산 #6: 수신 [ $1492$ ] B[ 0] 처리[ 1492]|@@@
+2026-06-15 14:29:00.907 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 27, tokenCount: 1, rawLog: @@@[2026/06/12 16:00:09.000][비교][JUCHE_DIFF_26]|실시간정산 #7: 수신 [ $1466$ ] B[ 0] 처리[ 1466]|@@@
+2026-06-15 14:29:00.907 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 28, tokenCount: 1, rawLog: @@@[2026/06/12 16:00:09.000][비교][JUCHE_DIFF_27]|실시간정산 #8: 수신 [ $1678$ ] B[ 0] 처리[ 1678]|@@@
+2026-06-15 14:29:00.907 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 29, tokenCount: 1, rawLog: @@@[2026/06/12 16:00:09.000][비교][JUCHE_DIFF_28]|실시간정산 #9: 수신 [ $1563$ ] B[ 0] 처리[ 1563]|@@@
+2026-06-15 14:29:00.908 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 30, tokenCount: 1, rawLog: @@@[2026/06/12 16:00:09.000][비교][JUCHE_DIFF_29]|실시간정산 #0: 수신 [ $1331$ ] B[ 0] 처리[ 1331]|@@@
+2026-06-15 14:29:00.908 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 31, tokenCount: 0, rawLog: @@@[2026/06/12 16:00:09.000][비교][JUCHE_DIFF_30]|------------------------------------------------------------------|@@@
+2026-06-15 14:29:00.908 [collect-async-2] INFO  CollectRetryService - 수집 완료 - 서버: pjpsap01-주파수클럽, 파일: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, 타입: 주기, 수집총라인수: 46, 정규화저장건수: 9, 정규화실패건수: 0
+2026-06-15 14:29:00.908 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 32, tokenCount: 0, rawLog: @@@[2026/06/12 16:00:09.000][비교][JUCHE_DIFF_31]|[재송정보]|@@@
+2026-06-15 14:29:00.909 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 33, tokenCount: 1, rawLog: @@@[2026/06/12 16:00:09.000][비교][JUCHE_DIFF_32]|R 현물 주/체#1: 수신 [ $0$ ] B[ 0] 처리[ 0]|@@@
+2026-06-15 14:29:00.909 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 34, tokenCount: 1, rawLog: @@@[2026/06/12 16:00:09.000][비교][JUCHE_DIFF_33]|R 파생 주/체#1: 수신 [ $0$ ] B[ 0] 처리[ 0]|@@@
+2026-06-15 14:29:00.909 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 35, tokenCount: 1, rawLog: @@@[2026/06/12 16:00:09.000][비교][JUCHE_DIFF_34]|R 계좌정보 #1: 수신 [ $0$ ] B[ 0] 처리[ 0]|@@@
+2026-06-15 14:29:00.910 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 36, tokenCount: 1, rawLog: @@@[2026/06/12 16:00:09.000][비교][JUCHE_DIFF_35]|R 실시간정산#1: 수신 [ $0$ ] B[ 0] 처리[ 0]|@@@
+2026-06-15 14:29:00.910 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 37, tokenCount: 0, rawLog: @@@[2026/06/12 16:00:09.000][비교][JUCHE_DIFF_36]|==================================================================|@@@
+2026-06-15 14:29:00.911 [collect-async-3] WARN  LogNormalizeParser - 수치형 로그 값 토큰 개수 오류로 무시 - lineNumber: 38, tokenCount: 0, rawLog: @@@[2026/06/12 16:00:09.000][수치][JCM_LOAD_1]|JCNEXT_SHMKEY=0xc0002212|@@@
+2026-06-15 14:29:00.911 [collect-async-3] WARN  LogNormalizeParser - 수치형 로그 값 토큰 개수 오류로 무시 - lineNumber: 39, tokenCount: 0, rawLog: @@@[2026/06/12 16:00:09.000][수치][JCM_LOAD_2]|JCM_CONF=/home/axistuja/cfg/jcm.cfg|@@@
+2026-06-15 14:29:00.911 [collect-async-3] WARN  LogNormalizeParser - 수치형 로그 값 토큰 개수 오류로 무시 - lineNumber: 40, tokenCount: 0, rawLog: @@@[2026/06/12 16:00:09.000][수치][JCM_LOAD_3]|[8e20000]|@@@
+2026-06-15 14:29:00.912 [collect-async-3] WARN  LogNormalizeParser - 수치형 로그 값 토큰 개수 오류로 무시 - lineNumber: 41, tokenCount: 0, rawLog: @@@[2026/06/12 16:00:09.000][수치][JCM_LOAD_4]|생성일자=2026/02/20 18:01:21|@@@
+2026-06-15 14:29:00.912 [collect-async-3] WARN  LogNormalizeParser - 수치형 로그 값 토큰 개수 오류로 무시 - lineNumber: 42, tokenCount: 0, rawLog: @@@[2026/06/12 16:00:09.000][수치][JCM_LOAD_5]|==================================================================|@@@
+2026-06-15 14:29:00.912 [collect-async-3] WARN  LogNormalizeParser - 수치형 로그 값 토큰 개수 오류로 무시 - lineNumber: 43, tokenCount: 0, rawLog: @@@[2026/06/12 16:00:09.000][수치][JCM_LOAD_6]|MCAST [ OFF ]|@@@
+2026-06-15 14:29:00.913 [collect-async-3] WARN  LogNormalizeParser - 수치형 로그 값 토큰 개수 오류로 무시 - lineNumber: 44, tokenCount: 0, rawLog: @@@[2026/06/12 16:00:09.000][수치][JCM_LOAD_7]|------------------------------------------------------------------|@@@
+2026-06-15 14:29:00.915 [collect-async-3] WARN  LogNormalizeParser - 수치형 로그 값 토큰 개수 오류로 무시 - lineNumber: 67, tokenCount: 0, rawLog: @@@[2026/06/12 16:00:10.000][수치][JCM_LOAD_30]|------------------------------------------------------------------|@@@
+2026-06-15 14:29:00.915 [collect-async-3] WARN  LogNormalizeParser - 수치형 로그 값 토큰 개수 오류로 무시 - lineNumber: 68, tokenCount: 0, rawLog: @@@[2026/06/12 16:00:10.000][수치][JCM_LOAD_31]|[재송정보]|@@@
+2026-06-15 14:29:00.916 [collect-async-3] WARN  LogNormalizeParser - 수치형 로그 값 토큰 개수 오류로 무시 - lineNumber: 73, tokenCount: 0, rawLog: @@@[2026/06/12 16:00:10.000][수치][JCM_LOAD_36]|==================================================================|@@@
+2026-06-15 14:29:00.917 [collect-async-3] WARN  LogNormalizeParser - 시간형 로그 값 토큰 개수 오류로 무시 - lineNumber: 105, tokenCount: 0, rawLog: @@@[2026/06/12 16:00:10.000][시간][JCM_IICLEAR]|FILE:/home/mini/IICLEAR_END.0612 TIME:00:10|@@@
+2026-06-15 14:29:00.918 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 118, tokenCount: 0, rawLog: @@@[2026/06/12 16:15:44.000][비교][JUCHE_DIFF_1]|JCNEXT_SHMKEY=0xc0002212|@@@
+2026-06-15 14:29:00.918 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 119, tokenCount: 0, rawLog: @@@[2026/06/12 16:15:44.000][비교][JUCHE_DIFF_2]|JCM_CONF=/home/axistuja/cfg/jcm.cfg|@@@
+2026-06-15 14:29:00.919 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 120, tokenCount: 0, rawLog: @@@[2026/06/12 16:15:44.000][비교][JUCHE_DIFF_3]|[21abd000]|@@@
+2026-06-15 14:29:00.919 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 121, tokenCount: 0, rawLog: @@@[2026/06/12 16:15:44.000][비교][JUCHE_DIFF_4]|생성일자=2026/02/20 18:01:21|@@@
+2026-06-15 14:29:00.919 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 122, tokenCount: 0, rawLog: @@@[2026/06/12 16:15:44.000][비교][JUCHE_DIFF_5]|==================================================================|@@@
+2026-06-15 14:29:00.920 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 123, tokenCount: 0, rawLog: @@@[2026/06/12 16:15:44.000][비교][JUCHE_DIFF_6]|MCAST [ OFF ]|@@@
+2026-06-15 14:29:00.920 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 124, tokenCount: 0, rawLog: @@@[2026/06/12 16:15:44.000][비교][JUCHE_DIFF_7]|------------------------------------------------------------------|@@@
+2026-06-15 14:29:00.920 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 125, tokenCount: 1, rawLog: @@@[2026/06/12 16:15:44.000][비교][JUCHE_DIFF_8]|현물 주/체 #1: 수신 [ $2$ ] B[ 0] 처리[ 2]|@@@
+2026-06-15 14:29:00.921 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 126, tokenCount: 1, rawLog: @@@[2026/06/12 16:15:44.000][비교][JUCHE_DIFF_9]|현물 주/체 #2: 수신 [ $33$ ] B[ 0] 처리[ 33]|@@@
+2026-06-15 14:29:00.921 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 127, tokenCount: 1, rawLog: @@@[2026/06/12 16:15:44.000][비교][JUCHE_DIFF_10]|현물 주/체 #3: 수신 [ $0$ ] B[ 0] 처리[ 0]|@@@
+2026-06-15 14:29:00.921 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 128, tokenCount: 1, rawLog: @@@[2026/06/12 16:15:44.000][비교][JUCHE_DIFF_11]|현물 주/체 #4: 수신 [ $14$ ] B[ 0] 처리[ 14]|@@@
+2026-06-15 14:29:00.922 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 129, tokenCount: 1, rawLog: @@@[2026/06/12 16:15:44.000][비교][JUCHE_DIFF_12]|현물 주/체 #5: 수신 [ $2$ ] B[ 0] 처리[ 2]|@@@
+2026-06-15 14:29:00.922 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 130, tokenCount: 1, rawLog: @@@[2026/06/12 16:15:44.000][비교][JUCHE_DIFF_13]|현물 주/체 #6: 수신 [ $1$ ] B[ 0] 처리[ 1]|@@@
+2026-06-15 14:29:00.922 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 131, tokenCount: 1, rawLog: @@@[2026/06/12 16:15:44.000][비교][JUCHE_DIFF_14]|현물 주/체 #7: 수신 [ $8$ ] B[ 0] 처리[ 8]|@@@
+2026-06-15 14:29:00.923 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 132, tokenCount: 1, rawLog: @@@[2026/06/12 16:15:44.000][비교][JUCHE_DIFF_15]|현물 주/체 #8: 수신 [ $0$ ] B[ 0] 처리[ 0]|@@@
+2026-06-15 14:29:00.923 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 133, tokenCount: 1, rawLog: @@@[2026/06/12 16:15:44.000][비교][JUCHE_DIFF_16]|현물 주/체 #9: 수신 [ $2$ ] B[ 0] 처리[ 2]|@@@
+2026-06-15 14:29:00.923 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 134, tokenCount: 1, rawLog: @@@[2026/06/12 16:15:44.000][비교][JUCHE_DIFF_17]|현물 주/체 #0: 수신 [ $2$ ] B[ 0] 처리[ 2]|@@@
+2026-06-15 14:29:00.924 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 135, tokenCount: 1, rawLog: @@@[2026/06/12 16:15:44.000][비교][JUCHE_DIFF_18]|파생 주/체 #1: 수신 [ $56$ ] B[ 0] 처리[ 56]|@@@
+2026-06-15 14:29:00.924 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 136, tokenCount: 1, rawLog: @@@[2026/06/12 16:15:44.000][비교][JUCHE_DIFF_19]|계좌정보 #1: 수신 [ $61$ ] B[ 0] 처리[ 61]|@@@
+2026-06-15 14:29:00.924 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 137, tokenCount: 1, rawLog: @@@[2026/06/12 16:15:44.000][비교][JUCHE_DIFF_20]|실시간정산 #1: 수신 [ $1432$ ] B[ 0] 처리[ 1432]|@@@
+2026-06-15 14:29:00.925 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 138, tokenCount: 1, rawLog: @@@[2026/06/12 16:15:44.000][비교][JUCHE_DIFF_21]|실시간정산 #2: 수신 [ $1773$ ] B[ 0] 처리[ 1773]|@@@
+2026-06-15 14:29:00.925 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 139, tokenCount: 1, rawLog: @@@[2026/06/12 16:15:44.000][비교][JUCHE_DIFF_22]|실시간정산 #3: 수신 [ $1594$ ] B[ 0] 처리[ 1594]|@@@
+2026-06-15 14:29:00.925 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 140, tokenCount: 1, rawLog: @@@[2026/06/12 16:15:44.000][비교][JUCHE_DIFF_23]|실시간정산 #4: 수신 [ $1489$ ] B[ 0] 처리[ 1489]|@@@
+2026-06-15 14:29:00.926 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 141, tokenCount: 1, rawLog: @@@[2026/06/12 16:15:44.000][비교][JUCHE_DIFF_24]|실시간정산 #5: 수신 [ $1714$ ] B[ 0] 처리[ 1714]|@@@
+2026-06-15 14:29:00.926 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 142, tokenCount: 1, rawLog: @@@[2026/06/12 16:15:44.000][비교][JUCHE_DIFF_25]|실시간정산 #6: 수신 [ $1495$ ] B[ 0] 처리[ 1495]|@@@
+2026-06-15 14:29:00.926 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 143, tokenCount: 1, rawLog: @@@[2026/06/12 16:15:44.000][비교][JUCHE_DIFF_26]|실시간정산 #7: 수신 [ $1466$ ] B[ 0] 처리[ 1466]|@@@
+2026-06-15 14:29:00.926 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 144, tokenCount: 1, rawLog: @@@[2026/06/12 16:15:44.000][비교][JUCHE_DIFF_27]|실시간정산 #8: 수신 [ $1680$ ] B[ 0] 처리[ 1680]|@@@
+2026-06-15 14:29:00.927 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 145, tokenCount: 1, rawLog: @@@[2026/06/12 16:15:44.000][비교][JUCHE_DIFF_28]|실시간정산 #9: 수신 [ $1563$ ] B[ 0] 처리[ 1563]|@@@
+2026-06-15 14:29:00.927 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 146, tokenCount: 1, rawLog: @@@[2026/06/12 16:15:44.000][비교][JUCHE_DIFF_29]|실시간정산 #0: 수신 [ $1331$ ] B[ 0] 처리[ 1331]|@@@
+2026-06-15 14:29:00.927 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 147, tokenCount: 0, rawLog: @@@[2026/06/12 16:15:44.000][비교][JUCHE_DIFF_30]|------------------------------------------------------------------|@@@
+2026-06-15 14:29:00.928 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 148, tokenCount: 0, rawLog: @@@[2026/06/12 16:15:44.000][비교][JUCHE_DIFF_31]|[재송정보]|@@@
+2026-06-15 14:29:00.928 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 149, tokenCount: 1, rawLog: @@@[2026/06/12 16:15:44.000][비교][JUCHE_DIFF_32]|R 현물 주/체#1: 수신 [ $0$ ] B[ 0] 처리[ 0]|@@@
+2026-06-15 14:29:00.928 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 150, tokenCount: 1, rawLog: @@@[2026/06/12 16:15:44.000][비교][JUCHE_DIFF_33]|R 파생 주/체#1: 수신 [ $0$ ] B[ 0] 처리[ 0]|@@@
+2026-06-15 14:29:00.929 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 151, tokenCount: 1, rawLog: @@@[2026/06/12 16:15:44.000][비교][JUCHE_DIFF_34]|R 계좌정보 #1: 수신 [ $0$ ] B[ 0] 처리[ 0]|@@@
+2026-06-15 14:29:00.929 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 152, tokenCount: 1, rawLog: @@@[2026/06/12 16:15:44.000][비교][JUCHE_DIFF_35]|R 실시간정산#1: 수신 [ $0$ ] B[ 0] 처리[ 0]|@@@
+2026-06-15 14:29:00.929 [collect-async-3] WARN  LogNormalizeParser - 비교형 로그 값 토큰 개수 오류로 무시 - lineNumber: 153, tokenCount: 0, rawLog: @@@[2026/06/12 16:15:44.000][비교][JUCHE_DIFF_36]|==================================================================|@@@
+2026-06-15 14:29:00.930 [collect-async-3] WARN  LogNormalizeParser - 수치형 로그 값 토큰 개수 오류로 무시 - lineNumber: 154, tokenCount: 0, rawLog: @@@[2026/06/12 16:15:44.000][수치][JCM_LOAD_1]|JCNEXT_SHMKEY=0xc0002212|@@@
+2026-06-15 14:29:00.930 [collect-async-3] WARN  LogNormalizeParser - 수치형 로그 값 토큰 개수 오류로 무시 - lineNumber: 155, tokenCount: 0, rawLog: @@@[2026/06/12 16:15:44.000][수치][JCM_LOAD_2]|JCM_CONF=/home/axistuja/cfg/jcm.cfg|@@@
+2026-06-15 14:29:00.930 [collect-async-3] WARN  LogNormalizeParser - 수치형 로그 값 토큰 개수 오류로 무시 - lineNumber: 156, tokenCount: 0, rawLog: @@@[2026/06/12 16:15:44.000][수치][JCM_LOAD_3]|[fa96e000]|@@@
+2026-06-15 14:29:00.931 [collect-async-3] WARN  LogNormalizeParser - 수치형 로그 값 토큰 개수 오류로 무시 - lineNumber: 157, tokenCount: 0, rawLog: @@@[2026/06/12 16:15:44.000][수치][JCM_LOAD_4]|생성일자=2026/02/20 18:01:21|@@@
+2026-06-15 14:29:00.931 [collect-async-3] WARN  LogNormalizeParser - 수치형 로그 값 토큰 개수 오류로 무시 - lineNumber: 158, tokenCount: 0, rawLog: @@@[2026/06/12 16:15:44.000][수치][JCM_LOAD_5]|==================================================================|@@@
+2026-06-15 14:29:00.931 [collect-async-3] WARN  LogNormalizeParser - 수치형 로그 값 토큰 개수 오류로 무시 - lineNumber: 159, tokenCount: 0, rawLog: @@@[2026/06/12 16:15:44.000][수치][JCM_LOAD_6]|MCAST [ OFF ]|@@@
+2026-06-15 14:29:00.932 [collect-async-3] WARN  LogNormalizeParser - 수치형 로그 값 토큰 개수 오류로 무시 - lineNumber: 160, tokenCount: 0, rawLog: @@@[2026/06/12 16:15:44.000][수치][JCM_LOAD_7]|------------------------------------------------------------------|@@@
+2026-06-15 14:29:00.933 [collect-async-3] WARN  LogNormalizeParser - 수치형 로그 값 토큰 개수 오류로 무시 - lineNumber: 183, tokenCount: 0, rawLog: @@@[2026/06/12 16:15:44.000][수치][JCM_LOAD_30]|------------------------------------------------------------------|@@@
+2026-06-15 14:29:00.933 [collect-async-3] WARN  LogNormalizeParser - 수치형 로그 값 토큰 개수 오류로 무시 - lineNumber: 184, tokenCount: 0, rawLog: @@@[2026/06/12 16:15:44.000][수치][JCM_LOAD_31]|[재송정보]|@@@
+2026-06-15 14:29:00.933 [collect-async-3] WARN  LogNormalizeParser - 수치형 로그 값 토큰 개수 오류로 무시 - lineNumber: 189, tokenCount: 0, rawLog: @@@[2026/06/12 16:15:44.000][수치][JCM_LOAD_36]|==================================================================|@@@
+2026-06-15 14:29:01.005 [collect-async-3] INFO  CollectRetryService - 수집 완료 - 서버: dcoodb01-주문체결, 파일: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jcm.log, 타입: 주기, 수집총라인수: 231, 정규화저장건수: 131, 정규화실패건수: 93
+2026-06-15 14:29:01.006 [collect-async-3] INFO  CollectRetryService -   └ 라인 2: 비교형 로그 값 토큰 개수 오류: 0
+2026-06-15 14:29:01.006 [collect-async-3] INFO  CollectRetryService -   └ 라인 3: 비교형 로그 값 토큰 개수 오류: 0
+2026-06-15 14:29:01.007 [collect-async-3] INFO  CollectRetryService -   └ 라인 4: 비교형 로그 값 토큰 개수 오류: 0
+2026-06-15 14:29:01.007 [collect-async-3] INFO  CollectRetryService -   └ 라인 5: 비교형 로그 값 토큰 개수 오류: 0
+2026-06-15 14:29:01.007 [collect-async-3] INFO  CollectRetryService -   └ 라인 6: 비교형 로그 값 토큰 개수 오류: 0
+2026-06-15 14:29:01.007 [collect-async-3] INFO  CollectRetryService -   └ 라인 7: 비교형 로그 값 토큰 개수 오류: 0
+2026-06-15 14:29:01.007 [collect-async-3] INFO  CollectRetryService -   └ 라인 8: 비교형 로그 값 토큰 개수 오류: 0
+2026-06-15 14:29:01.007 [collect-async-3] INFO  CollectRetryService -   └ 라인 9: 비교형 로그 값 토큰 개수 오류: 1
+2026-06-15 14:29:01.007 [collect-async-3] INFO  CollectRetryService -   └ 라인 10: 비교형 로그 값 토큰 개수 오류: 1
+2026-06-15 14:29:01.007 [collect-async-3] INFO  CollectRetryService -   └ 라인 11: 비교형 로그 값 토큰 개수 오류: 1
+2026-06-15 14:29:01.007 [collect-async-3] INFO  CollectRetryService -   └ 라인 12: 비교형 로그 값 토큰 개수 오류: 1
+2026-06-15 14:29:01.008 [collect-async-3] INFO  CollectRetryService -   └ 라인 13: 비교형 로그 값 토큰 개수 오류: 1
+2026-06-15 14:29:01.008 [collect-async-3] INFO  CollectRetryService -   └ 라인 14: 비교형 로그 값 토큰 개수 오류: 1
+2026-06-15 14:29:01.008 [collect-async-3] INFO  CollectRetryService -   └ 라인 15: 비교형 로그 값 토큰 개수 오류: 1
+2026-06-15 14:29:01.008 [collect-async-3] INFO  CollectRetryService -   └ 라인 16: 비교형 로그 값 토큰 개수 오류: 1
+2026-06-15 14:29:01.008 [collect-async-3] INFO  CollectRetryService -   └ 라인 17: 비교형 로그 값 토큰 개수 오류: 1
+2026-06-15 14:29:01.008 [collect-async-3] INFO  CollectRetryService -   └ 라인 18: 비교형 로그 값 토큰 개수 오류: 1
+2026-06-15 14:29:01.008 [collect-async-3] INFO  CollectRetryService -   └ 라인 19: 비교형 로그 값 토큰 개수 오류: 1
+2026-06-15 14:29:01.008 [collect-async-3] INFO  CollectRetryService -   └ 라인 20: 비교형 로그 값 토큰 개수 오류: 1
+2026-06-15 14:29:01.008 [collect-async-3] INFO  CollectRetryService -   └ 라인 21: 비교형 로그 값 토큰 개수 오류: 1
+2026-06-15 14:29:01.008 [collect-async-3] INFO  CollectRetryService -   └ 라인 22: 비교형 로그 값 토큰 개수 오류: 1
+2026-06-15 14:29:01.009 [collect-async-3] INFO  CollectRetryService -   └ 라인 23: 비교형 로그 값 토큰 개수 오류: 1
+2026-06-15 14:29:01.009 [collect-async-3] INFO  CollectRetryService -   └ 라인 24: 비교형 로그 값 토큰 개수 오류: 1
+2026-06-15 14:29:01.009 [collect-async-3] INFO  CollectRetryService -   └ 라인 25: 비교형 로그 값 토큰 개수 오류: 1
+2026-06-15 14:29:01.009 [collect-async-3] INFO  CollectRetryService -   └ 라인 26: 비교형 로그 값 토큰 개수 오류: 1
+2026-06-15 14:29:01.009 [collect-async-3] INFO  CollectRetryService -   └ 라인 27: 비교형 로그 값 토큰 개수 오류: 1
+2026-06-15 14:29:01.009 [collect-async-3] INFO  CollectRetryService -   └ 라인 28: 비교형 로그 값 토큰 개수 오류: 1
+2026-06-15 14:29:01.009 [collect-async-3] INFO  CollectRetryService -   └ 라인 29: 비교형 로그 값 토큰 개수 오류: 1
+2026-06-15 14:29:01.009 [collect-async-3] INFO  CollectRetryService -   └ 라인 30: 비교형 로그 값 토큰 개수 오류: 1
+2026-06-15 14:29:01.009 [collect-async-3] INFO  CollectRetryService -   └ 라인 31: 비교형 로그 값 토큰 개수 오류: 0
+2026-06-15 14:29:01.009 [collect-async-3] INFO  CollectRetryService -   └ 라인 32: 비교형 로그 값 토큰 개수 오류: 0
+2026-06-15 14:29:01.010 [collect-async-3] INFO  CollectRetryService -   └ 라인 33: 비교형 로그 값 토큰 개수 오류: 1
+2026-06-15 14:29:01.010 [collect-async-3] INFO  CollectRetryService -   └ 라인 34: 비교형 로그 값 토큰 개수 오류: 1
+2026-06-15 14:29:01.010 [collect-async-3] INFO  CollectRetryService -   └ 라인 35: 비교형 로그 값 토큰 개수 오류: 1
+2026-06-15 14:29:01.010 [collect-async-3] INFO  CollectRetryService -   └ 라인 36: 비교형 로그 값 토큰 개수 오류: 1
+2026-06-15 14:29:01.010 [collect-async-3] INFO  CollectRetryService -   └ 라인 37: 비교형 로그 값 토큰 개수 오류: 0
+2026-06-15 14:29:01.010 [collect-async-3] INFO  CollectRetryService -   └ 라인 38: 수치형 로그 값 토큰 개수 오류: 0
+2026-06-15 14:29:01.010 [collect-async-3] INFO  CollectRetryService -   └ 라인 39: 수치형 로그 값 토큰 개수 오류: 0
+2026-06-15 14:29:01.010 [collect-async-3] INFO  CollectRetryService -   └ 라인 40: 수치형 로그 값 토큰 개수 오류: 0
+2026-06-15 14:29:01.010 [collect-async-3] INFO  CollectRetryService -   └ 라인 41: 수치형 로그 값 토큰 개수 오류: 0
+2026-06-15 14:29:01.010 [collect-async-3] INFO  CollectRetryService -   └ 라인 42: 수치형 로그 값 토큰 개수 오류: 0
+2026-06-15 14:29:01.011 [collect-async-3] INFO  CollectRetryService -   └ 라인 43: 수치형 로그 값 토큰 개수 오류: 0
+2026-06-15 14:29:01.011 [collect-async-3] INFO  CollectRetryService -   └ 라인 44: 수치형 로그 값 토큰 개수 오류: 0
+2026-06-15 14:29:01.011 [collect-async-3] INFO  CollectRetryService -   └ 라인 67: 수치형 로그 값 토큰 개수 오류: 0
+2026-06-15 14:29:01.011 [collect-async-3] INFO  CollectRetryService -   └ 라인 68: 수치형 로그 값 토큰 개수 오류: 0
+2026-06-15 14:29:01.011 [collect-async-3] INFO  CollectRetryService -   └ 라인 73: 수치형 로그 값 토큰 개수 오류: 0
+2026-06-15 14:29:01.011 [collect-async-3] INFO  CollectRetryService -   └ 라인 105: 시간형 로그 값 토큰 개수 오류: 0
+2026-06-15 14:29:01.011 [collect-async-3] INFO  CollectRetryService -   └ 라인 118: 비교형 로그 값 토큰 개수 오류: 0
+2026-06-15 14:29:01.011 [collect-async-3] INFO  CollectRetryService -   └ 라인 119: 비교형 로그 값 토큰 개수 오류: 0
+2026-06-15 14:29:01.012 [collect-async-3] INFO  CollectRetryService -   └ 라인 120: 비교형 로그 값 토큰 개수 오류: 0
+2026-06-15 14:29:01.012 [collect-async-3] INFO  CollectRetryService -   └ 라인 121: 비교형 로그 값 토큰 개수 오류: 0
+2026-06-15 14:29:01.012 [collect-async-3] INFO  CollectRetryService -   └ 라인 122: 비교형 로그 값 토큰 개수 오류: 0
+2026-06-15 14:29:01.012 [collect-async-3] INFO  CollectRetryService -   └ 라인 123: 비교형 로그 값 토큰 개수 오류: 0
+2026-06-15 14:29:01.012 [collect-async-3] INFO  CollectRetryService -   └ 라인 124: 비교형 로그 값 토큰 개수 오류: 0
+2026-06-15 14:29:01.012 [collect-async-3] INFO  CollectRetryService -   └ 라인 125: 비교형 로그 값 토큰 개수 오류: 1
+2026-06-15 14:29:01.012 [collect-async-3] INFO  CollectRetryService -   └ 라인 126: 비교형 로그 값 토큰 개수 오류: 1
+2026-06-15 14:29:01.012 [collect-async-3] INFO  CollectRetryService -   └ 라인 127: 비교형 로그 값 토큰 개수 오류: 1
+2026-06-15 14:29:01.012 [collect-async-3] INFO  CollectRetryService -   └ 라인 128: 비교형 로그 값 토큰 개수 오류: 1
+2026-06-15 14:29:01.013 [collect-async-3] INFO  CollectRetryService -   └ 라인 129: 비교형 로그 값 토큰 개수 오류: 1
+2026-06-15 14:29:01.013 [collect-async-3] INFO  CollectRetryService -   └ 라인 130: 비교형 로그 값 토큰 개수 오류: 1
+2026-06-15 14:29:01.013 [collect-async-3] INFO  CollectRetryService -   └ 라인 131: 비교형 로그 값 토큰 개수 오류: 1
+2026-06-15 14:29:01.013 [collect-async-3] INFO  CollectRetryService -   └ 라인 132: 비교형 로그 값 토큰 개수 오류: 1
+2026-06-15 14:29:01.013 [collect-async-3] INFO  CollectRetryService -   └ 라인 133: 비교형 로그 값 토큰 개수 오류: 1
+2026-06-15 14:29:01.013 [collect-async-3] INFO  CollectRetryService -   └ 라인 134: 비교형 로그 값 토큰 개수 오류: 1
+2026-06-15 14:29:01.013 [collect-async-3] INFO  CollectRetryService -   └ 라인 135: 비교형 로그 값 토큰 개수 오류: 1
+2026-06-15 14:29:01.013 [collect-async-3] INFO  CollectRetryService -   └ 라인 136: 비교형 로그 값 토큰 개수 오류: 1
+2026-06-15 14:29:01.013 [collect-async-3] INFO  CollectRetryService -   └ 라인 137: 비교형 로그 값 토큰 개수 오류: 1
+2026-06-15 14:29:01.014 [collect-async-3] INFO  CollectRetryService -   └ 라인 138: 비교형 로그 값 토큰 개수 오류: 1
+2026-06-15 14:29:01.014 [collect-async-3] INFO  CollectRetryService -   └ 라인 139: 비교형 로그 값 토큰 개수 오류: 1
+2026-06-15 14:29:01.014 [collect-async-3] INFO  CollectRetryService -   └ 라인 140: 비교형 로그 값 토큰 개수 오류: 1
+2026-06-15 14:29:01.014 [collect-async-3] INFO  CollectRetryService -   └ 라인 141: 비교형 로그 값 토큰 개수 오류: 1
+2026-06-15 14:29:01.014 [collect-async-3] INFO  CollectRetryService -   └ 라인 142: 비교형 로그 값 토큰 개수 오류: 1
+2026-06-15 14:29:01.014 [collect-async-3] INFO  CollectRetryService -   └ 라인 143: 비교형 로그 값 토큰 개수 오류: 1
+2026-06-15 14:29:01.014 [collect-async-3] INFO  CollectRetryService -   └ 라인 144: 비교형 로그 값 토큰 개수 오류: 1
+2026-06-15 14:29:01.014 [collect-async-3] INFO  CollectRetryService -   └ 라인 145: 비교형 로그 값 토큰 개수 오류: 1
+2026-06-15 14:29:01.014 [collect-async-3] INFO  CollectRetryService -   └ 라인 146: 비교형 로그 값 토큰 개수 오류: 1
+2026-06-15 14:29:01.015 [collect-async-3] INFO  CollectRetryService -   └ 라인 147: 비교형 로그 값 토큰 개수 오류: 0
+2026-06-15 14:29:01.015 [collect-async-3] INFO  CollectRetryService -   └ 라인 148: 비교형 로그 값 토큰 개수 오류: 0
+2026-06-15 14:29:01.015 [collect-async-3] INFO  CollectRetryService -   └ 라인 149: 비교형 로그 값 토큰 개수 오류: 1
+2026-06-15 14:29:01.015 [collect-async-3] INFO  CollectRetryService -   └ 라인 150: 비교형 로그 값 토큰 개수 오류: 1
+2026-06-15 14:29:01.015 [collect-async-3] INFO  CollectRetryService -   └ 라인 151: 비교형 로그 값 토큰 개수 오류: 1
+2026-06-15 14:29:01.015 [collect-async-3] INFO  CollectRetryService -   └ 라인 152: 비교형 로그 값 토큰 개수 오류: 1
+2026-06-15 14:29:01.015 [collect-async-3] INFO  CollectRetryService -   └ 라인 153: 비교형 로그 값 토큰 개수 오류: 0
+2026-06-15 14:29:01.015 [collect-async-3] INFO  CollectRetryService -   └ 라인 154: 수치형 로그 값 토큰 개수 오류: 0
+2026-06-15 14:29:01.015 [collect-async-3] INFO  CollectRetryService -   └ 라인 155: 수치형 로그 값 토큰 개수 오류: 0
+2026-06-15 14:29:01.015 [collect-async-3] INFO  CollectRetryService -   └ 라인 156: 수치형 로그 값 토큰 개수 오류: 0
+2026-06-15 14:29:01.016 [collect-async-3] INFO  CollectRetryService -   └ 라인 157: 수치형 로그 값 토큰 개수 오류: 0
+2026-06-15 14:29:01.016 [collect-async-3] INFO  CollectRetryService -   └ 라인 158: 수치형 로그 값 토큰 개수 오류: 0
+2026-06-15 14:29:01.016 [collect-async-3] INFO  CollectRetryService -   └ 라인 159: 수치형 로그 값 토큰 개수 오류: 0
+2026-06-15 14:29:01.016 [collect-async-3] INFO  CollectRetryService -   └ 라인 160: 수치형 로그 값 토큰 개수 오류: 0
+2026-06-15 14:29:01.016 [collect-async-3] INFO  CollectRetryService -   └ 라인 183: 수치형 로그 값 토큰 개수 오류: 0
+2026-06-15 14:29:01.016 [collect-async-3] INFO  CollectRetryService -   └ 라인 184: 수치형 로그 값 토큰 개수 오류: 0
+2026-06-15 14:29:01.016 [collect-async-3] INFO  CollectRetryService -   └ 라인 189: 수치형 로그 값 토큰 개수 오류: 0
+2026-06-15 14:29:06.899 [scheduling-1] INFO  CollectScheduleParser - =============================
+2026-06-15 14:29:06.916 [scheduling-1] INFO  CollectScheduleParser -   [1] serverId: pjpsap01-주파수클럽, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jpc.log, scheduleExpression: 주기|*|080000|1|235959
+2026-06-15 14:29:06.916 [scheduling-1] INFO  CollectScheduleParser - =============================
+2026-06-15 14:29:06.917 [scheduling-1] INFO  CollectScheduleParser -   [2] serverId: dcoodb01-주문체결, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\log_sample\monitoring_jcm.log, scheduleExpression: 주기|*|080000|1|235959
