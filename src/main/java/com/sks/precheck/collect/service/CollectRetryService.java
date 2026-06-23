@@ -117,17 +117,14 @@ public class CollectRetryService {
 
         // 스케줄에 정의된 파일 경로 끝에 '+'가 붙어있으면 날짜 변경에 따른 라인번호 리셋을 비활성화한다.
         // 예) "/logs/test.log+" → 실제 경로 "/logs/test.log", 날짜가 바뀌어도 증분 수집 유지
-        String filePathTemplate = schedule.getSourceFilePath();
-        boolean dateResetDisabled = filePathTemplate.endsWith(CollectConstants.FILE_PATH_NO_DATE_RESET_SUFFIX);
-        if (dateResetDisabled) {
-            filePathTemplate = filePathTemplate.substring(
-                    0, filePathTemplate.length() - CollectConstants.FILE_PATH_NO_DATE_RESET_SUFFIX.length());
-        }
+        boolean dateResetDisabled = schedule.getSourceFilePath().endsWith(CollectConstants.FILE_PATH_NO_DATE_RESET_SUFFIX);
 
-        // 스케줄에 정의된 파일 경로의 날짜 자리표시자(yyyymmdd)를 오늘 날짜로 치환한다.
+        // 스케줄에 정의된 파일 경로의 '+' 접미사를 제거하고 날짜 자리표시자(yyyymmdd)를 오늘 날짜로 치환한다.
         // 예) "/logs/test.yyyymmdd" → "/logs/test.20260612"
+        // CollectService가 이력을 선등록할 때도 동일한 메서드로 경로를 치환하므로
+        // findLastLineNumber 조회 시 경로가 항상 일치한다.
         String collectDate = DateUtil.todayCollectDate();
-        String sourceFilePath = DateUtil.resolveFilePath(filePathTemplate, collectDate);
+        String sourceFilePath = DateUtil.resolveActualFilePath(schedule.getSourceFilePath(), collectDate);
 
         // ── Step 2. 영구 제외 대상 확인 ───────────────────────────────────────────
         // TB_COLLECT_EXCLUDE에 RESTORE_YN='N' 레코드가 있으면 제외 대상이다.
@@ -292,7 +289,8 @@ public class CollectRetryService {
         update.setUpdatedAt(LocalDateTime.now());
         collectHistoryMapper.updateCollectStatus(update);
 
-        log.error("수집 재시도 모두 실패 - 서버: {}, 파일: {}", schedule.getServerId(), schedule.getSourceFilePath(), e);
+        log.error("수집 재시도 모두 실패 - 서버: {}, 파일: {}, 사유: {}",
+                schedule.getServerId(), schedule.getSourceFilePath(), e.getMessage());
         return 0;
     }
 

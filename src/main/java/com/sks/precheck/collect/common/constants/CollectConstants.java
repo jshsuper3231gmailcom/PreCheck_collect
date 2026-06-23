@@ -19,6 +19,12 @@ public final class CollectConstants {
     /** 수집 대상 파일 경로에서 당일 날짜(yyyyMMdd)로 치환되는 자리표시자 */
     public static final String FILE_PATH_DATE_PLACEHOLDER = "yyyymmdd";
 
+    /** 수집 대상 파일 경로에서 당일 월/일(MMdd)로 치환되는 자리표시자 */
+    public static final String FILE_PATH_DATE_PLACEHOLDER_MMDD = "mmdd";
+
+    /** 수집 대상 파일 경로에서 당일 요일 숫자(0=일요일 ~ 6=토요일)로 치환되는 자리표시자 */
+    public static final String FILE_PATH_DATE_PLACEHOLDER_DOW = "$";
+
     /** 수집 대상 파일 경로 끝에 붙으면 날짜 변경에 따른 라인번호 리셋을 비활성화하는 접미사 */
     public static final String FILE_PATH_NO_DATE_RESET_SUFFIX = "+";
 

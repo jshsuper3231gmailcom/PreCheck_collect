@@ -83,12 +83,10 @@
 
 ## logdatagen 스킬 연동 현황
 
-- `logdatagen` 스킬이 `precheck_collect\test_dataset\{서버구분}-yyyymmdd.log` 형태로
+- `logdatagen` 스킬이 `~/test_log/{서버구분}-yyyymmdd.log` 형태로
   생성하는 테스트 로그를 실제 수집 서버가 읽도록, `PreCheck_CollectLogs_Schedule.conf`의
   Dashboard 7개 대상서버(`application.yml`의 `precheck.info-data` 기준) 라인을 해당 경로로
-  갱신/활성화함 (2026-06-22 최초 등록, 2026-06-23 경로를 `~/test_log` →
-  `precheck_collect\test_dataset`로 변경 — history seed `.sql`이 이미 쓰던 디렉토리와
-  통일)
+  갱신/활성화함 (2026-06-22)
 - 대상서버: dlprem01-테스트개발, pamoap01-자동주문, pqgetap1-시세포착1, pqgetap2-시세포착2,
   pjpsap01-주파수클럽, pmaster2-마스터, ddfep01-해외시세 (ddfep01-해외시세는 기존에 등록되어
   있지 않아 신규 추가)

@@ -100,8 +100,14 @@ isExcluded() → TB_COLLECT_EXCLUDE WHERE RESTORE_YN='N' 존재
 #### D. 파일 경로 특수 처리
 
 ```
-sourceFilePath에 "yyyymmdd" 포함 → today 날짜로 치환
+sourceFilePath에 "yyyymmdd" 포함 → today 날짜(yyyyMMdd)로 치환
   예: /logs/app_yyyymmdd.log → /logs/app_20260616.log
+
+sourceFilePath에 "mmdd" 포함 → today 월/일(MMdd)로 치환
+  예: /logs/app_mmdd.log → /logs/app_0616.log
+
+sourceFilePath에 "$" 포함 → today 요일 숫자(0=일요일~6=토요일)로 치환
+  예: /logs/sys0$.log → (월요일) /logs/sys01.log
 
 sourceFilePath가 "+" 로 끝남 → 날짜 리셋 비활성화
   예: /logs/app.log+  → 날짜 바뀌어도 LAST_LINE_NUMBER 유지
@@ -306,7 +312,9 @@ collect/
 | `PART_COLLECT_SIZE_LIMIT_BYTES` | 50MB | 주기 수집 1회 최대 읽기 크기 |
 | `MAX_RETRY_COUNT` | 3 | 최대 재시도 횟수 |
 | `RETRY_DELAY_MILLISECONDS` | 10,000L (10초) | 재시도 간격 |
-| `FILE_PATH_DATE_PLACEHOLDER` | `"yyyymmdd"` | 날짜 치환 플레이스홀더 |
+| `FILE_PATH_DATE_PLACEHOLDER` | `"yyyymmdd"` | 날짜(yyyyMMdd) 치환 플레이스홀더 |
+| `FILE_PATH_DATE_PLACEHOLDER_MMDD` | `"mmdd"` | 월/일(MMdd) 치환 플레이스홀더 |
+| `FILE_PATH_DATE_PLACEHOLDER_DOW` | `"$"` | 요일 숫자(0~6) 치환 플레이스홀더 |
 | `FILE_PATH_NO_DATE_RESET_SUFFIX` | `"+"` | 날짜 리셋 비활성화 접미사 |
 | `STATUS_SUCCESS` | `"SUCCESS"` | 수집 성공 상태 |
 | `STATUS_FAIL` | `"FAIL"` | 수집 실패 상태 |

@@ -76,16 +76,22 @@ public class CollectService {
         // ── Step 3. 수집 이력 선등록 (수집 시작 마킹) ────────────────────────────
         // 초기 상태는 FAIL + IN_PROGRESS로 등록한다.
         // 이후 수집 결과에 따라 collectWithRetry 내부에서 SUCCESS / SKIP / FAIL로 갱신된다.
+        // findLastLineNumber는 실제 수집에 쓰이는(날짜 치환 완료) 경로로 조회하므로,
+        // 이력에도 같은 경로를 저장해야 한다. 원본 템플릿을 그대로 저장하면 경로가
+        // 일치하지 않아 직전 수집 위치를 찾지 못하고 매번 파일을 처음부터 재수집한다.
+        String collectDate = DateUtil.todayCollectDate();
+        String resolvedSourceFilePath = DateUtil.resolveActualFilePath(schedule.getSourceFilePath(), collectDate);
+
         CollectHistory history = new CollectHistory();
         history.setCollectHistoryId(historyId);
         history.setServerId(schedule.getServerId());
         history.setServerIp(schedule.getServerIp());
-        history.setSourceFilePath(schedule.getSourceFilePath());
+        history.setSourceFilePath(resolvedSourceFilePath);
         history.setScheduleType(scheduleType);
         history.setCollectStatus(CollectConstants.STATUS_FAIL);
         history.setRetryCount(0L);
         history.setCollectStartAt(LocalDateTime.now());
-        history.setCollectDate(DateUtil.todayCollectDate());
+        history.setCollectDate(collectDate);
         history.setCreatedAt(LocalDateTime.now());
         history.setUpdatedAt(LocalDateTime.now());
         history.setFailReason("IN_PROGRESS");

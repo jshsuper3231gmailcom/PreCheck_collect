@@ -101,7 +101,8 @@ public class CollectScheduler {
                     collectService.collect(schedule, sftpPort, sftpUsername, sftpPassword);
                 }
             } catch (Exception e) {
-                log.error("스케줄 실행 실패 - 서버: {}, 파일: {}", schedule.getServerId(), schedule.getSourceFilePath(), e);
+                log.error("스케줄 실행 실패 - 서버: {}, 파일: {}, 사유: {}",
+                        schedule.getServerId(), schedule.getSourceFilePath(), e.getMessage());
             }
         }
     }
@@ -118,7 +119,7 @@ public class CollectScheduler {
             lastReloadAtMillis = nowMillis;
             return schedules;
         } catch (CollectException e) {
-            log.error("스케줄 파일 파싱 실패 - file: {}", scheduleFilePath, e);
+            log.error("스케줄 파일 파싱 실패 - file: {}, 사유: {}", scheduleFilePath, e.getMessage());
             cachedSchedules = List.of();
             lastReloadAtMillis = nowMillis;
             return cachedSchedules;

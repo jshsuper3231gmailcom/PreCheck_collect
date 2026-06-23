@@ -5,6 +5,7 @@ import com.sks.precheck.collect.common.util.SequenceHelper;
 import com.sks.precheck.collect.mapper.CollectHistoryMapper;
 import com.sks.precheck.collect.mapper.CollectLogMapper;
 import com.sks.precheck.collect.vo.CollectScheduleVo;
+import java.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -84,6 +85,34 @@ class CollectRetryServiceTest {
         collectRetryService.collectWithRetry(1L, schedule("/logs/test.log"), "주기", 22, "user", "pass");
 
         verify(collectHistoryMapper).findLastLineNumber("srv01", "/logs/test.log", today);
+    }
+
+    @Test
+    void mmdd_플레이스홀더는_오늘월일로_치환된다() {
+        String today = DateUtil.todayCollectDate();
+        String monthDay = today.substring(4);
+
+        collectRetryService.collectWithRetry(1L, schedule("/logs/test.mmdd"), "주기", 22, "user", "pass");
+
+        ArgumentCaptor<String> pathCaptor = ArgumentCaptor.forClass(String.class);
+        verify(fileReadService).getFileSizeBytes(any(), anyInt(), any(), any(), pathCaptor.capture());
+        assertThat(pathCaptor.getValue()).isEqualTo("/logs/test." + monthDay);
+
+        verify(collectHistoryMapper).findLastLineNumber("srv01", "/logs/test." + monthDay, today);
+    }
+
+    @Test
+    void dollar_플레이스홀더는_오늘요일숫자로_치환된다() {
+        String today = DateUtil.todayCollectDate();
+        int dayOfWeekDigit = LocalDate.now().getDayOfWeek().getValue() % 7;
+
+        collectRetryService.collectWithRetry(1L, schedule("/logs/sys0$.log"), "주기", 22, "user", "pass");
+
+        ArgumentCaptor<String> pathCaptor = ArgumentCaptor.forClass(String.class);
+        verify(fileReadService).getFileSizeBytes(any(), anyInt(), any(), any(), pathCaptor.capture());
+        assertThat(pathCaptor.getValue()).isEqualTo("/logs/sys0" + dayOfWeekDigit + ".log");
+
+        verify(collectHistoryMapper).findLastLineNumber("srv01", "/logs/sys0" + dayOfWeekDigit + ".log", today);
     }
 
     @Test
