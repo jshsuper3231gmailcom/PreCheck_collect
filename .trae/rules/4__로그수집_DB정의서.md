@@ -123,7 +123,7 @@ CREATE TABLE TB_COLLECT_LOG (
 
     LOG_ID              VARCHAR(30)         NOT NULL,
     -- 로그 식별 코드 (로그포맷정의서 기준)
-    -- 형식: 영문 대문자 + 숫자 + 언더스코어, 최대 30자
+    -- 형식: 영문 대/소문자 + 숫자 + 언더스코어, 최대 30자
     -- 예) 'DISK_HOME', 'PROC_COUNT', 'PUSH_STATUS'
     -- 분석 서버가 이 값을 기준으로 분석 정책을 매칭함
     -- [서버구분 + LOG_ID] 조합으로 분석 정책이 유일하게 결정됨

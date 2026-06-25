@@ -82,8 +82,57 @@ class LogNormalizeParserTest {
     }
 
     @Test
-    void parse_rejectsInvalidLogId() {
+    void parse_date_acceptsSlashToken() {
+        String line = "@@@[2026/05/01 09:00:01.123][날짜][DATE_BDAY]|bday[$2026/04/22$] frec[12607]|@@@";
+
+        CollectLog result = parser.parseNormalizedLogFromLine(line, 1);
+
+        assertNotNull(result);
+        assertEquals(CollectConstants.LOG_TYPE_DATE, result.getLogType());
+        assertEquals("bday[$2026/04/22$] frec[12607]", result.getLogContent());
+    }
+
+    @Test
+    void parse_date_acceptsDashToken() {
+        String line = "@@@[2026/05/01 09:00:01.123][날짜][DATE_BDAY]|bday[$2026-04-22$] frec[12607]|@@@";
+
+        CollectLog result = parser.parseNormalizedLogFromLine(line, 1);
+
+        assertNotNull(result);
+        assertEquals(CollectConstants.LOG_TYPE_DATE, result.getLogType());
+    }
+
+    @Test
+    void parse_date_rejectsMissingToken() {
+        String line = "@@@[2026/05/01 09:00:01.123][날짜][DATE_BDAY]|bday[2026/04/22] frec[12607]|@@@";
+
+        CollectLog result = parser.parseNormalizedLogFromLine(line, 1);
+
+        assertNull(result);
+    }
+
+    @Test
+    void parse_date_rejectsInvalidCalendarDate() {
+        String line = "@@@[2026/05/01 09:00:01.123][날짜][DATE_BDAY]|bday[$2026/02/30$]|@@@";
+
+        CollectLog result = parser.parseNormalizedLogFromLine(line, 1);
+
+        assertNull(result);
+    }
+
+    @Test
+    void parse_acceptsLowercaseLogId() {
         String line = "@@@[2026/05/01 09:00:01.123][수치][disk_home]|홈디스크|$80$@@@";
+
+        CollectLog result = parser.parseNormalizedLogFromLine(line, 1);
+
+        assertNotNull(result);
+        assertEquals("disk_home", result.getLogId());
+    }
+
+    @Test
+    void parse_rejectsInvalidLogId() {
+        String line = "@@@[2026/05/01 09:00:01.123][수치][disk-home]|홈디스크|$80$@@@";
 
         CollectLog result = parser.parseNormalizedLogFromLine(line, 1);
 

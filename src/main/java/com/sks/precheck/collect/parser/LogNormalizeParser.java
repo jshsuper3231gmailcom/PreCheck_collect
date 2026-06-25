@@ -9,7 +9,11 @@ import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.time.format.ResolverStyle;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.MatchResult;
@@ -25,8 +29,10 @@ import org.apache.logging.log4j.Logger;
  *   @@@[yyyy/MM/dd HH:mm:ss.SSS][입력타입][LOG_ID]|로그내용|...@@@
  *
  * 값 토큰 규칙:
- *   - 수치/비교/시간은 $...$ 값 토큰을 사용한다.
- *   - $...$ 안에 콜론(:)이 포함되면 시간값(HH:mm)으로, 없으면 수치값(정수/실수)으로 간주한다.
+ *   - 수치/비교/시간/날짜는 $...$ 값 토큰을 사용한다.
+ *   - $...$ 안에 콜론(:)이 포함되면 시간값(HH:mm)으로 간주한다.
+ *   - $...$ 안이 yyyy/MM/dd 또는 yyyy-MM-dd 형식이면 날짜값으로 간주한다.
+ *   - 그 외(콜론, 날짜 구분자 모두 없음)는 수치값(정수/실수)으로 간주한다.
  *
  * 입력 타입(CollectConstants 참조):
  *   문구, 정보, 날짜, 수치, 존재, 비교, 시간
@@ -44,10 +50,13 @@ public class LogNormalizeParser {
                     "\\[(?<logId>[^\\]]+)\\]"
     );
 
-    private static final Pattern LOG_ID_PATTERN = Pattern.compile("^[A-Z0-9_]{1,30}$");
+    private static final Pattern LOG_ID_PATTERN = Pattern.compile("^[A-Za-z0-9_]{1,30}$");
 
     private static final Pattern VALUE_TOKEN_PATTERN = Pattern.compile("\\$[^$]+\\$");
     private static final Pattern WRAPPED_VALUE_PATTERN = Pattern.compile("^\\$(?<value>[^$]+)\\$$");
+    private static final Pattern DATE_VALUE_PATTERN = Pattern.compile("^\\d{4}(/|-)\\d{2}\\1\\d{2}$");
+    private static final DateTimeFormatter DATE_VALUE_FORMATTER =
+            DateTimeFormatter.ofPattern("uuuu/MM/dd").withResolverStyle(ResolverStyle.STRICT);
 
     /**
      * 로컬 파일을 처음부터 끝까지 읽으며 정규화 로그를 추출한다.
@@ -262,9 +271,24 @@ public class LogNormalizeParser {
             }
             logValue = BigDecimal.valueOf(minutes);
             logContent = contentPart;
+        } else if (CollectConstants.LOG_TYPE_DATE.equals(logType)) {
+            if (valueTokens.isEmpty()) {
+                log.warn("날짜형 로그에 날짜 값 토큰이 없어 무시 - lineNumber: {}, rawLog: {}", lineNumber, rawLog);
+                addFailDetail(failDetails, lineNumber, "날짜형 로그에 날짜 값 토큰 없음");
+                return null;
+            }
+            for (String token : valueTokens) {
+                if (!isDateToken(token)) {
+                    log.warn("날짜형 로그 값 토큰 포맷 불일치로 무시 - lineNumber: {}, token: {}, rawLog: {}",
+                            lineNumber, token, rawLog);
+                    addFailDetail(failDetails, lineNumber, "날짜형 로그 값 토큰 포맷 불일치: " + token);
+                    return null;
+                }
+            }
+            logContent = contentPart;
         } else {
             if (!valueTokens.isEmpty()) {
-                log.warn("값 토큰이 포함된 비수치/비교/시간 로그로 무시 - lineNumber: {}, logType: {}, rawLog: {}",
+                log.warn("값 토큰이 포함된 비수치/비교/시간/날짜 로그로 무시 - lineNumber: {}, logType: {}, rawLog: {}",
                         lineNumber, logType, rawLog);
                 addFailDetail(failDetails, lineNumber, "비지원 타입에 값 토큰 포함: " + logType);
                 return null;
@@ -357,6 +381,26 @@ public class LogNormalizeParser {
             return false;
         }
         return matcher.group("value").contains(":");
+    }
+
+    /**
+     * $...$ 값이 yyyy/MM/dd 또는 yyyy-MM-dd 형식(구분자 혼용 불가)의 실재하는 날짜인지 확인한다.
+     */
+    private boolean isDateToken(String valueToken) {
+        Matcher matcher = WRAPPED_VALUE_PATTERN.matcher(valueToken);
+        if (!matcher.matches()) {
+            return false;
+        }
+        String value = matcher.group("value").trim();
+        if (!DATE_VALUE_PATTERN.matcher(value).matches()) {
+            return false;
+        }
+        try {
+            LocalDate.parse(value.replace('-', '/'), DATE_VALUE_FORMATTER);
+            return true;
+        } catch (DateTimeParseException e) {
+            return false;
+        }
     }
 
     private Integer parseTimeMinutes(String timeToken, long lineNumber) {

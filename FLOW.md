@@ -271,7 +271,7 @@ collect/
 |---------|-----------|------|
 | 문구 | 없음 | content만 저장 |
 | 수치 | 숫자 토큰 정확히 1개 | BigDecimal 변환 |
-| 날짜 | 없음 | content를 날짜로 해석 |
+| 날짜 | 날짜 토큰 1개 이상 (`$yyyy/MM/dd$` 또는 `$yyyy-MM-dd$`) | content 그대로 유지(토큰 포함), 유효 날짜 검증만 수행 |
 | 존재 | 없음 | content를 Y/N으로 해석 |
 | 정보 | 없음 | content 그대로 |
 | 비교 | 숫자 토큰 정확히 2개 | BigDecimal 두 값 저장 |
@@ -282,8 +282,9 @@ collect/
 | 패턴 | 정규식 | 설명 |
 |------|--------|------|
 | `HEADER_PATTERN` | `^@@@\[timestamp\]\[logType\]\[logId\]` | 라인 시작 구조 검증 |
-| `LOG_ID_PATTERN` | `^[A-Z0-9_]{1,30}$` | LOG_ID 형식 검증 |
+| `LOG_ID_PATTERN` | `^[A-Za-z0-9_]{1,30}$` | LOG_ID 형식 검증 |
 | `VALUE_TOKEN_PATTERN` | `\$[^$]+\$` | `$...$` 토큰 추출 |
+| `DATE_VALUE_PATTERN` | `^\d{4}(/|-)\d{2}\1\d{2}$` | 날짜 토큰 형식 검증(구분자 통일) |
 
 ---
 
@@ -361,7 +362,7 @@ collect/
 |------|------|
 | `LOG_SEQ` | PK (SEQ_COLLECT_LOG) |
 | `SERVER_ID` | 대상 서버 ID |
-| `LOG_ID` | 로그 식별자 (`[A-Z0-9_]{1,30}`) |
+| `LOG_ID` | 로그 식별자 (`[A-Za-z0-9_]{1,30}`) |
 | `LOG_TYPE` | 문구 / 수치 / 날짜 / 존재 / 정보 / 비교 / 시간 |
 | `LOG_TIMESTAMP` | 로그 발생 시각 |
 | `CONTENT` | 로그 내용 |
