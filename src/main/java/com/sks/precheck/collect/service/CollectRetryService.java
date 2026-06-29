@@ -10,12 +10,13 @@ import com.sks.precheck.collect.mapper.CollectHistoryMapper;
 import com.sks.precheck.collect.mapper.CollectLogMapper;
 import com.sks.precheck.collect.parser.LogNormalizeParser;
 import com.sks.precheck.collect.vo.CollectScheduleVo;
-import java.nio.charset.StandardCharsets;
+import java.nio.charset.Charset;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Recover;
 import org.springframework.retry.annotation.Retryable;
@@ -44,6 +45,9 @@ import org.springframework.stereotype.Service;
 public class CollectRetryService {
 
     private static final Logger log = LogManager.getLogger(CollectRetryService.class);
+
+    @Value("${precheck.collect.file-charset:UTF-8}")
+    private Charset fileCharset;
 
     private final SequenceHelper sequenceHelper;
     private final CollectLogMapper collectLogMapper;
@@ -174,13 +178,13 @@ public class CollectRetryService {
         fileReadService.readLines(
                 serverIp, port, username, password, sourceFilePath,
                 startLineNumber,
-                StandardCharsets.UTF_8,
+                fileCharset,
                 (lineNumber, lineText) -> {
 
                     // 현재까지 읽은 마지막 라인번호와 누적 바이트를 갱신한다.
                     // 파싱 가능 여부와 무관하게 읽기 자체는 항상 기록한다.
                     lineReadState.lastReadLineNumber = lineNumber;
-                    lineReadState.totalReadBytes += (lineText != null ? lineText.getBytes(StandardCharsets.UTF_8).length : 0);
+                    lineReadState.totalReadBytes += (lineText != null ? lineText.getBytes(fileCharset).length : 0);
 
                     // 주기 수집 증분 크기 한도 초과 시 파싱을 중단한다.
                     // return은 이 람다(accept 호출)만 종료하므로 파일 읽기 루프는 계속된다.

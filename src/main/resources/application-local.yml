@@ -11,6 +11,7 @@ precheck:
   collect:
     schedule-file-path: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\schedule_sample\PreCheck_CollectLogs_Schedule.conf
     mode: local   # local: 로컬 파일 직접 읽기 / sftp: SFTP 원격 수집 (기본값)
+    file-charset: UTF-8
     # 스케쥴러에 [localtest01][127.0.0.1][C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\log_sample\monitoring_120_log.0519.txt][주기|*|090000|1|235959]로 설정
     # 스케쥴러에 [localtest02][127.0.0.1][C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\log_sample\monitoring_141_log.0519.txt][배치|*|080000]로 설정
     # mode: sftp

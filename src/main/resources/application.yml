@@ -6,6 +6,7 @@ spring:
 
 precheck:
   collect:
+    file-charset: UTF-8
     async:
       core-pool-size: 5
       max-pool-size: 20

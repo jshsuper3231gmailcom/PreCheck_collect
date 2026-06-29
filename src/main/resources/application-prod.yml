@@ -8,6 +8,7 @@ spring:
 precheck:
   collect:
     schedule-file-path: /home/precheck/cfg/PreCheck_CollectLogs_Schedule.conf
+    file-charset: EUC-KR
   sftp:
     port: 22
     username: prod_user
