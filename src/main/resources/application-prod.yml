@@ -1,7 +1,8 @@
 spring:
   datasource:
-    driver-class-name: Altibase.jdbc.driver.AltibaseDriver
-    url: jdbc:Altibase://192.168.0.1:20300/precheck
+    driver-class-name: org.postgresql.Driver
+    # TODO: 실제 운영 PostgreSQL host:port/db, 계정으로 교체
+    url: jdbc:postgresql://prod-db-host:5432/precheck
     username: precheck
     password: precheck
 

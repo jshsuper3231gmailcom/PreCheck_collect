@@ -42,6 +42,6 @@ gradlew.bat test
 ## 스택 참고
 
 - Java 17, Spring Boot 3.5.3, MyBatis 3.0.5 (XML 매퍼), SSHJ 0.39.0
-- PostgreSQL (local/test) / Altibase (prod)
+- PostgreSQL (local/test/prod)
 - Log4j2 (`spring-boot-starter-logging` 제외)
 - `collectExecutor` 스레드풀: core=5, max=20, queue=100
