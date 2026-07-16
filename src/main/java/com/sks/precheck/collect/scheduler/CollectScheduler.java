@@ -2,8 +2,10 @@ package com.sks.precheck.collect.scheduler;
 
 import com.sks.precheck.collect.common.exception.CollectException;
 import com.sks.precheck.collect.parser.CollectScheduleParser;
+import com.sks.precheck.collect.parser.CollectServerAuthParser;
 import com.sks.precheck.collect.service.CollectService;
 import com.sks.precheck.collect.vo.CollectScheduleVo;
+import com.sks.precheck.collect.vo.CollectServerAuthVo;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -30,6 +32,7 @@ public class CollectScheduler {
     private static final Logger log = LogManager.getLogger(CollectScheduler.class);
 
     private static final String DEFAULT_SCHEDULE_FILE_RELATIVE_PATH = "/cfg/PreCheck_CollectLogs_Schedule.conf";
+    private static final String DEFAULT_SERVER_AUTH_FILE_RELATIVE_PATH = "/cfg/PreCheck_CollectServer_Auth.conf";
 
     private final CollectService collectService;
     private final CollectScheduleParser collectScheduleParser;
@@ -39,6 +42,7 @@ public class CollectScheduler {
     private final int sftpPort;
     private final String sftpUsername;
     private final String sftpPassword;
+    private final Map<String, CollectServerAuthVo> serverAuthMap;
 
     private final long reloadIntervalMillis;
     private volatile long lastReloadAtMillis;
@@ -50,6 +54,7 @@ public class CollectScheduler {
     public CollectScheduler(
             CollectService collectService,
             @Value("${precheck.collect.schedule-file-path:}") String scheduleFilePath,
+            @Value("${precheck.collect.server-auth-file-path:}") String serverAuthFilePath,
             @Value("${precheck.collect.mode:sftp}") String collectMode,
             @Value("${precheck.sftp.port:22}") int sftpPort,
             @Value("${precheck.sftp.username:}") String sftpUsername,
@@ -60,11 +65,11 @@ public class CollectScheduler {
         log.info("<<< CollectScheduler initialized with configuration: >>>");
         log.info("  Schedule file path: {}", scheduleFilePath);
         log.info("  Collect mode: {}", collectMode);
-        log.info("  SFTP port: {}", sftpPort);
-        log.info("  SFTP username: {}", sftpUsername);
+        log.info("  SFTP port(전역 기본값): {}", sftpPort);
+        log.info("  SFTP username(전역 기본값): {}", sftpUsername);
         log.info("  Schedule reload interval (ms): {}", reloadIntervalMillis);
         log.info("<<< Configuration initialized >>>");
-        
+
         this.collectService = collectService;
         this.collectScheduleParser = new CollectScheduleParser();
         this.scheduleFilePath = (scheduleFilePath == null || scheduleFilePath.isBlank())
@@ -75,6 +80,19 @@ public class CollectScheduler {
         this.sftpUsername = sftpUsername != null ? sftpUsername : "";
         this.sftpPassword = sftpPassword != null ? sftpPassword : "";
         this.reloadIntervalMillis = reloadIntervalMillis;
+
+        String resolvedAuthFilePath = (serverAuthFilePath == null || serverAuthFilePath.isBlank())
+                ? System.getProperty("user.home") + DEFAULT_SERVER_AUTH_FILE_RELATIVE_PATH
+                : serverAuthFilePath;
+        Map<String, CollectServerAuthVo> loadedAuthMap;
+        try {
+            loadedAuthMap = new CollectServerAuthParser().parseAuthFile(resolvedAuthFilePath);
+        } catch (CollectException e) {
+            log.error("서버별 접속정보 override 로딩 실패, 전역 기본값만 사용 - file: {}, 사유: {}", resolvedAuthFilePath, e.getMessage());
+            loadedAuthMap = Map.of();
+        }
+        this.serverAuthMap = loadedAuthMap;
+        log.info("  서버별 접속정보 override 건수: {}", serverAuthMap.size());
     }
 
     /**
@@ -84,7 +102,7 @@ public class CollectScheduler {
      */
     @Scheduled(fixedDelayString = "${precheck.collect.scheduler.fixed-delay-ms:1000}")
     public void run() {
-        if (!"local".equals(collectMode) && (sftpUsername.isBlank() || sftpPassword.isBlank())) {
+        if (!"local".equals(collectMode) && (sftpUsername.isBlank() || sftpPassword.isBlank()) && serverAuthMap.isEmpty()) {
             log.warn("SFTP 계정/비밀번호가 설정되지 않아 스케줄 실행을 건너뜀");
             return;
         }
@@ -98,7 +116,23 @@ public class CollectScheduler {
         for (CollectScheduleVo schedule : schedules) {
             try {
                 if (shouldRun(schedule, now)) {
-                    collectService.collect(schedule, sftpPort, sftpUsername, sftpPassword);
+                    CollectServerAuthVo override = serverAuthMap.get(schedule.getServerId());
+                    int port = (override != null && override.getPort() != null) ? override.getPort() : sftpPort;
+                    String username = (override != null && override.getUsername() != null) ? override.getUsername() : sftpUsername;
+                    String password = (override != null && override.getPassword() != null) ? override.getPassword() : sftpPassword;
+
+                    log.info("SFTP 접속정보 확정 - 서버: {}, port: {} ({}), username: {} ({})",
+                            schedule.getServerId(), port,
+                            (override != null && override.getPort() != null) ? "override" : "전역 기본값",
+                            username,
+                            (override != null && override.getUsername() != null) ? "override" : "전역 기본값");
+
+                    if (!"local".equals(collectMode) && (username.isBlank() || password.isBlank())) {
+                        log.warn("SFTP 계정/비밀번호 미설정으로 스케줄 건너뜀 - 서버: {}", schedule.getServerId());
+                        continue;
+                    }
+
+                    collectService.collect(schedule, port, username, password);
                 }
             } catch (Exception e) {
                 log.error("스케줄 실행 실패 - 서버: {}, 파일: {}, 사유: {}",
