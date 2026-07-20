@@ -1,15 +1,13 @@
 package com.sks.precheck.collect.service;
 
 import com.sks.precheck.collect.common.exception.CollectException;
-import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Objects;
-import java.util.function.BiConsumer;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
@@ -43,29 +41,28 @@ public class LocalFileService implements FileReadService {
             String password,
             String filePath,
             long startLineNumber,
+            long startByteOffset,
             Charset charset,
-            BiConsumer<Long, String> lineConsumer
+            LineConsumer lineConsumer
     ) {
         Objects.requireNonNull(lineConsumer, "lineConsumer must not be null");
         if (startLineNumber < 1) {
             throw new CollectException("startLineNumber는 1 이상이어야 한다: " + startLineNumber);
         }
+        if (startByteOffset < 0) {
+            throw new CollectException("startByteOffset은 0 이상이어야 한다: " + startByteOffset);
+        }
 
         Charset effectiveCharset = charset != null ? charset : StandardCharsets.UTF_8;
 
-        try (BufferedReader reader = new BufferedReader(
-                new InputStreamReader(Files.newInputStream(Path.of(filePath)), effectiveCharset))) {
-
-            String line;
-            long currentLineNumber = 0;
-
-            while ((line = reader.readLine()) != null) {
-                currentLineNumber++;
-                if (currentLineNumber < startLineNumber) {
-                    continue;
-                }
-                lineConsumer.accept(currentLineNumber, line);
+        // FileInputStream의 채널 position을 옮겨 시작 바이트 위치부터 바로 읽는다.
+        // 로컬 파일이라 seek 비용이 사실상 없으므로 SFTP처럼 read 오프셋 API를 쓸 필요 없이
+        // 채널 position 이동만으로 충분하다.
+        try (FileInputStream in = new FileInputStream(filePath)) {
+            if (startByteOffset > 0) {
+                in.getChannel().position(startByteOffset);
             }
+            FileReadService.readLinesFromStream(in, startByteOffset, startLineNumber, effectiveCharset, lineConsumer);
         } catch (IOException e) {
             throw new CollectException("로컬 파일 라인 읽기 실패: " + filePath, e);
         }

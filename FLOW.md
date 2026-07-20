@@ -52,11 +52,12 @@ HTTP 포트 없음. JVM 프로세스로 기동 후 `CollectScheduler`가 매초 
         ├── Step 2: TB_COLLECT_EXCLUDE 체크 → SKIP
         ├── Step 3: SFTP getFileSizeBytes()
         ├── Step 4: 배치 + fileSize ≥ 300MB → registerExclude + SKIP
-        ├── Step 5: 주기 → findLastLineNumber(), 날짜 리셋 판정
-        ├── Step 6: readLines() → logNormalizeParser.parseNormalizedLogFromLine()
+        ├── Step 5: 주기 → findResumePoint(), 날짜 리셋 판정
+        ├── Step 5-1: 오프셋 ≥ fileSize(신규 데이터 없음) → SFTP 접속 생략, SUCCESS 즉시 종료
+        ├── Step 6: readLines(startByteOffset로 seek) → logNormalizeParser.parseNormalizedLogFromLine()
         ├── Step 7: 주기 + totalReadBytes ≥ 50MB → registerExclude + SKIP
         ├── Step 8: INSERT TB_COLLECT_LOG (SEQ_COLLECT_LOG)
-        └── Step 9: UPDATE TB_COLLECT_HISTORY → SUCCESS (LAST_LINE_NUMBER 저장)
+        └── Step 9: UPDATE TB_COLLECT_HISTORY → SUCCESS (LAST_LINE_NUMBER + LAST_BYTE_OFFSET 저장)
                                                                │
         @Recover → UPDATE TB_COLLECT_HISTORY → FAIL           │
                                                                ▼
@@ -70,13 +71,16 @@ HTTP 포트 없음. JVM 프로세스로 기동 후 `CollectScheduler`가 매초 
 #### A. 주기 수집 (증분)
 
 ```
-1. LAST_LINE_NUMBER 조회 (TB_COLLECT_HISTORY)
-2. COLLECT_DATE ≠ 오늘 AND '+' 미사용 → startLineNumber=0 (날짜 리셋)
-3. SFTP readLines(startLineNumber=LAST_LINE_NUMBER+1)
-4. 각 라인: @@@...@@@ 파싱 → 파싱 성공 시 로그 리스트에 추가
-5. totalReadBytes ≥ 50MB → PART_SIZE 제외 등록, SKIP
-6. TB_COLLECT_LOG INSERT (파싱 성공한 라인만)
-7. LAST_LINE_NUMBER = 마지막 읽은 라인 번호로 UPDATE
+1. LAST_LINE_NUMBER + LAST_BYTE_OFFSET 조회 (TB_COLLECT_HISTORY, 한 쿼리로 함께)
+2. COLLECT_DATE ≠ 오늘 AND '+' 미사용 → startLineNumber=1, startByteOffset=0 (날짜 리셋)
+3. LAST_BYTE_OFFSET ≥ fileSizeBytes → SFTP 접속 없이 즉시 SUCCESS(신규 데이터 없음)
+4. SFTP readLines(startByteOffset=LAST_BYTE_OFFSET로 seek, 라인번호는 LAST_LINE_NUMBER+1부터 이어서 매김)
+   - LAST_BYTE_OFFSET이 NULL(컬럼 도입 이전 이력)이면 과도기 경로:
+     offset 0부터 전체를 다시 읽되 LAST_LINE_NUMBER까지는 저장하지 않고 건너뜀 (1회성)
+5. 각 라인: @@@...@@@ 파싱 → 파싱 성공 시 로그 리스트에 추가
+6. totalReadBytes(과도기 구간 제외한 신규 바이트) ≥ 50MB → PART_SIZE 제외 등록, SKIP
+7. TB_COLLECT_LOG INSERT (파싱 성공한 라인만)
+8. LAST_LINE_NUMBER = 마지막 읽은 라인 번호, LAST_BYTE_OFFSET = 마지막 도달한 바이트 위치로 UPDATE
 ```
 
 #### B. 배치 수집 (전체)
@@ -84,9 +88,10 @@ HTTP 포트 없음. JVM 프로세스로 기동 후 `CollectScheduler`가 매초 
 ```
 1. SFTP getFileSizeBytes()
 2. fileSize ≥ 300MB → INIT_SIZE 제외 등록, SKIP
-3. startLineNumber=0 으로 전체 파일 읽기
+3. startLineNumber=1, startByteOffset=0 으로 전체 파일 읽기 (resumePoint 조회 자체를 안 함)
 4. TB_COLLECT_LOG INSERT
-5. LAST_LINE_NUMBER 갱신 안 함 (배치는 매번 전체 읽기)
+5. LAST_LINE_NUMBER/LAST_BYTE_OFFSET은 실제 마지막 위치로 기록되지만, 다음 배치 실행도
+   항상 처음부터 다시 읽으므로(resumePoint 미조회) 사실상 참고용일 뿐 재개 목적으로 쓰이지 않음
 ```
 
 #### C. 제외 파일 처리
@@ -110,7 +115,7 @@ sourceFilePath에 "$" 포함 → today 요일 숫자(0=일요일~6=토요일)로
   예: /logs/sys0$.log → (월요일) /logs/sys01.log
 
 sourceFilePath가 "+" 로 끝남 → 날짜 리셋 비활성화
-  예: /logs/app.log+  → 날짜 바뀌어도 LAST_LINE_NUMBER 유지
+  예: /logs/app.log+  → 날짜 바뀌어도 LAST_LINE_NUMBER/LAST_BYTE_OFFSET 유지
 ```
 
 ---
@@ -199,7 +204,7 @@ collect/
 
 | 함수명 | 파라미터 | 반환값 | 설명 |
 |--------|----------|--------|------|
-| `collectWithRetry(rule, historyId)` | `ScheduleRule`, `Long` | void | `@Retryable(CollectException, maxAttempts=4, delay=10000ms)` — 9단계 수집 흐름 |
+| `collectWithRetry(rule, historyId)` | `ScheduleRule`, `Long` | void | `@Retryable(CollectException, maxAttempts=4, delay=10000ms)` — 9단계(+5-1 조기종료) 수집 흐름 |
 | `recover(e, rule, historyId)` | `CollectException`, `ScheduleRule`, `Long` | void | `@Recover` — 최대 재시도 소진 후 FAIL 처리 |
 
 **9단계 수집 흐름 상세**
@@ -210,8 +215,9 @@ collect/
 | 2 | 제외 파일 체크 | `excludeService.isExcluded(serverId, filePath)` |
 | 3 | SFTP 파일 크기 조회 | `fileReadService.getFileSizeBytes(...)` |
 | 4 | 배치 + ≥300MB → 영구 제외 | `excludeService.registerExclude(..., "INIT_SIZE")` |
-| 5 | 주기: 마지막 라인 번호 조회, 날짜 리셋 판정 | `collectHistoryMapper.findLastLineNumber(...)` |
-| 6 | 라인 읽기 + 정규화 파싱 | `fileReadService.readLines(...)`, `logNormalizeParser.parseNormalizedLogFromLine(...)` |
+| 5 | 주기: 마지막 라인번호+바이트오프셋 조회, 날짜 리셋 판정 | `collectHistoryMapper.findResumePoint(...)` |
+| 5-1 | 오프셋 ≥ 파일크기(신규 데이터 없음) → SFTP 접속 생략, 즉시 SUCCESS | `updateHistorySuccess(...)` |
+| 6 | 오프셋 위치로 seek해서 라인 읽기 + 정규화 파싱 | `fileReadService.readLines(...)`, `logNormalizeParser.parseNormalizedLogFromLine(...)` |
 | 7 | 주기 + ≥50MB → 영구 제외 | `excludeService.registerExclude(..., "PART_SIZE")` |
 | 8 | TB_COLLECT_LOG INSERT | `collectLogMapper.insert(...)` (SEQ_COLLECT_LOG) |
 | 9 | TB_COLLECT_HISTORY 성공 UPDATE | `collectHistoryMapper.updateCollectStatus(...)` |
@@ -221,8 +227,9 @@ collect/
 | 필드 | 설명 |
 |------|------|
 | `lastReadLineNumber` | 마지막으로 읽은 라인 번호 |
-| `totalReadBytes` | 이번 실행에서 읽은 누적 바이트 |
-| `totalLineCount` | 이번 실행에서 읽은 라인 수 |
+| `lastByteOffset` | 마지막으로 도달한 누적 바이트 오프셋 (다음 실행의 seek 시작점) |
+| `totalReadBytes` | 이번 실행에서 새로 읽은 누적 바이트 (과도기 구간 제외) |
+| `totalLineCount` | 이번 실행에서 실제로 처리한 라인 수 (과도기 구간 제외) |
 | `exceededPartSizeLimit` | 50MB 초과 여부 플래그 |
 
 ---
@@ -232,7 +239,7 @@ collect/
 | 함수명 | 파라미터 | 반환값 | 설명 |
 |--------|----------|--------|------|
 | `getFileSizeBytes(host, port, user, pass, path)` | String, int, String, String, String | long | SFTP stat으로 파일 크기 조회 |
-| `readLines(host, port, user, pass, path, startLine, consumer)` | ..., long, `BiConsumer<Long,String>` | void | startLine 이전 라인 순차 스킵, 이후 라인 consumer 콜백 |
+| `readLines(host, port, user, pass, path, startLine, startByteOffset, charset, consumer)` | ..., long, long, Charset, `FileReadService.LineConsumer` | void | `RemoteFile.RemoteFileInputStream(startByteOffset)`로 그 위치부터 바로 SFTP READ — 이전에 읽은 앞부분은 네트워크로 재전송되지 않음. 라인 분리는 `FileReadService.readLinesFromStream()` 공통 로직(default 메서드) 위임 |
 
 - `@ConditionalOnProperty(name="precheck.collect.mode", havingValue="sftp", matchIfMissing=true)`
 - SSHJ `PromiscuousVerifier` — 내부망 전용, 호스트 키 검증 생략
@@ -245,7 +252,7 @@ collect/
 | 함수명 | 파라미터 | 반환값 | 설명 |
 |--------|----------|--------|------|
 | `getFileSizeBytes(...)` | (serverIp/port/user/pass 무시) | long | 로컬 파일 크기 조회 |
-| `readLines(...)` | (serverIp/port/user/pass 무시) | void | 로컬 파일 순차 읽기 |
+| `readLines(...)` | (serverIp/port/user/pass 무시), startLine, startByteOffset, charset | void | `FileInputStream.getChannel().position(startByteOffset)`으로 seek 후 읽기 — `FileReadService.readLinesFromStream()` 공통 로직 위임 |
 
 - `@ConditionalOnProperty(name="precheck.collect.mode", havingValue="local")`
 - 로컬 개발/테스트 전용
@@ -339,7 +346,7 @@ collect/
 
 | 테이블 | 역할 |
 |--------|------|
-| `TB_COLLECT_HISTORY` | 수집 작업 이력 (STATUS, LAST_LINE_NUMBER, retryCount 등) |
+| `TB_COLLECT_HISTORY` | 수집 작업 이력 (STATUS, LAST_LINE_NUMBER, LAST_BYTE_OFFSET, retryCount 등) |
 | `TB_COLLECT_LOG` | 수집된 정규화 로그 라인 (SEQ_COLLECT_LOG 시퀀스) |
 | `TB_COLLECT_EXCLUDE` | 크기 초과 등으로 영구 제외된 파일 목록 |
 
@@ -351,7 +358,8 @@ collect/
 | `SERVER_ID` | 대상 서버 ID |
 | `SOURCE_FILE_PATH` | 수집 대상 파일 경로 |
 | `STATUS` | SUCCESS / FAIL / SKIP |
-| `LAST_LINE_NUMBER` | 다음 수집 시작 라인 (주기 수집) |
+| `LAST_LINE_NUMBER` | 다음 수집 시작 라인번호 (주기 수집, TB_COLLECT_LOG.LINE_NUMBER 연속성용) |
+| `LAST_BYTE_OFFSET` | 다음 수집의 SFTP seek 시작 바이트 위치 (주기 수집, 네트워크 재전송 방지용) |
 | `COLLECT_DATE` | 수집 일자 (날짜 리셋 판단 기준) |
 | `RETRY_COUNT` | 현재 재시도 횟수 |
 | `FAIL_REASON` | 실패 사유 (`IN_PROGRESS` → 크래시 감지용) |
@@ -392,8 +400,8 @@ collect/
 | 쿼리 ID | 설명 |
 |---------|------|
 | `insert` | TB_COLLECT_HISTORY 초기 INSERT |
-| `updateCollectStatus` | STATUS / LAST_LINE_NUMBER / RETRY_COUNT 동적 UPDATE (`<if>` 조건) |
-| `findLastLineNumber` | 최근 SUCCESS 이력의 LAST_LINE_NUMBER 조회 (`FETCH FIRST 1 ROWS ONLY`) |
+| `updateCollectStatus` | STATUS / LAST_LINE_NUMBER / LAST_BYTE_OFFSET / RETRY_COUNT 동적 UPDATE (`<if>` 조건) |
+| `findResumePoint` | 최근 SUCCESS 이력의 LAST_LINE_NUMBER + LAST_BYTE_OFFSET을 `CollectResumePoint`로 함께 조회 (`FETCH FIRST 1 ROWS ONLY`) |
 
 **`CollectLogMapper.xml` 주요 쿼리**
 

@@ -22,6 +22,7 @@
             COLLECT_STATUS,
             COLLECTED_COUNT,
             LAST_LINE_NUMBER,
+            LAST_BYTE_OFFSET,
             FILE_SIZE_BYTES,
             RETRY_COUNT,
             FAIL_REASON,
@@ -39,6 +40,7 @@
             #{collectStatus},
             #{collectedCount},
             #{lastLineNumber},
+            #{lastByteOffset},
             #{fileSizeBytes},
             #{retryCount},
             #{failReason},
@@ -63,6 +65,9 @@
             <if test="lastLineNumber != null">
                 LAST_LINE_NUMBER = #{lastLineNumber},
             </if>
+            <if test="lastByteOffset != null">
+                LAST_BYTE_OFFSET = #{lastByteOffset},
+            </if>
             <if test="fileSizeBytes != null">
                 FILE_SIZE_BYTES = #{fileSizeBytes},
             </if>
@@ -80,12 +85,19 @@
         WHERE COLLECT_HISTORY_ID = #{collectHistoryId}
     </update>
 
-    <!-- 주기 수집용: 마지막 성공 수집의 라인번호 조회 -->
+    <!-- 주기 수집용: 마지막 성공 수집의 증분 시작점(라인번호 + 바이트오프셋) 조회 -->
     <!-- collectDate가 전달되면 COLLECT_DATE가 다른 경우 결과 없음 → 날짜가 바뀌면 파일 처음부터 다시 읽음 -->
     <!-- collectDate가 null이면(파일 경로에 '+' 접미사) 날짜 조건 없이 마지막 성공 이력을 그대로 사용 -->
-    <!-- 결과 없으면 null → 서비스에서 0으로 처리 (파일 처음부터 읽기) -->
-    <select id="findLastLineNumber" resultType="java.lang.Long">
-        SELECT LAST_LINE_NUMBER
+    <!-- 결과 없으면 null → 서비스에서 라인 1번/오프셋 0으로 처리 (파일 처음부터 읽기) -->
+    <resultMap id="resumePointResultMap" type="com.sks.precheck.collect.domain.CollectResumePoint">
+        <constructor>
+            <arg column="LAST_LINE_NUMBER" javaType="java.lang.Long"/>
+            <arg column="LAST_BYTE_OFFSET" javaType="java.lang.Long"/>
+        </constructor>
+    </resultMap>
+
+    <select id="findResumePoint" resultMap="resumePointResultMap">
+        SELECT LAST_LINE_NUMBER, LAST_BYTE_OFFSET
         FROM TB_COLLECT_HISTORY
         WHERE SERVER_ID = #{serverId}
           AND SOURCE_FILE_PATH = #{sourceFilePath}

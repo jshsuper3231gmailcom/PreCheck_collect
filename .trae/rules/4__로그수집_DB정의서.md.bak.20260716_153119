@@ -305,20 +305,10 @@ CREATE TABLE TB_COLLECT_HISTORY (
     -- 성공 시에만 값 있음, 실패/제외 시 NULL 또는 0
 
     LAST_LINE_NUMBER    NUMERIC(10, 0),
-    -- 이번 수집에서 마지막으로 읽은 파일 절대 라인번호
-    -- 다음 수집 시 이 번호 +1을 새로 저장되는 로그의 라인번호로 이어서 매긴다
-    -- (TB_COLLECT_LOG.LINE_NUMBER 등 감사·디버깅용 절대 라인번호 유지 목적)
-    -- 배치 수집은 전체를 읽으므로 실제 마지막 라인번호를 기록
-
-    LAST_BYTE_OFFSET    NUMERIC(19, 0),
-    -- 이번 수집에서 마지막으로 읽은 파일의 누적 바이트 위치 (0-based, 파일 시작 기준)
-    -- 주기 수집의 실제 네트워크 읽기 시작점(SFTP seek 위치)으로 쓰인다:
-    --   다음 수집은 offset 0부터 다시 읽고 앞부분을 버리는 대신, 이 위치부터 바로 READ 요청을 보낸다
-    --   → 이미 읽은 앞부분이 네트워크로 재전송되지 않아 SFTP 트래픽/연결 비용이 크게 줄어든다
-    -- LAST_LINE_NUMBER와 항상 같은 행에서 함께 기록/조회한다 (라인번호 연속성 + 오프셋 재개를 동시에 보장)
-    -- 이 컬럼 도입 이전에 기록된 이력(값이 NULL)은 오프셋을 모르므로, 해당 파일은 1회에 한해
-    -- 파일 전체를 다시 읽되 LAST_LINE_NUMBER까지는 저장하지 않고 건너뛰는 과도기 로직을 거친다
-    -- (수집 서버 CollectRetryService의 과도기 경로 참고)
+    -- 이번 수집에서 마지막으로 읽은 파일 라인번호
+    -- 주기 수집에서 핵심 역할:
+    --   다음 수집 시 이 번호 +1 라인부터 읽기 시작
+    --   배치 수집은 전체를 읽으므로 실제 마지막 라인번호를 기록
 
     FILE_SIZE_BYTES     NUMERIC(15, 0),
     -- 수집 시점의 원본 파일 크기 (bytes 단위)
@@ -559,16 +549,13 @@ WHERE SERVER_ID = ?
   AND RESTORE_YN = 'N';
 ```
 
-### 6-2. 주기 수집 시 마지막 증분 시작점(라인번호 + 바이트오프셋) 조회
+### 6-2. 주기 수집 시 마지막 라인번호 조회
 
 ```sql
 -- 주기 수집에서 핵심 쿼리
--- 이전 성공 수집의 마지막 라인번호(LAST_LINE_NUMBER)와 바이트오프셋(LAST_BYTE_OFFSET)을
--- 한 쿼리로 함께 가져온다. 두 값을 별도 쿼리로 나누면 그 사이 다른 수집이 이력을 갱신했을 때
--- 서로 다른 행을 가리킬 위험이 있어 반드시 같은 행에서 함께 조회한다.
--- LAST_LINE_NUMBER는 다음에 저장할 로그의 라인번호를 이어가기 위함이고,
--- LAST_BYTE_OFFSET은 SFTP READ 요청을 이 위치부터 바로 보내 앞부분 재전송을 없애기 위함이다.
-SELECT LAST_LINE_NUMBER, LAST_BYTE_OFFSET
+-- 이전 성공 수집의 마지막 라인번호를 가져와서
+-- 그 다음 라인부터 읽기 시작함
+SELECT LAST_LINE_NUMBER
 FROM TB_COLLECT_HISTORY
 WHERE SERVER_ID = ?
   AND SOURCE_FILE_PATH = ?

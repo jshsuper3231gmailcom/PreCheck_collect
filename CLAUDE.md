@@ -34,7 +34,8 @@ gradlew.bat test
 
 - **`@Retryable` 별도 빈 필수**: `CollectService` → `CollectRetryService`. `this.method()` 직접 호출 시 AOP 프록시 우회 → 재시도 불동작
 - **`VALUE1`/`VALUE2`는 `BigDecimal`** — Float/Double 사용 금지
-- **SFTP `readLines()`는 startLineNumber 이전 줄을 순차 스킵** — SFTP seek 미지원 설계. 대용량 파일에서 초기 줄 수가 많으면 느릴 수 있음
+- **SFTP `readLines()`는 `TB_COLLECT_HISTORY.LAST_BYTE_OFFSET`으로 바로 seek** — `RemoteFile.RemoteFileInputStream(offset)`으로 열어서 이미 읽은 앞부분은 네트워크로 재전송되지 않음. 신규 데이터가 없으면(오프셋 ≥ 파일크기) SFTP 접속 자체를 생략함(`CollectRetryService` Step 5-1). `LAST_LINE_NUMBER`는 별도로 계속 유지 — `TB_COLLECT_LOG.LINE_NUMBER` 등 절대 라인번호 연속성 때문에 오프셋과 별개로 필요
+- **`LAST_BYTE_OFFSET`이 NULL인 레거시 이력**(이 컬럼 도입 이전 수집분)은 1회에 한해 파일 처음부터 다시 읽되 `LAST_LINE_NUMBER`까지는 저장하지 않고 건너뛰는 과도기 경로를 탐 — 그 실행이 끝나면 오프셋이 기록되어 이후부터는 정상 seek 경로로 전환됨
 - **크래시 감지**: 수집 시작 직전 `STATUS=FAIL, FAIL_REASON=IN_PROGRESS` INSERT. 재기동 시 해당 이력은 자동 재처리 안 됨 — 수동 확인 필요
 - **파일 경로 특수 토큰**: `yyyymmdd`(날짜), `mmdd`(월/일), `$`(요일 0-6), `+` 접미사(날짜 리셋 비활성화)
 - 제외 파일 복원: `TB_COLLECT_EXCLUDE.RESTORE_YN='Y'`로 수동 변경

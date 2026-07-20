@@ -6,6 +6,7 @@ import com.sks.precheck.collect.common.util.DateUtil;
 import com.sks.precheck.collect.common.util.SequenceHelper;
 import com.sks.precheck.collect.domain.CollectHistory;
 import com.sks.precheck.collect.domain.CollectLog;
+import com.sks.precheck.collect.domain.CollectResumePoint;
 import com.sks.precheck.collect.mapper.CollectHistoryMapper;
 import com.sks.precheck.collect.mapper.CollectLogMapper;
 import com.sks.precheck.collect.parser.LogNormalizeParser;
@@ -81,8 +82,9 @@ public class CollectRetryService {
      *   2. 영구 제외 대상이면 수집을 건너뛴다(SKIP).
      *   3. 원격 파일 크기를 조회한다.
      *   4. 배치 수집에서 파일이 초기 수집 크기 한도를 초과하면 영구 제외 등록 후 건너뛴다.
-     *   5. 주기 수집이면 직전 성공 수집의 마지막 라인번호를 조회하여 증분 시작점을 계산한다.
-     *   6. SFTP로 원격 파일을 라인 단위로 읽으며 정규화 로그를 파싱한다.
+     *   5. 주기 수집이면 직전 성공 수집의 마지막 라인번호/바이트오프셋을 조회해 증분 시작점을 계산한다.
+     *      신규 데이터가 없으면(오프셋이 파일 크기 이상) SFTP 접속 자체를 생략하고 바로 성공 처리한다.
+     *   6. SFTP로 원격 파일을 시작 오프셋부터 seek해서 읽으며 정규화 로그를 파싱한다.
      *   7. 주기 수집에서 증분 읽기량이 증분 크기 한도를 초과하면 영구 제외 등록 후 건너뛴다.
      *   8. 파싱된 로그를 TB_COLLECT_LOG에 저장한다.
      *   9. 수집 성공 상태로 이력을 갱신하고 저장 건수를 반환한다.
@@ -126,7 +128,7 @@ public class CollectRetryService {
         // 스케줄에 정의된 파일 경로의 '+' 접미사를 제거하고 날짜 자리표시자(yyyymmdd)를 오늘 날짜로 치환한다.
         // 예) "/logs/test.yyyymmdd" → "/logs/test.20260612"
         // CollectService가 이력을 선등록할 때도 동일한 메서드로 경로를 치환하므로
-        // findLastLineNumber 조회 시 경로가 항상 일치한다.
+        // findResumePoint 조회 시 경로가 항상 일치한다.
         String collectDate = DateUtil.todayCollectDate();
         String sourceFilePath = DateUtil.resolveActualFilePath(schedule.getSourceFilePath(), collectDate);
 
@@ -154,17 +156,51 @@ public class CollectRetryService {
             return 0;
         }
 
-        // ── Step 5. 주기 수집 — 시작 라인번호 계산 ───────────────────────────────
-        // 주기 수집은 직전 성공 수집이 마지막으로 읽은 라인번호 이후부터 읽는다(증분 수집).
+        // ── Step 5. 주기 수집 — 시작 라인번호/바이트오프셋 계산 ──────────────────
+        // 주기 수집은 직전 성공 수집이 마지막으로 읽은 위치 이후부터 읽는다(증분 수집).
         // 단, 직전 성공 수집의 COLLECT_DATE가 오늘과 다르면(날짜가 바뀌면) 처음부터 다시 읽는다.
-        // 이력이 없으면(첫 수집이거나 이력 없음) lastLineNumber=null이므로 1번 라인부터 시작한다.
-        // 배치 수집은 항상 파일 전체를 읽으므로 lastLineNumber를 조회하지 않는다.
-        Long lastLineNumber = null;
+        // 이력이 없으면(첫 수집이거나 이력 없음) 1번 라인/오프셋 0부터 시작한다.
+        // 배치 수집은 항상 파일 전체를 읽으므로 resumePoint를 조회하지 않는다.
+        CollectResumePoint resumePoint = null;
         if ("주기".equals(scheduleType)) {
             String lastLineCollectDate = dateResetDisabled ? null : collectDate;
-            lastLineNumber = collectHistoryMapper.findLastLineNumber(serverId, sourceFilePath, lastLineCollectDate);
+            resumePoint = collectHistoryMapper.findResumePoint(serverId, sourceFilePath, lastLineCollectDate);
         }
-        long startLineNumber = lastLineNumber == null ? 1 : lastLineNumber + 1;
+
+        Long legacyLastLineNumber = resumePoint == null ? null : resumePoint.getLastLineNumber();
+        Long knownByteOffset = resumePoint == null ? null : resumePoint.getLastByteOffset();
+
+        long startLineNumber;
+        long startByteOffset;
+        // suppressBelowLineNumber보다 작거나 같은 라인번호는 실제로는 예전(라인번호 기반) 방식으로
+        // 이미 수집이 끝난 구간이므로 파싱·저장하지 않고 건너뛴다. 정상 상황에서는 항상 0이다.
+        long suppressBelowLineNumber = 0;
+
+        if (knownByteOffset != null) {
+            // 정상 경로: LAST_BYTE_OFFSET을 알고 있으므로 그 위치로 바로 seek해서 읽는다.
+            startLineNumber = (legacyLastLineNumber == null ? 0 : legacyLastLineNumber) + 1;
+            startByteOffset = knownByteOffset;
+        } else if (legacyLastLineNumber != null) {
+            // 과도기 경로: LAST_BYTE_OFFSET 컬럼 도입 이전에 기록된 이력이라 바이트 위치를 모른다.
+            // 파일 처음부터 다시 읽되, 이미 처리된 구간(legacyLastLineNumber까지)은 저장하지 않는다.
+            // 이 실행이 끝나면 LAST_BYTE_OFFSET이 기록되므로, 이후 실행부터는 정상 경로(seek)로 전환된다.
+            startLineNumber = 1;
+            startByteOffset = 0;
+            suppressBelowLineNumber = legacyLastLineNumber;
+        } else {
+            // 첫 수집이거나 이력이 없는 경우: 처음부터 읽는다.
+            startLineNumber = 1;
+            startByteOffset = 0;
+        }
+
+        // ── Step 5-1. 주기 수집 — 신규 데이터 없으면 네트워크 접속 자체를 생략 ────
+        // 파일 크기(Step 3에서 이미 조회함)가 시작 오프셋과 같거나 작으면 늘어난 데이터가 없다는
+        // 뜻이므로, SFTP 접속·READ 요청을 아예 하지 않고 바로 성공 처리한다.
+        if ("주기".equals(scheduleType) && knownByteOffset != null && startByteOffset >= fileSizeBytes) {
+            updateHistorySuccess(historyId, 0L, startLineNumber - 1, startByteOffset, fileSizeBytes);
+            log.info("신규 데이터 없어 수집 생략 - 서버: {}, 파일: {}, 오프셋: {}", serverId, sourceFilePath, startByteOffset);
+            return 0;
+        }
 
         // ── Step 6. 원격 파일 라인 읽기 및 정규화 로그 파싱 ──────────────────────
         List<CollectLog> parsedLogs = new ArrayList<>();
@@ -173,18 +209,33 @@ public class CollectRetryService {
         // LineReadState : 람다 내부에서 읽기 상태를 추적하기 위한 가변 컨테이너.
         // Java 람다는 effectively final 변수만 캡처할 수 있어서
         // 상태를 외부로 전달하기 위해 이 내부 클래스를 사용한다.
-        LineReadState lineReadState = new LineReadState(startLineNumber - 1);
+        LineReadState lineReadState = new LineReadState(startLineNumber - 1, startByteOffset);
+        long finalSuppressBelowLineNumber = suppressBelowLineNumber;
 
         fileReadService.readLines(
                 serverIp, port, username, password, sourceFilePath,
                 startLineNumber,
+                startByteOffset,
                 fileCharset,
-                (lineNumber, lineText) -> {
+                (lineNumber, byteOffsetAfterLine, lineText) -> {
 
-                    // 현재까지 읽은 마지막 라인번호와 누적 바이트를 갱신한다.
-                    // 파싱 가능 여부와 무관하게 읽기 자체는 항상 기록한다.
+                    // 이번 라인만큼 실제로 증가한 바이트 수(과도기 구간 제외 후 증분 크기 계산용).
+                    long lineByteLength = byteOffsetAfterLine - lineReadState.lastByteOffset;
+
+                    // 현재까지 읽은 마지막 라인번호와 바이트오프셋을 갱신한다.
+                    // 파싱 가능 여부와 무관하게, 그리고 과도기 구간 여부와도 무관하게 항상 기록한다
+                    // (다음 실행의 정확한 재개 지점이 되어야 하므로).
                     lineReadState.lastReadLineNumber = lineNumber;
-                    lineReadState.totalReadBytes += (lineText != null ? lineText.getBytes(fileCharset).length : 0);
+                    lineReadState.lastByteOffset = byteOffsetAfterLine;
+
+                    if (lineNumber <= finalSuppressBelowLineNumber) {
+                        // 과도기 구간: 예전 방식으로 이미 수집된 라인 — 저장하지 않고,
+                        // 증분 크기 한도 계산에도 포함하지 않는다(레거시 파일 전체 재전송량이
+                        // 실제 신규 증분으로 오인되어 잘못 영구제외되는 것을 막기 위함).
+                        return;
+                    }
+
+                    lineReadState.totalReadBytes += lineByteLength;
 
                     // 주기 수집 증분 크기 한도 초과 시 파싱을 중단한다.
                     // return은 이 람다(accept 호출)만 종료하므로 파일 읽기 루프는 계속된다.
@@ -239,23 +290,15 @@ public class CollectRetryService {
         }
 
         // ── Step 9. 수집 이력 성공 갱신 ──────────────────────────────────────────
-        // lastProcessedLineNumber는 다음 주기 수집의 시작점이 된다.
-        // 읽은 라인이 하나도 없는 경우(파일 변경 없음) startLineNumber - 1을 유지한다.
+        // lastProcessedLineNumber/lastProcessedByteOffset은 다음 주기 수집의 시작점이 된다.
+        // 읽은 라인이 하나도 없는 경우(파일 변경 없음) startLineNumber - 1 / startByteOffset을 유지한다.
         long lastProcessedLineNumber = lineReadState.lastReadLineNumber;
         if (lastProcessedLineNumber < (startLineNumber - 1)) {
             lastProcessedLineNumber = startLineNumber - 1;
         }
+        long lastProcessedByteOffset = lineReadState.lastByteOffset;
 
-        CollectHistory update = new CollectHistory();
-        update.setCollectHistoryId(historyId);
-        update.setCollectStatus(CollectConstants.STATUS_SUCCESS);
-        update.setCollectedCount((long) parsedLogs.size());
-        update.setLastLineNumber(lastProcessedLineNumber);
-        update.setFileSizeBytes(fileSizeBytes);
-        update.setFailReason(null);
-        update.setCollectEndAt(LocalDateTime.now());
-        update.setUpdatedAt(LocalDateTime.now());
-        collectHistoryMapper.updateCollectStatus(update);
+        updateHistorySuccess(historyId, (long) parsedLogs.size(), lastProcessedLineNumber, lastProcessedByteOffset, fileSizeBytes);
 
         log.info("수집 완료 - 서버: {}, 파일: {}, 타입: {}, 수집총라인수: {}, 정규화저장건수: {}, 정규화실패건수: {}",
                 serverId, sourceFilePath, scheduleType,
@@ -307,6 +350,32 @@ public class CollectRetryService {
         CollectHistory update = new CollectHistory();
         update.setCollectHistoryId(historyId);
         update.setRetryCount((long) retryCount);
+        update.setUpdatedAt(LocalDateTime.now());
+        collectHistoryMapper.updateCollectStatus(update);
+    }
+
+    /**
+     * 수집 이력을 SUCCESS 상태로 마무리한다.
+     *
+     * 정상 완료된 수집뿐 아니라, 신규 데이터가 없어 읽기 자체를 생략한 경우(Step 5-1)에도
+     * 동일하게 사용한다 — 두 경우 모두 "성공적으로 최신 상태까지 처리됨"이라는 의미는 같다.
+     */
+    private void updateHistorySuccess(
+            Long historyId,
+            long collectedCount,
+            long lastLineNumber,
+            long lastByteOffset,
+            long fileSizeBytes
+    ) {
+        CollectHistory update = new CollectHistory();
+        update.setCollectHistoryId(historyId);
+        update.setCollectStatus(CollectConstants.STATUS_SUCCESS);
+        update.setCollectedCount(collectedCount);
+        update.setLastLineNumber(lastLineNumber);
+        update.setLastByteOffset(lastByteOffset);
+        update.setFileSizeBytes(fileSizeBytes);
+        update.setFailReason(null);
+        update.setCollectEndAt(LocalDateTime.now());
         update.setUpdatedAt(LocalDateTime.now());
         collectHistoryMapper.updateCollectStatus(update);
     }
@@ -370,18 +439,23 @@ public class CollectRetryService {
      *
      * 필드:
      *   lastReadLineNumber    - 람다가 마지막으로 처리한 라인번호. 다음 주기 수집의 시작점이 된다.
-     *   totalReadBytes        - 누적 읽기 바이트 수. 주기 수집 증분 크기 한도 판단에 사용한다.
-     *   totalLineCount        - 파싱을 시도한 총 라인 수.
+     *   lastByteOffset        - 람다가 마지막으로 도달한 누적 바이트 오프셋. 다음 주기 수집이
+     *                           SFTP seek 시작점으로 그대로 사용한다.
+     *   totalReadBytes        - 과도기 구간(레거시 라인)을 제외한, 이번 실행에서 새로 읽은 바이트 수.
+     *                           주기 수집 증분 크기 한도 판단에 사용한다.
+     *   totalLineCount        - 실제로 파싱을 시도한(과도기 구간 제외) 총 라인 수.
      *   exceededPartSizeLimit - 증분 크기 한도를 초과했는지 여부.
      */
     private static class LineReadState {
         private long lastReadLineNumber;
+        private long lastByteOffset;
         private long totalReadBytes;
         private long totalLineCount;
         private boolean exceededPartSizeLimit;
 
-        private LineReadState(long lastReadLineNumber) {
+        private LineReadState(long lastReadLineNumber, long lastByteOffset) {
             this.lastReadLineNumber = lastReadLineNumber;
+            this.lastByteOffset = lastByteOffset;
         }
     }
 }

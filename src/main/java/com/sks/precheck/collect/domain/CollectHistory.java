@@ -15,6 +15,7 @@ public class CollectHistory {
     private String collectStatus;
     private Long collectedCount;
     private Long lastLineNumber;
+    private Long lastByteOffset;
     private Long fileSizeBytes;
     private Long retryCount;
     private String failReason;
@@ -89,6 +90,14 @@ public class CollectHistory {
 
     public void setLastLineNumber(Long lastLineNumber) {
         this.lastLineNumber = lastLineNumber;
+    }
+
+    public Long getLastByteOffset() {
+        return lastByteOffset;
+    }
+
+    public void setLastByteOffset(Long lastByteOffset) {
+        this.lastByteOffset = lastByteOffset;
     }
 
     public Long getFileSizeBytes() {

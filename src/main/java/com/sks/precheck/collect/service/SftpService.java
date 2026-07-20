@@ -1,13 +1,10 @@
 package com.sks.precheck.collect.service;
 
 import com.sks.precheck.collect.common.exception.CollectException;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
-import java.util.function.BiConsumer;
 import net.schmizz.sshj.SSHClient;
 import net.schmizz.sshj.sftp.RemoteFile;
 import net.schmizz.sshj.sftp.SFTPClient;
@@ -68,29 +65,27 @@ public class SftpService implements FileReadService {
     }
 
     /**
-     * 원격 파일을 startLineNumber 라인부터 끝까지 읽어 lineConsumer로 전달한다.
+     * 원격 파일을 startByteOffset 위치부터 끝까지 읽어 lineConsumer로 전달한다.
      *
      * 처리 방식:
-     *   SFTP로 원격 파일을 스트림으로 열고 BufferedReader로 감싸 라인 단위로 읽는다.
-     *   startLineNumber 이전 라인은 건너뛰고(skip), 이후 라인부터 콜백을 호출한다.
-     *   콜백(lineConsumer)은 (라인번호, 라인내용) 형태로 호출되므로
-     *   호출자는 람다 표현식으로 파싱·필터링·저장 등 원하는 처리를 구현하면 된다.
-     *
-     * 주의:
-     *   startLineNumber 이전 라인도 실제로는 스트림에서 읽어 건너뛴다.
-     *   대용량 파일에서 시작 라인이 매우 뒤쪽이면 앞부분 읽기 비용이 발생한다.
-     *   현재 구조에서는 이를 감수하고 단순 구현을 선택하였다.
+     *   SFTP READ 프로토콜은 원래 (handle, offset, length) 방식으로 임의 위치를 바로 읽을 수 있다.
+     *   remoteFile.new RemoteFileInputStream(startByteOffset)로 시작 오프셋을 지정해서 열면
+     *   그 위치부터 바로 READ 요청이 나가므로, 이전에 이미 읽은 앞부분은 네트워크로 전송되지 않는다.
+     *   (과거 버전은 항상 offset 0부터 읽고 클라이언트에서 앞부분을 버리는 방식이라 매 주기마다
+     *    파일 앞부분을 반복 전송받는 낭비가 있었다 — 이 낭비를 없애는 것이 이 메서드의 목적이다)
      *
      * @param serverIp       원격 서버 IP 주소
      * @param port           SSH 포트
      * @param username       SFTP 계정
      * @param password       SFTP 비밀번호
      * @param remoteFilePath 원격 파일의 절대 경로
-     * @param startLineNumber 읽기 시작 라인번호 (1부터 시작, 포함)
+     * @param startLineNumber startByteOffset 위치가 몇 번째 라인인지 (1부터 시작)
+     * @param startByteOffset 읽기 시작 바이트 위치 (0부터 시작)
      * @param charset        파일 인코딩 (null이면 UTF-8로 대체)
-     * @param lineConsumer   (라인번호, 라인내용)을 처리하는 콜백
+     * @param lineConsumer   (라인번호, 누적바이트오프셋, 라인내용)을 처리하는 콜백
      * @throws CollectException SFTP 접속 또는 파일 읽기 실패 시
      */
+    @Override
     public void readLines(
             String serverIp,
             int port,
@@ -98,8 +93,9 @@ public class SftpService implements FileReadService {
             String password,
             String remoteFilePath,
             long startLineNumber,
+            long startByteOffset,
             Charset charset,
-            BiConsumer<Long, String> lineConsumer
+            LineConsumer lineConsumer
     ) {
         Objects.requireNonNull(lineConsumer, "lineConsumer must not be null");
 
@@ -109,53 +105,24 @@ public class SftpService implements FileReadService {
         if (startLineNumber < 1) {
             throw new CollectException("startLineNumber는 1 이상이어야 한다: " + startLineNumber);
         }
+        if (startByteOffset < 0) {
+            throw new CollectException("startByteOffset은 0 이상이어야 한다: " + startByteOffset);
+        }
 
         try (SSHClient client = createClient()) {
             connectAndAuth(client, serverIp, port, username, password);
 
-            // SFTPClient, RemoteFile, BufferedReader를 모두 try-with-resources로 관리하여
+            // SFTPClient, RemoteFile, RemoteFileInputStream을 모두 try-with-resources로 관리하여
             // 예외 발생 시에도 원격 파일 스트림과 SSH 연결이 반드시 닫히도록 보장한다.
             try (SFTPClient sftpClient = client.newSFTPClient();
                  RemoteFile remoteFile = sftpClient.open(remoteFilePath);
-                 BufferedReader reader = new BufferedReader(
-                         new InputStreamReader(remoteFile.new RemoteFileInputStream(), effectiveCharset))) {
+                 RemoteFile.RemoteFileInputStream in = remoteFile.new RemoteFileInputStream(startByteOffset)) {
 
-                String line;
-                long currentLineNumber = 0;
-
-                while ((line = reader.readLine()) != null) {
-                    currentLineNumber++;
-
-                    // startLineNumber 이전 라인은 읽되 콜백을 호출하지 않고 건너뛴다.
-                    // 주기 수집에서 이미 처리한 라인을 재처리하지 않기 위한 증분 처리 방식이다.
-                    if (currentLineNumber < startLineNumber) {
-                        continue;
-                    }
-
-                    // 콜백에 라인번호(1-based)와 라인 내용을 전달한다.
-                    lineConsumer.accept(currentLineNumber, line);
-                }
+                FileReadService.readLinesFromStream(in, startByteOffset, startLineNumber, effectiveCharset, lineConsumer);
             }
         } catch (IOException e) {
             throw new CollectException("원격 파일 라인 읽기 실패: " + serverIp + ":" + port + " " + remoteFilePath, e);
         }
-    }
-
-    /**
-     * charset을 UTF-8로 고정한 readLines 오버로드.
-     *
-     * charset 파라미터가 없는 단순 호출용이며, 내부적으로 readLines(charset) 버전에 위임한다.
-     */
-    public void readLines(
-            String serverIp,
-            int port,
-            String username,
-            String password,
-            String remoteFilePath,
-            long startLineNumber,
-            BiConsumer<Long, String> lineConsumer
-    ) {
-        readLines(serverIp, port, username, password, remoteFilePath, startLineNumber, StandardCharsets.UTF_8, lineConsumer);
     }
 
     /**
