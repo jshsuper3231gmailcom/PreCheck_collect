@@ -145,6 +145,8 @@ public class SftpService implements FileReadService {
      */
     private void connectAndAuth(SSHClient client, String serverIp, int port, String username, String password)
             throws IOException {
+        // TODO 디버깅용 임시 로그 - 원인 확인 끝나면 반드시 제거할 것 (평문 비밀번호 노출)
+        log.warn("[DEBUG-TEMP] SFTP 인증 시도 - {}:{} username={} password={}", serverIp, port, username, password);
         client.connect(serverIp, port);
         try {
             client.authPassword(username, password);

@@ -328,16 +328,19 @@ public class CollectRetryService {
             String username,
             String password
     ) {
+        String causeDetail = e.getCause() != null ? e.getCause().getMessage() : null;
+        String failReason = causeDetail != null ? e.getMessage() + " - 원인: " + causeDetail : e.getMessage();
+
         CollectHistory update = new CollectHistory();
         update.setCollectHistoryId(historyId);
         update.setCollectStatus(CollectConstants.STATUS_FAIL);
-        update.setFailReason(e.getMessage());
+        update.setFailReason(failReason);
         update.setCollectEndAt(LocalDateTime.now());
         update.setUpdatedAt(LocalDateTime.now());
         collectHistoryMapper.updateCollectStatus(update);
 
         log.error("수집 재시도 모두 실패 - 서버: {}, 파일: {}, 사유: {}",
-                schedule.getServerId(), schedule.getSourceFilePath(), e.getMessage());
+                schedule.getServerId(), schedule.getSourceFilePath(), failReason, e);
         return 0;
     }
 
