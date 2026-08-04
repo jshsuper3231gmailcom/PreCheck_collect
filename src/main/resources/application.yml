@@ -10,7 +10,7 @@ precheck:
     async:
       core-pool-size: 5
       max-pool-size: 20
-      queue-capacity: 100
+      queue-capacity: 300
 
 mybatis:
   mapper-locations: classpath:/mapper/*.xml
