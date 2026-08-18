@@ -9,6 +9,7 @@ public class CollectScheduleVo {
     private String serverIp;
     private String sourceFilePath;
     private String scheduleExpression;
+    private boolean holidaySkip;
 
     public CollectScheduleVo() {
     }
@@ -43,6 +44,14 @@ public class CollectScheduleVo {
 
     public void setScheduleExpression(String scheduleExpression) {
         this.scheduleExpression = scheduleExpression;
+    }
+
+    public boolean isHolidaySkip() {
+        return holidaySkip;
+    }
+
+    public void setHolidaySkip(boolean holidaySkip) {
+        this.holidaySkip = holidaySkip;
     }
 }
 

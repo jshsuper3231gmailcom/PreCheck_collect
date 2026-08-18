@@ -1,0 +1,115 @@
+2026-08-18 15:24:06.867 [Test worker] INFO  CollectApplicationTests - Starting CollectApplicationTests using Java 17.0.19 with PID 32688 (started by 20200161 in C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect)
+2026-08-18 15:24:06.872 [Test worker] INFO  CollectApplicationTests - The following 1 profile is active: "local"
+2026-08-18 15:24:07.926 [Test worker] INFO  CollectScheduler - <<< CollectScheduler initialized with configuration: >>>
+2026-08-18 15:24:07.928 [Test worker] INFO  CollectScheduler -   Schedule file path: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\collect\schedule_sample\PreCheck_CollectLogs_Schedule.conf
+2026-08-18 15:24:07.929 [Test worker] INFO  CollectScheduler -   Holiday file path: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\notify\schedule_sample\PreCheck_NotifyHoliday_List.conf
+2026-08-18 15:24:07.929 [Test worker] INFO  CollectScheduler -   Collect mode: local
+2026-08-18 15:24:07.930 [Test worker] INFO  CollectScheduler -   SFTP port(전역 기본값): 22
+2026-08-18 15:24:07.930 [Test worker] INFO  CollectScheduler -   SFTP username(전역 기본값): local_user
+2026-08-18 15:24:07.930 [Test worker] INFO  CollectScheduler -   Schedule reload interval (ms): 60000
+2026-08-18 15:24:07.930 [Test worker] INFO  CollectScheduler - <<< Configuration initialized >>>
+2026-08-18 15:24:07.931 [Test worker] INFO  CollectScheduler -   서버별 접속정보 override 건수: 0
+2026-08-18 15:24:08.062 [Test worker] INFO  CollectApplicationTests - Started CollectApplicationTests in 1.675 seconds (process running for 3.048)
+2026-08-18 15:24:08.072 [scheduling-1] INFO  CollectScheduleParser - =============================
+2026-08-18 15:24:08.072 [scheduling-1] INFO  CollectScheduleParser -   [1] serverId: pamoap01-자동주문, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\test_dataset\pamoap01-자동주문-yyyymmdd.log, scheduleExpression: 주기|*|080000|1|235959
+2026-08-18 15:24:08.072 [scheduling-1] INFO  CollectScheduleParser - =============================
+2026-08-18 15:24:08.072 [scheduling-1] INFO  CollectScheduleParser -   [2] serverId: pqgetap1-시세포착1, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\test_dataset\pqgetap1-시세포착1-yyyymmdd.log, scheduleExpression: 주기|*|080000|1|235959
+2026-08-18 15:24:08.072 [scheduling-1] INFO  CollectScheduleParser - =============================
+2026-08-18 15:24:08.072 [scheduling-1] INFO  CollectScheduleParser -   [3] serverId: pqgetap2-시세포착2, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\test_dataset\pqgetap2-시세포착2-yyyymmdd.log, scheduleExpression: 주기|*|080000|1|235959
+2026-08-18 15:24:08.077 [scheduling-1] INFO  CollectScheduleParser - =============================
+2026-08-18 15:24:08.077 [scheduling-1] INFO  CollectScheduleParser -   [4] serverId: pjpsap01-주파수클럽, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\test_dataset\pjpsap01-주파수클럽-yyyymmdd.log, scheduleExpression: 주기|*|080000|1|235959
+2026-08-18 15:24:08.077 [scheduling-1] INFO  CollectScheduleParser - =============================
+2026-08-18 15:24:08.077 [scheduling-1] INFO  CollectScheduleParser -   [5] serverId: pmaster2-마스터, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\test_dataset\pmaster2-마스터-yyyymmdd.log, scheduleExpression: 주기|*|080000|1|235959
+2026-08-18 15:24:08.077 [scheduling-1] INFO  CollectScheduleParser - =============================
+2026-08-18 15:24:08.077 [scheduling-1] INFO  CollectScheduleParser -   [6] serverId: ddfep01-해외시세, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\test_dataset\ddfep01-해외시세-yyyymmdd.log, scheduleExpression: 주기|*|080000|1|235959
+2026-08-18 15:24:08.078 [scheduling-1] INFO  CollectScheduleParser - =============================
+2026-08-18 15:24:08.079 [scheduling-1] INFO  CollectScheduleParser -   [7] serverId: dlprem01-테스트개발, serverIp: 127.0.0.1, sourceFilePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\test_dataset\dlprem01-테스트개발-yyyymmdd.log, scheduleExpression: 주기|*|080000|1|235959
+2026-08-18 15:24:08.877 [Test worker] INFO  CollectHolidayParser - 비영업일 목록 파일 파싱 완료 - absolutePath: C:\Users\20200161\AppData\Local\Temp\junit-2989599865264197866\PreCheck_NotifyHoliday_List.conf, 등록된 비영업일 수: 1
+2026-08-18 15:24:08.889 [Test worker] WARN  CollectHolidayParser - 비영업일 날짜 포맷 오류(yyyyMMdd) - line: 2026-01-01
+2026-08-18 15:24:08.889 [Test worker] WARN  CollectHolidayParser - 비영업일 날짜 포맷 오류(yyyyMMdd) - line: abcdefgh
+2026-08-18 15:24:08.890 [Test worker] INFO  CollectHolidayParser - 비영업일 목록 파일 파싱 완료 - absolutePath: C:\Users\20200161\AppData\Local\Temp\junit-4170417403052271755\PreCheck_NotifyHoliday_List.conf, 등록된 비영업일 수: 1
+2026-08-18 15:24:08.895 [Test worker] INFO  CollectHolidayParser - 비영업일 목록 파일 파싱 완료 - absolutePath: C:\Users\20200161\AppData\Local\Temp\junit-980551272279816182\PreCheck_NotifyHoliday_List.conf, 등록된 비영업일 수: 2
+2026-08-18 15:24:08.899 [Test worker] WARN  CollectHolidayParser - 비영업일 목록 파일이 존재하지 않음 - filePath: C:\Users\20200161\AppData\Local\Temp\junit-13833558471487067488\does-not-exist.conf, absolutePath: C:\Users\20200161\AppData\Local\Temp\junit-13833558471487067488\does-not-exist.conf
+2026-08-18 15:24:08.903 [Test worker] INFO  CollectHolidayParser - 비영업일 목록 파일 파싱 완료 - absolutePath: C:\Users\20200161\AppData\Local\Temp\junit-6686692996680185389\PreCheck_NotifyHoliday_List.conf, 등록된 비영업일 수: 0
+2026-08-18 15:24:08.908 [Test worker] INFO  CollectHolidayParser - 비영업일 목록 파일 파싱 완료 - absolutePath: C:\Users\20200161\AppData\Local\Temp\junit-11457509576115426065\PreCheck_NotifyHoliday_List.conf, 등록된 비영업일 수: 1
+2026-08-18 15:24:08.913 [Test worker] INFO  CollectHolidayParser - 비영업일 목록 파일 파싱 완료 - absolutePath: C:\Users\20200161\AppData\Local\Temp\junit-13332761341201132438\PreCheck_NotifyHoliday_List.conf, 등록된 비영업일 수: 1
+2026-08-18 15:24:08.919 [Test worker] INFO  CollectScheduleParser - =============================
+2026-08-18 15:24:08.919 [Test worker] INFO  CollectScheduleParser -   [1] serverId: srv01, serverIp: 127.0.0.1, sourceFilePath: /tmp/a.log, scheduleExpression: 주기|*|080000|1|235959
+2026-08-18 15:24:08.923 [Test worker] WARN  CollectScheduleParser - 휴장일 스킵 플래그 포맷 오류(Y/N만 허용)로 무시 - lineNumber: 1, value: X
+2026-08-18 15:24:08.924 [Test worker] WARN  CollectScheduleParser - 휴장일 스킵 플래그 포맷 오류(Y/N만 허용)로 무시 - lineNumber: 2, value: y
+2026-08-18 15:24:08.928 [Test worker] INFO  CollectScheduleParser - =============================
+2026-08-18 15:24:08.928 [Test worker] INFO  CollectScheduleParser -   [1] serverId: srv01, serverIp: 127.0.0.1, sourceFilePath: /tmp/a.log, scheduleExpression: 주기|*|080000|1|235959
+2026-08-18 15:24:08.933 [Test worker] ERROR CollectScheduleParser - 스케줄 설정 파일 읽기 실패 - filePath: C:\Users\20200161\AppData\Local\Temp\junit-8682866467422887079\does-not-exist.conf, absolutePath: C:\Users\20200161\AppData\Local\Temp\junit-8682866467422887079\does-not-exist.conf, error: C:\Users\20200161\AppData\Local\Temp\junit-8682866467422887079\does-not-exist.conf
+2026-08-18 15:24:08.937 [Test worker] INFO  CollectScheduleParser - =============================
+2026-08-18 15:24:08.937 [Test worker] INFO  CollectScheduleParser -   [1] serverId: srv01, serverIp: 127.0.0.1, sourceFilePath: /tmp/a.log, scheduleExpression: 주기|*|080000|1|235959
+2026-08-18 15:24:08.941 [Test worker] INFO  CollectScheduleParser - =============================
+2026-08-18 15:24:08.942 [Test worker] INFO  CollectScheduleParser -   [1] serverId: srv02, serverIp: 127.0.0.1, sourceFilePath: /tmp/b.log, scheduleExpression: 배치|*|090000
+2026-08-18 15:24:08.946 [Test worker] WARN  CollectScheduleParser - 스케줄 라인 포맷 오류로 무시 - lineNumber: 1, line: [srv01][127.0.0.1][/tmp/a.log][주기|*|080000|1|235959][Y][extra]
+2026-08-18 15:24:08.951 [Test worker] INFO  CollectScheduleParser - =============================
+2026-08-18 15:24:08.951 [Test worker] INFO  CollectScheduleParser -   [1] serverId: srv02, serverIp: 127.0.0.1, sourceFilePath: /tmp/b.log, scheduleExpression: 배치|*|090000
+2026-08-18 15:24:08.958 [Test worker] WARN  LogNormalizeParser - LOG_ID 형식 불일치로 무시 - lineNumber: 1, logId: disk-home
+2026-08-18 15:24:08.960 [Test worker] WARN  LogNormalizeParser - 날짜형 로그에 날짜 값 토큰이 없어 무시 - lineNumber: 1, rawLog: @@@[2026/05/01 09:00:01.123][날짜][DATE_BDAY]|bday[2026/04/22] frec[12607]|@@@
+2026-08-18 15:24:08.961 [Test worker] WARN  LogNormalizeParser - 수치형 로그 값 토큰 개수 오류로 무시 - lineNumber: 1, tokenCount: 2, rawLog: @@@[2026/05/28 13:01:09.555][수치][PROC_AO_TR]|처리 $4$ 중 $5$|@@@
+2026-08-18 15:24:08.962 [Test worker] WARN  LogNormalizeParser - 시간형 로그에 수치 토큰이 포함되어 무시 - lineNumber: 1, token: $735$, rawLog: @@@[2026/05/01 09:00:01.123][시간][DATE_BTIME]|처리시간 $735$|@@@
+2026-08-18 15:24:08.965 [Test worker] WARN  LogNormalizeParser - 날짜형 로그 값 토큰 포맷 불일치로 무시 - lineNumber: 1, token: $2026/02/30$, rawLog: @@@[2026/05/01 09:00:01.123][날짜][DATE_BDAY]|bday[$2026/02/30$]|@@@
+2026-08-18 15:24:09.083 [Test worker] INFO  CollectScheduler - <<< CollectScheduler initialized with configuration: >>>
+2026-08-18 15:24:09.084 [Test worker] INFO  CollectScheduler -   Schedule file path: 
+2026-08-18 15:24:09.084 [Test worker] INFO  CollectScheduler -   Holiday file path: C:\Users\20200161\AppData\Local\Temp\junit-5515591764367040110\PreCheck_NotifyHoliday_List.conf
+2026-08-18 15:24:09.084 [Test worker] INFO  CollectScheduler -   Collect mode: local
+2026-08-18 15:24:09.084 [Test worker] INFO  CollectScheduler -   SFTP port(전역 기본값): 22
+2026-08-18 15:24:09.084 [Test worker] INFO  CollectScheduler -   SFTP username(전역 기본값): u
+2026-08-18 15:24:09.085 [Test worker] INFO  CollectScheduler -   Schedule reload interval (ms): 60000
+2026-08-18 15:24:09.085 [Test worker] INFO  CollectScheduler - <<< Configuration initialized >>>
+2026-08-18 15:24:09.085 [Test worker] INFO  CollectScheduler -   서버별 접속정보 override 건수: 0
+2026-08-18 15:24:09.087 [Test worker] INFO  CollectHolidayParser - 비영업일 목록 파일 파싱 완료 - absolutePath: C:\Users\20200161\AppData\Local\Temp\junit-5515591764367040110\PreCheck_NotifyHoliday_List.conf, 등록된 비영업일 수: 1
+2026-08-18 15:24:09.093 [Test worker] INFO  CollectScheduler - [[[비영업일 - 수집 스킵]]] - serverId: srv01, serverIp: 127.0.0.1, sourceFilePath: /tmp/a.log, date: 2026-08-18
+2026-08-18 15:24:09.105 [Test worker] INFO  CollectScheduler - <<< CollectScheduler initialized with configuration: >>>
+2026-08-18 15:24:09.105 [Test worker] INFO  CollectScheduler -   Schedule file path: 
+2026-08-18 15:24:09.105 [Test worker] INFO  CollectScheduler -   Holiday file path: C:\Users\20200161\AppData\Local\Temp\junit-7212866589300239074\does-not-exist.conf
+2026-08-18 15:24:09.105 [Test worker] INFO  CollectScheduler -   Collect mode: local
+2026-08-18 15:24:09.106 [Test worker] INFO  CollectScheduler -   SFTP port(전역 기본값): 22
+2026-08-18 15:24:09.106 [Test worker] INFO  CollectScheduler -   SFTP username(전역 기본값): u
+2026-08-18 15:24:09.106 [Test worker] INFO  CollectScheduler -   Schedule reload interval (ms): 60000
+2026-08-18 15:24:09.106 [Test worker] INFO  CollectScheduler - <<< Configuration initialized >>>
+2026-08-18 15:24:09.106 [Test worker] INFO  CollectScheduler -   서버별 접속정보 override 건수: 0
+2026-08-18 15:24:09.107 [Test worker] WARN  CollectHolidayParser - 비영업일 목록 파일이 존재하지 않음 - filePath: C:\Users\20200161\AppData\Local\Temp\junit-7212866589300239074\does-not-exist.conf, absolutePath: C:\Users\20200161\AppData\Local\Temp\junit-7212866589300239074\does-not-exist.conf
+2026-08-18 15:24:09.107 [Test worker] INFO  CollectScheduler - 주기 수집 실행 - serverId: srv01, serverIp: 127.0.0.1, sourceFilePath: /tmp/a.log, 간격: 1분, 1번째 실행, schedule: 주기|*|080000|1|235959
+2026-08-18 15:24:09.113 [Test worker] INFO  CollectScheduler - <<< CollectScheduler initialized with configuration: >>>
+2026-08-18 15:24:09.114 [Test worker] INFO  CollectScheduler -   Schedule file path: 
+2026-08-18 15:24:09.114 [Test worker] INFO  CollectScheduler -   Holiday file path: C:\Users\20200161\AppData\Local\Temp\junit-2675524731816656405\PreCheck_NotifyHoliday_List.conf
+2026-08-18 15:24:09.114 [Test worker] INFO  CollectScheduler -   Collect mode: local
+2026-08-18 15:24:09.114 [Test worker] INFO  CollectScheduler -   SFTP port(전역 기본값): 22
+2026-08-18 15:24:09.114 [Test worker] INFO  CollectScheduler -   SFTP username(전역 기본값): u
+2026-08-18 15:24:09.115 [Test worker] INFO  CollectScheduler -   Schedule reload interval (ms): 60000
+2026-08-18 15:24:09.115 [Test worker] INFO  CollectScheduler - <<< Configuration initialized >>>
+2026-08-18 15:24:09.115 [Test worker] INFO  CollectScheduler -   서버별 접속정보 override 건수: 0
+2026-08-18 15:24:09.117 [Test worker] INFO  CollectHolidayParser - 비영업일 목록 파일 파싱 완료 - absolutePath: C:\Users\20200161\AppData\Local\Temp\junit-2675524731816656405\PreCheck_NotifyHoliday_List.conf, 등록된 비영업일 수: 1
+2026-08-18 15:24:09.122 [Test worker] INFO  CollectScheduler - <<< CollectScheduler initialized with configuration: >>>
+2026-08-18 15:24:09.123 [Test worker] INFO  CollectScheduler -   Schedule file path: 
+2026-08-18 15:24:09.123 [Test worker] INFO  CollectScheduler -   Holiday file path: C:\Users\20200161\AppData\Local\Temp\junit-11901167039583864044\PreCheck_NotifyHoliday_List.conf
+2026-08-18 15:24:09.123 [Test worker] INFO  CollectScheduler -   Collect mode: local
+2026-08-18 15:24:09.123 [Test worker] INFO  CollectScheduler -   SFTP port(전역 기본값): 22
+2026-08-18 15:24:09.123 [Test worker] INFO  CollectScheduler -   SFTP username(전역 기본값): u
+2026-08-18 15:24:09.123 [Test worker] INFO  CollectScheduler -   Schedule reload interval (ms): 60000
+2026-08-18 15:24:09.123 [Test worker] INFO  CollectScheduler - <<< Configuration initialized >>>
+2026-08-18 15:24:09.124 [Test worker] INFO  CollectScheduler -   서버별 접속정보 override 건수: 0
+2026-08-18 15:24:09.125 [Test worker] INFO  CollectHolidayParser - 비영업일 목록 파일 파싱 완료 - absolutePath: C:\Users\20200161\AppData\Local\Temp\junit-11901167039583864044\PreCheck_NotifyHoliday_List.conf, 등록된 비영업일 수: 1
+2026-08-18 15:24:09.125 [Test worker] INFO  CollectScheduler - 주기 수집 실행 - serverId: srv01, serverIp: 127.0.0.1, sourceFilePath: /tmp/a.log, 간격: 1분, 1번째 실행, schedule: 주기|*|080000|1|235959
+2026-08-18 15:24:09.131 [Test worker] INFO  CollectScheduler - <<< CollectScheduler initialized with configuration: >>>
+2026-08-18 15:24:09.132 [Test worker] INFO  CollectScheduler -   Schedule file path: 
+2026-08-18 15:24:09.132 [Test worker] INFO  CollectScheduler -   Holiday file path: C:\Users\20200161\AppData\Local\Temp\junit-8205728890093583646\PreCheck_NotifyHoliday_List.conf
+2026-08-18 15:24:09.132 [Test worker] INFO  CollectScheduler -   Collect mode: local
+2026-08-18 15:24:09.132 [Test worker] INFO  CollectScheduler -   SFTP port(전역 기본값): 22
+2026-08-18 15:24:09.132 [Test worker] INFO  CollectScheduler -   SFTP username(전역 기본값): u
+2026-08-18 15:24:09.133 [Test worker] INFO  CollectScheduler -   Schedule reload interval (ms): 60000
+2026-08-18 15:24:09.133 [Test worker] INFO  CollectScheduler - <<< Configuration initialized >>>
+2026-08-18 15:24:09.133 [Test worker] INFO  CollectScheduler -   서버별 접속정보 override 건수: 0
+2026-08-18 15:24:09.134 [Test worker] INFO  CollectScheduler - 주기 수집 실행 - serverId: srv01, serverIp: 127.0.0.1, sourceFilePath: /tmp/a.log, 간격: 1분, 1번째 실행, schedule: 주기|*|080000|1|235959
+2026-08-18 15:24:09.456 [Test worker] INFO  CollectRetryService - 수집 완료 - 서버: srv01, 파일: /logs/sys02.log, 타입: 주기, 수집총라인수: 0, 정규화저장건수: 0, 정규화실패건수: 0
+2026-08-18 15:24:09.563 [Test worker] INFO  CollectRetryService - 수집 완료 - 서버: srv01, 파일: /logs/test.0818, 타입: 주기, 수집총라인수: 0, 정규화저장건수: 0, 정규화실패건수: 0
+2026-08-18 15:24:09.567 [Test worker] INFO  CollectRetryService - 신규 데이터 없어 수집 생략 - 서버: srv01, 파일: /logs/test.log, 오프셋: 100
+2026-08-18 15:24:09.583 [Test worker] INFO  CollectRetryService - 수집 완료 - 서버: srv01, 파일: /logs/test.20260818, 타입: 주기, 수집총라인수: 0, 정규화저장건수: 0, 정규화실패건수: 0
+2026-08-18 15:24:09.586 [Test worker] INFO  CollectRetryService - 수집 완료 - 서버: srv01, 파일: /logs/test.log, 타입: 주기, 수집총라인수: 0, 정규화저장건수: 0, 정규화실패건수: 0
+2026-08-18 15:24:09.590 [Test worker] INFO  CollectRetryService - 수집 완료 - 서버: srv01, 파일: /logs/test.log, 타입: 주기, 수집총라인수: 0, 정규화저장건수: 0, 정규화실패건수: 0
+2026-08-18 15:24:09.593 [Test worker] INFO  CollectRetryService - 수집 완료 - 서버: srv01, 파일: /logs/test.log, 타입: 주기, 수집총라인수: 0, 정규화저장건수: 0, 정규화실패건수: 0
+2026-08-18 15:24:09.597 [Test worker] INFO  CollectRetryService - 수집 완료 - 서버: srv01, 파일: /logs/test.20260818, 타입: 주기, 수집총라인수: 0, 정규화저장건수: 0, 정규화실패건수: 0

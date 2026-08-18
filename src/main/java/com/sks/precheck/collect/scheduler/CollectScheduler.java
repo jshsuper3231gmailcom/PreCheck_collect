@@ -1,6 +1,7 @@
 package com.sks.precheck.collect.scheduler;
 
 import com.sks.precheck.collect.common.exception.CollectException;
+import com.sks.precheck.collect.parser.CollectHolidayParser;
 import com.sks.precheck.collect.parser.CollectScheduleParser;
 import com.sks.precheck.collect.parser.CollectServerAuthParser;
 import com.sks.precheck.collect.service.CollectService;
@@ -13,6 +14,7 @@ import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,11 +35,14 @@ public class CollectScheduler {
 
     private static final String DEFAULT_SCHEDULE_FILE_RELATIVE_PATH = "/cfg/PreCheck_CollectLogs_Schedule.conf";
     private static final String DEFAULT_SERVER_AUTH_FILE_RELATIVE_PATH = "/cfg/PreCheck_CollectServer_Auth.conf";
+    private static final String DEFAULT_HOLIDAY_FILE_RELATIVE_PATH = "/cfg/PreCheck_NotifyHoliday_List.conf";
 
     private final CollectService collectService;
     private final CollectScheduleParser collectScheduleParser;
+    private final CollectHolidayParser collectHolidayParser;
 
     private final String scheduleFilePath;
+    private final String holidayFilePath;
     private final String collectMode;
     private final int sftpPort;
     private final String sftpUsername;
@@ -47,9 +52,12 @@ public class CollectScheduler {
     private final long reloadIntervalMillis;
     private volatile long lastReloadAtMillis;
     private volatile List<CollectScheduleVo> cachedSchedules;
+    private volatile long lastHolidayReloadAtMillis;
+    private volatile Set<LocalDate> cachedHolidays;
 
     private final Map<String, String> lastBatchRunDateByKey = new HashMap<>();
     private final Map<String, Long> lastPeriodicRunIndexByKey = new HashMap<>();
+    private final Map<String, LocalDate> lastHolidaySkipLogDateByKey = new HashMap<>();
 
     public CollectScheduler(
             CollectService collectService,
@@ -59,11 +67,13 @@ public class CollectScheduler {
             @Value("${precheck.sftp.port:22}") int sftpPort,
             @Value("${precheck.sftp.username:}") String sftpUsername,
             @Value("${precheck.sftp.password:}") String sftpPassword,
-            @Value("${precheck.collect.scheduler.reload-interval-ms:60000}") long reloadIntervalMillis
+            @Value("${precheck.collect.scheduler.reload-interval-ms:60000}") long reloadIntervalMillis,
+            @Value("${precheck.collect.holiday-file-path:}") String holidayFilePath
     ) {
         // Log loaded configuration values (exclude password for security)
         log.info("<<< CollectScheduler initialized with configuration: >>>");
         log.info("  Schedule file path: {}", scheduleFilePath);
+        log.info("  Holiday file path: {}", holidayFilePath);
         log.info("  Collect mode: {}", collectMode);
         log.info("  SFTP port(전역 기본값): {}", sftpPort);
         log.info("  SFTP username(전역 기본값): {}", sftpUsername);
@@ -72,9 +82,13 @@ public class CollectScheduler {
 
         this.collectService = collectService;
         this.collectScheduleParser = new CollectScheduleParser();
+        this.collectHolidayParser = new CollectHolidayParser();
         this.scheduleFilePath = (scheduleFilePath == null || scheduleFilePath.isBlank())
                 ? System.getProperty("user.home") + DEFAULT_SCHEDULE_FILE_RELATIVE_PATH
                 : scheduleFilePath;
+        this.holidayFilePath = (holidayFilePath == null || holidayFilePath.isBlank())
+                ? System.getProperty("user.home") + DEFAULT_HOLIDAY_FILE_RELATIVE_PATH
+                : holidayFilePath;
         this.collectMode = collectMode != null ? collectMode : "sftp";
         this.sftpPort = sftpPort;
         this.sftpUsername = sftpUsername != null ? sftpUsername : "";
@@ -160,9 +174,45 @@ public class CollectScheduler {
         }
     }
 
-    private boolean shouldRun(CollectScheduleVo schedule, LocalDateTime now) {
+    Set<LocalDate> getHolidays() {
+        long nowMillis = System.currentTimeMillis();
+        if (cachedHolidays != null && nowMillis - lastHolidayReloadAtMillis < reloadIntervalMillis) {
+            return cachedHolidays;
+        }
+
+        try {
+            Set<LocalDate> holidays = collectHolidayParser.parseHolidayFile(holidayFilePath);
+            cachedHolidays = holidays;
+            lastHolidayReloadAtMillis = nowMillis;
+            return holidays;
+        } catch (CollectException e) {
+            log.error("비영업일 목록 파일 파싱 실패(휴장일 없음으로 처리) - file: {}, 사유: {}", holidayFilePath, e.getMessage());
+            cachedHolidays = Set.of();
+            lastHolidayReloadAtMillis = nowMillis;
+            return cachedHolidays;
+        }
+    }
+
+    private void logHolidaySkipOncePerDay(CollectScheduleVo schedule, LocalDate today) {
+        String key = buildScheduleKey(schedule);
+        LocalDate lastLoggedDate = lastHolidaySkipLogDateByKey.get(key);
+        if (today.equals(lastLoggedDate)) {
+            return;
+        }
+
+        lastHolidaySkipLogDateByKey.put(key, today);
+        log.info("[[[비영업일 - 수집 스킵]]] - serverId: {}, serverIp: {}, sourceFilePath: {}, date: {}",
+                schedule.getServerId(), schedule.getServerIp(), schedule.getSourceFilePath(), today);
+    }
+
+    boolean shouldRun(CollectScheduleVo schedule, LocalDateTime now) {
         ScheduleRule rule = parseRule(schedule.getScheduleExpression());
         if (!isTodayMatched(rule.daySpec, now.toLocalDate())) {
+            return false;
+        }
+
+        if (schedule.isHolidaySkip() && getHolidays().contains(now.toLocalDate())) {
+            logHolidaySkipOncePerDay(schedule, now.toLocalDate());
             return false;
         }
 

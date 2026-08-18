@@ -14,8 +14,8 @@ import org.apache.logging.log4j.Logger;
 /**
  * 로그 수집 스케줄 설정 파일 파서.
  *
- * ~/cfg/PreCheck_CollectLogs_Schedule.conf 파일을 읽어 [서버구분][IP][파일경로][수집주기기술] 포맷을
- * CollectScheduleVo 목록으로 변환한다.
+ * ~/cfg/PreCheck_CollectLogs_Schedule.conf 파일을 읽어 [서버구분][IP][파일경로][수집주기기술][Y|N](선택) 포맷을
+ * CollectScheduleVo 목록으로 변환한다. 5번째 브라켓은 휴장일(비영업일) 스킵 여부이며, 생략 시 N(스킵 안 함)으로 간주한다.
  *
  * '#'으로 시작하는 라인과 포맷이 맞지 않는 라인은 무시하고 WARN 로그를 남긴다.
  */
@@ -70,7 +70,7 @@ public class CollectScheduleParser {
         }
 
         List<String> tokens = extractBracketTokens(trimmed);
-        if (tokens.size() != 4) {
+        if (tokens.size() != 4 && tokens.size() != 5) {
             log.warn("스케줄 라인 포맷 오류로 무시 - lineNumber: {}, line: {}", lineNumber, trimmed);
             return null;
         }
@@ -90,12 +90,34 @@ public class CollectScheduleParser {
             return null;
         }
 
+        boolean holidaySkip = false;
+        if (tokens.size() == 5) {
+            String holidaySkipToken = tokens.get(4).trim();
+            Boolean parsed = parseHolidaySkipFlag(holidaySkipToken);
+            if (parsed == null) {
+                log.warn("휴장일 스킵 플래그 포맷 오류(Y/N만 허용)로 무시 - lineNumber: {}, value: {}", lineNumber, holidaySkipToken);
+                return null;
+            }
+            holidaySkip = parsed;
+        }
+
         CollectScheduleVo vo = new CollectScheduleVo();
         vo.setServerId(serverId);
         vo.setServerIp(serverIp);
         vo.setSourceFilePath(sourceFilePath);
         vo.setScheduleExpression(scheduleExpression);
+        vo.setHolidaySkip(holidaySkip);
         return vo;
+    }
+
+    private Boolean parseHolidaySkipFlag(String text) {
+        if ("Y".equals(text)) {
+            return Boolean.TRUE;
+        }
+        if ("N".equals(text)) {
+            return Boolean.FALSE;
+        }
+        return null;
     }
 
     private List<String> extractBracketTokens(String text) {

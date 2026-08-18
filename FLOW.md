@@ -466,8 +466,12 @@ collect/
 **파일 형식**
 
 ```
-[serverId][serverIp][sourceFilePath][scheduleExpression]
+[serverId][serverIp][sourceFilePath][scheduleExpression][Y|N](선택)
 ```
+
+5번째 브라켓은 휴장일(비영업일) 스킵 여부다. `[Y]`면 오늘이 휴장일 목록(`PreCheck_NotifyHoliday_List.conf`,
+notify와 물리적으로 동일 파일 공유)에 있을 때 이 항목만 수집을 건너뛴다. 생략(기존 4-브라켓 라인) 또는
+`[N]`이면 휴장일 여부와 무관하게 항상 기존대로 동작한다 — notify(휴장일에 모듈 전체 스킵)와 달리 항목 단위.
 
 **scheduleExpression 형식**
 
@@ -522,6 +526,9 @@ max=20 스레드 모두 재시도 대기 상태가 되면 신규 수집 작업�
 - **스케줄 파일 캐시**: 60초 (`reloadIntervalMillis=60000`)
 - **시간 매칭 윈도우**: ±2초 (`pollWindowSeconds=2`)
 - 같은 스케줄 키가 윈도우 내 중복 실행되지 않도록 실행 중인 키를 추적
+- **휴장일 스킵**: `[Y]`로 표시된 스케줄 항목만 오늘이 비영업일(`PreCheck_NotifyHoliday_List.conf` 기준,
+  notify와 공유)이면 건너뜀. 휴장일 목록도 스케줄 파일과 동일한 `reloadIntervalMillis`(60초)로 캐시됨.
+  건너뛸 때마다 매 폴링 로그가 남지 않도록 항목별로 하루 1회만 `[[[비영업일 - 수집 스킵]]]` 로그를 남김.
 
 ### analyze 서버와의 연계
 

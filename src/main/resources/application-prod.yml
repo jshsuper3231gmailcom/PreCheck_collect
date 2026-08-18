@@ -9,6 +9,7 @@ spring:
 precheck:
   collect:
     schedule-file-path: /home/precheck/cfg/PreCheck_CollectLogs_Schedule.conf
+    holiday-file-path: /home/precheck/cfg/PreCheck_NotifyHoliday_List.conf  # notify와 물리적으로 동일한 파일 공유
     # server-auth-file-path: /home/precheck/cfg/PreCheck_CollectServer_Auth.conf  # 미지정 시 기본값(위 경로) 사용
     file-charset: EUC-KR
   sftp:

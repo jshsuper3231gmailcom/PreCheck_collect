@@ -39,6 +39,7 @@ gradlew.bat test
 - **크래시 감지**: 수집 시작 직전 `STATUS=FAIL, FAIL_REASON=IN_PROGRESS` INSERT. 재기동 시 해당 이력은 자동 재처리 안 됨 — 수동 확인 필요
 - **파일 경로 특수 토큰**: `yyyymmdd`(날짜), `mmdd`(월/일), `$`(요일 0-6), `+` 접미사(날짜 리셋 비활성화)
 - 제외 파일 복원: `TB_COLLECT_EXCLUDE.RESTORE_YN='Y'`로 수동 변경
+- **휴장일 스킵은 스케쥴 항목 단위**: conf 5번째 브라켓 `[Y]`로 표시된 항목만 오늘이 비영업일(`PreCheck_NotifyHoliday_List.conf`, notify와 물리적으로 동일 파일 공유)이면 건너뜀. `[Y]` 없는 기존 라인은 휴장일과 무관하게 항상 실행 — notify(통보)의 모듈 전체 스킵과 다름
 
 ## 스택 참고
 
