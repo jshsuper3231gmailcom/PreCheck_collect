@@ -529,6 +529,8 @@ max=20 스레드 모두 재시도 대기 상태가 되면 신규 수집 작업�
 - **휴장일 스킵**: `[Y]`로 표시된 스케줄 항목만 오늘이 비영업일(`PreCheck_NotifyHoliday_List.conf` 기준,
   notify와 공유)이면 건너뜀. 휴장일 목록도 스케줄 파일과 동일한 `reloadIntervalMillis`(60초)로 캐시됨.
   건너뛸 때마다 매 폴링 로그가 남지 않도록 항목별로 하루 1회만 `[[[비영업일 - 수집 스킵]]]` 로그를 남김.
+  같은 하루 1회 게이트 안에서 `TB_COLLECT_HISTORY`에도 `COLLECT_STATUS='SKIP'`, `FAIL_REASON='HOLIDAY_SKIP'`
+  1건을 기록(`CollectService.recordHolidaySkip()`) — dashboard "수집제외 SKIP" 카운터/툴팁에 반영됨.
 
 ### analyze 서버와의 연계
 

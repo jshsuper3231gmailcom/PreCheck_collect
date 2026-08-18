@@ -193,16 +193,17 @@ public class CollectScheduler {
         }
     }
 
-    private void logHolidaySkipOncePerDay(CollectScheduleVo schedule, LocalDate today) {
+    private void recordHolidaySkipOncePerDay(CollectScheduleVo schedule, String scheduleType, LocalDate today) {
         String key = buildScheduleKey(schedule);
-        LocalDate lastLoggedDate = lastHolidaySkipLogDateByKey.get(key);
-        if (today.equals(lastLoggedDate)) {
+        LocalDate lastRecordedDate = lastHolidaySkipLogDateByKey.get(key);
+        if (today.equals(lastRecordedDate)) {
             return;
         }
 
         lastHolidaySkipLogDateByKey.put(key, today);
         log.info("[[[비영업일 - 수집 스킵]]] - serverId: {}, serverIp: {}, sourceFilePath: {}, date: {}",
                 schedule.getServerId(), schedule.getServerIp(), schedule.getSourceFilePath(), today);
+        collectService.recordHolidaySkip(schedule, scheduleType);
     }
 
     boolean shouldRun(CollectScheduleVo schedule, LocalDateTime now) {
@@ -212,7 +213,7 @@ public class CollectScheduler {
         }
 
         if (schedule.isHolidaySkip() && getHolidays().contains(now.toLocalDate())) {
-            logHolidaySkipOncePerDay(schedule, now.toLocalDate());
+            recordHolidaySkipOncePerDay(schedule, rule.type, now.toLocalDate());
             return false;
         }
 

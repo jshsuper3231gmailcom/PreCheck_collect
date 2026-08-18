@@ -103,6 +103,32 @@ public class CollectService {
     }
 
     /**
+     * 휴장일(비영업일)로 건너뛴 스케줄 항목을 이력에 SKIP으로 기록한다.
+     * 실제 수집 시도가 없으므로 IN_PROGRESS 선등록 없이 SKIP 상태로 곧바로 1건 INSERT한다.
+     */
+    public void recordHolidaySkip(CollectScheduleVo schedule, String scheduleType) {
+        Long historyId = sequenceHelper.nextval("SEQ_COLLECT_HISTORY");
+        String collectDate = DateUtil.todayCollectDate();
+        String resolvedSourceFilePath = DateUtil.resolveActualFilePath(schedule.getSourceFilePath(), collectDate);
+
+        CollectHistory history = new CollectHistory();
+        history.setCollectHistoryId(historyId);
+        history.setServerId(schedule.getServerId());
+        history.setServerIp(schedule.getServerIp());
+        history.setSourceFilePath(resolvedSourceFilePath);
+        history.setScheduleType(scheduleType);
+        history.setCollectStatus(CollectConstants.STATUS_SKIP);
+        history.setRetryCount(0L);
+        history.setCollectStartAt(LocalDateTime.now());
+        history.setCollectEndAt(LocalDateTime.now());
+        history.setCollectDate(collectDate);
+        history.setCreatedAt(LocalDateTime.now());
+        history.setUpdatedAt(LocalDateTime.now());
+        history.setFailReason("HOLIDAY_SKIP");
+        collectHistoryMapper.insert(history);
+    }
+
+    /**
      * 스케줄 표현식에서 수집 타입(배치/주기)을 파싱한다.
      *
      * 표현식 형식: "배치|크론표현식" 또는 "주기|인터벌"

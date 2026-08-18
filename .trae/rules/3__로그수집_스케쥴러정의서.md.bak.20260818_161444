@@ -89,7 +89,6 @@
   휴장일 여부와 무관하게 항상 기존대로 동작한다.
 - 파일이 없거나 읽기 실패하면 "비영업일 없음"으로 안전하게 처리(수집이 이 파일 문제로 영구 정지되지 않음)
 - 휴장일 목록도 스케쥴 파일과 동일한 재로딩 주기(`precheck.collect.scheduler.reload-interval-ms`, 기본 60초)로 캐시됨
-- **이력 기록**: `[Y]`로 스킵된 항목은 `TB_COLLECT_HISTORY`에 `COLLECT_STATUS='SKIP'`, `FAIL_REASON='HOLIDAY_SKIP'` 1건이 남는다(항목당 하루 1회, 실제 수집 시도가 없어 IN_PROGRESS 선등록 없이 바로 SKIP 상태로 INSERT). 이 덕분에 Dashboard "수집제외(SKIP)" 카운터·툴팁에 해당 서버가 노출되어, "수집 현황(N/전체)" 비율만 조용히 깎이는 게 아니라 사유가 화면에서 바로 보인다.
 
 ---
 

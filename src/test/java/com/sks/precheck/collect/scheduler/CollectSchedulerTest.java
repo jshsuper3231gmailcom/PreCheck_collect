@@ -1,7 +1,12 @@
 package com.sks.precheck.collect.scheduler;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import com.sks.precheck.collect.service.CollectService;
 import com.sks.precheck.collect.vo.CollectScheduleVo;
@@ -89,5 +94,47 @@ class CollectSchedulerTest {
         CollectScheduler scheduler = scheduler(holidayFile.toString());
 
         assertTrue(scheduler.getHolidays().contains(java.time.LocalDate.of(2026, 1, 1)));
+    }
+
+    @Test
+    void shouldRun_holidaySkipTrue_holidayToday_recordsSkipHistory() throws Exception {
+        Path holidayFile = holidayFileWithDate("20260818");
+        CollectService collectService = mock(CollectService.class);
+        CollectScheduler scheduler = new CollectScheduler(
+                collectService, "", "", "local", 22, "u", "p", 60000L, holidayFile.toString());
+        LocalDateTime now = LocalDateTime.of(2026, 8, 18, 8, 0, 0);
+        CollectScheduleVo schedule = schedule(true);
+
+        scheduler.shouldRun(schedule, now);
+
+        verify(collectService).recordHolidaySkip(eq(schedule), eq("주기"));
+    }
+
+    @Test
+    void shouldRun_holidaySkipTrue_holidayToday_recordsOnlyOncePerDay() throws Exception {
+        Path holidayFile = holidayFileWithDate("20260818");
+        CollectService collectService = mock(CollectService.class);
+        CollectScheduler scheduler = new CollectScheduler(
+                collectService, "", "", "local", 22, "u", "p", 60000L, holidayFile.toString());
+        CollectScheduleVo schedule = schedule(true);
+
+        scheduler.shouldRun(schedule, LocalDateTime.of(2026, 8, 18, 8, 0, 0));
+        scheduler.shouldRun(schedule, LocalDateTime.of(2026, 8, 18, 8, 0, 1));
+        scheduler.shouldRun(schedule, LocalDateTime.of(2026, 8, 18, 12, 30, 0));
+
+        verify(collectService, times(1)).recordHolidaySkip(any(), any());
+    }
+
+    @Test
+    void shouldRun_holidaySkipFalse_holidayToday_neverRecordsSkip() throws Exception {
+        Path holidayFile = holidayFileWithDate("20260818");
+        CollectService collectService = mock(CollectService.class);
+        CollectScheduler scheduler = new CollectScheduler(
+                collectService, "", "", "local", 22, "u", "p", 60000L, holidayFile.toString());
+        LocalDateTime now = LocalDateTime.of(2026, 8, 18, 8, 0, 0);
+
+        scheduler.shouldRun(schedule(false), now);
+
+        verify(collectService, never()).recordHolidaySkip(any(), any());
     }
 }
